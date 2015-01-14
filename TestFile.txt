@@ -1,5 +1,5 @@
 Here is the fist test file of my repository.
 
 It has three lines.
-Added a new line in the same place.
+Added a new line.
 Final line is here.
