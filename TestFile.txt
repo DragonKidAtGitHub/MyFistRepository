@@ -1,6 +1,0 @@
-Here is the fist test file of my repository.
-
-It has three lines.
-Added a new line.
-Final line is here.
-The real final line is here :-)
