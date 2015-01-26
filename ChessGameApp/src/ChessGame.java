@@ -1,6 +1,3 @@
-/**
- * Created by UJ on 23.01.2015.
- */
 public class ChessGame {
     final int gameRows = 8;
     final int gameColumns = 8;
@@ -15,6 +12,7 @@ public class ChessGame {
     public void setupGame()
     {
         if (game.isEmpty()) {
+            String newLine = System.lineSeparator();
             String emptySymbol = "*";
             String row = "";
             for (int i = 0; i < gameRows; i++) {
@@ -23,7 +21,7 @@ public class ChessGame {
             for (int i = 0; i < gameColumns; i++) {
                 game += row;
                 if(i < gameColumns-1) {
-                    game += " ";
+                    game += newLine;
                 }
             }
         }

@@ -25,13 +25,14 @@ public class ChessGameTest {
         String gameString = "";
         String emptySymbol = "*";
         String row = "";
+        String newLine = System.lineSeparator();
         for (int i = 0; i < 8; i++) {
             row += emptySymbol;
         }
         for (int i = 0; i < 8; i++) {
             gameString += row;
             if(i < 7) {
-                gameString += " ";
+                gameString += newLine;
             }
         }
         return gameString;
