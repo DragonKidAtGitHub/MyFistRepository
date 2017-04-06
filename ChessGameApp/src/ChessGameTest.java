@@ -1,5 +1,6 @@
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ChessGameTest {
     @Test
@@ -19,6 +20,11 @@ public class ChessGameTest {
 
         String gameString = createGameString();
         assertEquals(gameString,g.getGame());
+    }
+
+    @Test
+    public void testFault() throws Exception {
+        assertEquals(0,1);
     }
 
     private String createGameString() {
