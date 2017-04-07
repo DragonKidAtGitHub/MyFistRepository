@@ -33,11 +33,16 @@ public class King implements Piece {
     }
 
     @Override
+    public void moveTo(int toX, int toY) {
+
+    }
+
+    @Override
     public boolean isValidMove(int toX, int toY) {
-        if (toX == x && toY == y){ // No move
+        if (isNoMove(toX, toY)){
             return false;
         }
-        else if (toX < 0 || toX > 7 || toY < 0 || toY > 7){// Out of bounds
+        else if (isOutOfBoundsMove(toX, toY)){
             return false;
         }
         else if (Math.sqrt(Math.pow(Math.abs(x - toX), 2) + Math.pow(Math.abs(y - toY), 2)) <= Math.sqrt(2)){
@@ -46,5 +51,15 @@ public class King implements Piece {
         else{
             return false;
         }
+    }
+
+    @Override
+    public boolean isNoMove(int toX, int toY) {
+        return (toX == x && toY == y);
+    }
+
+    @Override
+    public boolean isOutOfBoundsMove(int toX, int toY) {
+        return (toX < 0 || toX > 7 || toY < 0 || toY > 7);
     }
 }

@@ -45,8 +45,30 @@ public class ChessGameTest {
         assertEquals(2, p2.getX());
         assertEquals(6, p2.getY());
 
-        Piece p3 = new Pawn(Color.BLACK, -1);
+        Piece p3 = new Pawn(Color.BLACK, -2);
+        assertEquals(-1, p3.getX());
+    }
 
+    @Test
+    public void testPossibleMovePawn() throws Exception {
+        Piece p1 = new Pawn(Color.BLACK, 0);
+        Piece p2 = new Pawn(Color.WHITE, 0);
+        assertFalse(p1.isValidMove(p1.getX(),p1.getY()));       // No move
+        assertFalse(p1.isValidMove(-1, p1.getY()));         // Out of bounds
+        assertFalse(p1.isValidMove(8, p1.getY()));          // Out of bounds
+        assertFalse(p1.isValidMove(p1.getX(), -1));         // Out of bounds
+        assertFalse(p1.isValidMove(-1, 8));             // Out of bounds
+        assertTrue(p1.isValidMove(p1.getX(),p1.getY()+1));  // Normal move
+        assertTrue(p2.isValidMove(p2.getX(),p2.getY()-1));  // Normal move
+        assertFalse(p1.isValidMove(p1.getX(),p1.getY()-1)); // Wrong direction move
+        assertFalse(p2.isValidMove(p2.getX(),p2.getY()+1)); // Wrong direction move
+        assertTrue(p1.isValidMove(p1.getX(), p1.getY()+2)); // Allowed first time
+        assertTrue(p2.isValidMove(p2.getX(), p2.getY()-2)); // Allowed first time
+
+        p1.moveTo(p1.getX(),p1.getY()+1);
+        p2.moveTo(p2.getX(),p2.getY()-1);
+        assertFalse(p1.isValidMove(p1.getX(), p1.getY()+2)); // Only allowed first time
+        assertFalse(p2.isValidMove(p2.getX(), p2.getY()-2)); // Only allowed first time
     }
 }
 
