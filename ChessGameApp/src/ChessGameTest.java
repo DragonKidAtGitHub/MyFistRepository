@@ -51,8 +51,8 @@ public class ChessGameTest {
 
     @Test
     public void testPossibleMovePawn() throws Exception {
-        Piece p1 = new Pawn(Color.BLACK, 0);
-        Piece p2 = new Pawn(Color.WHITE, 0);
+        Piece p1 = new Pawn(Color.BLACK, 2);
+        Piece p2 = new Pawn(Color.WHITE, 2);
         assertFalse(p1.isValidMove(p1.getX(),p1.getY()));       // No move
         assertFalse(p1.isValidMove(-1, p1.getY()));         // Out of bounds
         assertFalse(p1.isValidMove(8, p1.getY()));          // Out of bounds
@@ -64,11 +64,158 @@ public class ChessGameTest {
         assertFalse(p2.isValidMove(p2.getX(),p2.getY()+1)); // Wrong direction move
         assertTrue(p1.isValidMove(p1.getX(), p1.getY()+2)); // Allowed first time
         assertTrue(p2.isValidMove(p2.getX(), p2.getY()-2)); // Allowed first time
+        assertTrue(p1.isValidMove(p1.getX()+1,p1.getY()+1)); // Diagonal move
+        assertTrue(p1.isValidMove(p1.getX()-1,p1.getY()+1)); // Diagonal move
+        assertTrue(p2.isValidMove(p2.getX()+1,p2.getY()-1)); // Diagonal move
+        assertTrue(p2.isValidMove(p2.getX()-1,p2.getY()-1)); // Diagonal move
+        assertFalse(p1.isValidMove(p1.getX()+1,p1.getY()-1)); // Diagonal move
+        assertFalse(p1.isValidMove(p1.getX()-1,p1.getY()-1)); // Diagonal move
+        assertFalse(p2.isValidMove(p2.getX()+1,p2.getY()+1)); // Diagonal move
+        assertFalse(p2.isValidMove(p2.getX()-1,p2.getY()+1)); // Diagonal move
 
         p1.moveTo(p1.getX(),p1.getY()+1);
         p2.moveTo(p2.getX(),p2.getY()-1);
         assertFalse(p1.isValidMove(p1.getX(), p1.getY()+2)); // Only allowed first time
         assertFalse(p2.isValidMove(p2.getX(), p2.getY()-2)); // Only allowed first time
     }
-}
 
+    @Test
+    public void testMakeQueen() throws Exception {
+        Piece p1 = new Queen(Color.BLACK);
+        Piece p2 = new Queen(Color.WHITE);
+        assertEquals(Color.BLACK, p1.getColor());
+        assertEquals(Color.WHITE, p2.getColor());
+        assertEquals(0, p1.getY());
+        assertEquals(3, p1.getX());
+        assertEquals(3, p2.getX());
+        assertEquals(7, p2.getY());
+    }
+
+    @Test
+    public void  testPossibleQueenMoves() throws Exception {
+        Piece p1 = new Queen(Color.BLACK);
+        Piece p2 = new Queen(Color.WHITE);
+        assertFalse(p1.isValidMove(p1.getX(),p1.getY()));               // No move
+        assertTrue(p1.isValidMove(p1.getX()+1,p1.getY()+1));    //Diagonal move
+        assertTrue(p1.isValidMove(p1.getX()-3,p1.getY()+3));    //Diagonal move
+        assertTrue(p1.isValidMove(p1.getX()+4,p1.getY()+4));    //Diagonal move
+        assertTrue(p1.isValidMove(p1.getX()+4,p1.getY()));          //Straight move
+        assertTrue(p1.isValidMove(p1.getX(),p1.getY()+3));          //Straight move
+        assertFalse(p1.isValidMove(p1.getX(),p1.getY()-1));         // Out of bounds move
+        assertFalse(p1.isValidMove(p1.getX(),p1.getY()+8));         // Out of bounds move
+
+        assertFalse(p2.isValidMove(p2.getX(),p2.getY()));               // No move
+        assertTrue(p2.isValidMove(p2.getX()+1,p2.getY()-1));    //Diagonal move
+        assertTrue(p2.isValidMove(p2.getX()-3,p2.getY()-3));    //Diagonal move
+        assertTrue(p2.isValidMove(p2.getX()+4,p2.getY()-4));    //Diagonal move
+        assertTrue(p2.isValidMove(p2.getX()+4,p2.getY()));          //Straight move
+        assertTrue(p2.isValidMove(p2.getX(),p2.getY()-3));          //Straight move
+        assertFalse(p2.isValidMove(p2.getX(),p2.getY()+1));         // Out of bounds move
+        assertFalse(p2.isValidMove(p2.getX(),p2.getY()-8));         // Out of bounds move
+    }
+
+    @Test
+    public void testMakeRook() throws Exception {
+        Piece p1 = new Rook(Color.BLACK,0);
+        Piece p2 = new Rook(Color.WHITE,7);
+        assertEquals(Color.BLACK, p1.getColor());
+        assertEquals(Color.WHITE, p2.getColor());
+        assertEquals(0, p1.getY());
+        assertEquals(0, p1.getX());
+        assertEquals(7, p2.getX());
+        assertEquals(7, p2.getY());
+    }
+
+    @Test
+    public void  testPossibleRookMoves() throws Exception {
+        Piece p1 = new Rook(Color.BLACK,0);
+        Piece p2 = new Rook(Color.WHITE,7);
+        assertFalse(p1.isValidMove(p1.getX(),p1.getY()));               // No move
+        assertFalse(p1.isValidMove(p1.getX()+1,p1.getY()+1));    //Diagonal move
+        assertFalse(p1.isValidMove(p1.getX()-3,p1.getY()+3));    //Diagonal move
+        assertTrue(p1.isValidMove(p1.getX()+4,p1.getY()));          //Straight move
+        assertTrue(p1.isValidMove(p1.getX(),p1.getY()+3));          //Straight move
+        assertFalse(p1.isValidMove(p1.getX(),p1.getY()-1));         // Out of bounds move
+        assertFalse(p1.isValidMove(p1.getX(),p1.getY()+8));         // Out of bounds move
+
+        assertFalse(p2.isValidMove(p2.getX(),p2.getY()));               // No move
+        assertFalse(p2.isValidMove(p2.getX()+1,p2.getY()-1));    //Diagonal move
+        assertFalse(p2.isValidMove(p2.getX()-3,p2.getY()-3));    //Diagonal move
+        assertTrue(p2.isValidMove(p2.getX()-4,p2.getY()));          //Straight move
+        assertTrue(p2.isValidMove(p2.getX(),p2.getY()-3));          //Straight move
+        assertFalse(p2.isValidMove(p2.getX(),p2.getY()+1));         // Out of bounds move
+        assertFalse(p2.isValidMove(p2.getX(),p2.getY()-8));         // Out of bounds move
+    }
+
+    @Test
+    public void testMakeBishop() throws Exception {
+        Piece p1 = new Bishop(Color.BLACK,2);
+        Piece p2 = new Bishop(Color.WHITE,5);
+        assertEquals(Color.BLACK, p1.getColor());
+        assertEquals(Color.WHITE, p2.getColor());
+        assertEquals(0, p1.getY());
+        assertEquals(2, p1.getX());
+        assertEquals(5, p2.getX());
+        assertEquals(7, p2.getY());
+    }
+
+    @Test
+    public void  testPossibleBishopMoves() throws Exception {
+        Piece p1 = new Bishop(Color.BLACK,2);
+        Piece p2 = new Bishop(Color.WHITE,5);
+        assertFalse(p1.isValidMove(p1.getX(),p1.getY()));               // No move
+        assertTrue(p1.isValidMove(p1.getX()+1,p1.getY()+1));    //Diagonal move
+        assertTrue(p1.isValidMove(p1.getX()-2,p1.getY()+2));    //Diagonal move
+        assertFalse(p1.isValidMove(p1.getX()+4,p1.getY()));          //Straight move
+        assertFalse(p1.isValidMove(p1.getX(),p1.getY()+3));          //Straight move
+        assertFalse(p1.isValidMove(p1.getX(),p1.getY()-1));         // Out of bounds move
+        assertFalse(p1.isValidMove(p1.getX(),p1.getY()+8));         // Out of bounds move
+
+        assertFalse(p2.isValidMove(p2.getX(),p2.getY()));               // No move
+        assertTrue(p2.isValidMove(p2.getX()+1,p2.getY()-1));    //Diagonal move
+        assertTrue(p2.isValidMove(p2.getX()-3,p2.getY()-3));    //Diagonal move
+        assertFalse(p2.isValidMove(p2.getX()-4,p2.getY()));          //Straight move
+        assertFalse(p2.isValidMove(p2.getX(),p2.getY()-3));          //Straight move
+        assertFalse(p2.isValidMove(p2.getX(),p2.getY()+1));         // Out of bounds move
+        assertFalse(p2.isValidMove(p2.getX(),p2.getY()-8));         // Out of bounds move
+    }
+
+    @Test
+    public void testMakeKnight() throws Exception {
+        Piece p1 = new Knight(Color.BLACK,1);
+        Piece p2 = new Knight(Color.WHITE,6);
+        assertEquals(Color.BLACK, p1.getColor());
+        assertEquals(Color.WHITE, p2.getColor());
+        assertEquals(0, p1.getY());
+        assertEquals(1, p1.getX());
+        assertEquals(6, p2.getX());
+        assertEquals(7, p2.getY());
+    }
+
+    @Test
+    public void  testPossibleKnightMoves() throws Exception {
+        Piece p1 = new Knight(Color.BLACK,1);
+        Piece p2 = new Knight(Color.WHITE,5);
+        assertFalse(p1.isValidMove(p1.getX(),p1.getY()));                   // No move
+        assertFalse(p1.isValidMove(p1.getX()+1,p1.getY()+1));       //Diagonal move
+        assertFalse(p1.isValidMove(p1.getX()-2,p1.getY()+2));       //Diagonal move
+        assertFalse(p1.isValidMove(p1.getX()+4,p1.getY()));             //Straight move
+        assertFalse(p1.isValidMove(p1.getX(),p1.getY()+3));             //Straight move
+        assertFalse(p1.isValidMove(p1.getX(),p1.getY()-1));             // Out of bounds move
+        assertFalse(p1.isValidMove(p1.getX(),p1.getY()+8));             // Out of bounds move
+        assertTrue(p1.isValidMove(p1.getX()+1,p1.getY()+2));        // Knight move
+        assertTrue(p1.isValidMove(p1.getX()-1,p1.getY()+2));        // Knight move
+        assertTrue(p1.isValidMove(p1.getX()+2,p1.getY()+1));        // Knight move
+
+        assertFalse(p2.isValidMove(p2.getX(),p2.getY()));                   // No move
+        assertFalse(p2.isValidMove(p2.getX()+1,p2.getY()-1));       //Diagonal move
+        assertFalse(p2.isValidMove(p2.getX()-3,p2.getY()-3));       //Diagonal move
+        assertFalse(p2.isValidMove(p2.getX()-4,p2.getY()));             //Straight move
+        assertFalse(p2.isValidMove(p2.getX(),p2.getY()-3));             //Straight move
+        assertFalse(p2.isValidMove(p2.getX(),p2.getY()+1));             // Out of bounds move
+        assertFalse(p2.isValidMove(p2.getX(),p2.getY()-8));             // Out of bounds move
+        assertTrue(p2.isValidMove(p2.getX()+1,p2.getY()-2));        // Knight move
+        assertTrue(p2.isValidMove(p2.getX()-1,p2.getY()-2));        // Knight move
+        assertTrue(p2.isValidMove(p2.getX()+2,p2.getY()-1));        // Knight move
+    }
+}

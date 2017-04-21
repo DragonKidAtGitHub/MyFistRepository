@@ -19,6 +19,13 @@ public class King implements Piece {
         isAvailable = true;
     }
 
+    public King(Color color, int x, int y) {
+        this.color = color;
+        this.x = x;
+        this.y = y;
+        isAvailable = true;
+    }
+
     public Color getColor() {
         return color;
     }
@@ -34,7 +41,8 @@ public class King implements Piece {
 
     @Override
     public void moveTo(int toX, int toY) {
-
+        x = toX;
+        y = toY;
     }
 
     @Override
@@ -45,7 +53,7 @@ public class King implements Piece {
         else if (isOutOfBoundsMove(toX, toY)){
             return false;
         }
-        else if (Math.sqrt(Math.pow(Math.abs(x - toX), 2) + Math.pow(Math.abs(y - toY), 2)) <= Math.sqrt(2)){
+        else if (Math.abs(x-toX)<=1 && Math.abs(y-toY)<=1){
             return true;
         }
         else{
