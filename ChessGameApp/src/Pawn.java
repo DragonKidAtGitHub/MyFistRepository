@@ -8,22 +8,14 @@ public class Pawn implements Piece {
     private boolean hasMoved;
     private boolean isAvailable;
 
-    public Pawn(Color color, int x){
+    Pawn(Color color, int x){
         this.color = color;
         isAvailable = true;
         hasMoved = false;
-        if (color == Color.BLACK){
-            y = 1;
-        }
-        else {
-            y = 6;
-        }
-        if (x >= 0 && x <= 7){
-            this.x = x;
-        }
-        else{
-            this.x = -1;
-        }
+        if (color == Color.BLACK)   y = 1;
+        else                        y = 6;
+        if (x >= 0 && x <= 7)       this.x = x;
+        else                        this.x = -1;
     }
 
     public Pawn(Color color, int x, int y){
@@ -35,41 +27,15 @@ public class Pawn implements Piece {
 
     @Override
     public boolean isValidMove(int toX, int toY) {
-        if (isNoMove(toX, toY)){
-            return false;
-        }
-        else if (isOutOfBoundsMove(toX, toY)){
-            return false;
-        }
-        else if (isDiagonalMove(toX,toY)){
-            return true;
-        }
+        if (isNoMove(toX, toY))                 return false;
+        else if (isOutOfBoundsMove(toX, toY))   return false;
+        else if (isDiagonalMove(toX,toY))       return true;
         else{
-            if (color==Color.BLACK){
-                if (toX == x && toY == y+1) {
-                    return true;
-                }
-                else {
-                    if (!hasMoved && toX == x && toY == y+2){
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                }
+            if (color==Color.BLACK) {
+                return toX == x && toY == y + 1 || !hasMoved && toX == x && toY == y + 2;
             }
             else if (color == Color.WHITE) {
-                if (toX == x && toY == y-1) {
-                    return true;
-                }
-                else {
-                    if (!hasMoved && toX == x && toY == y-2){
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                }
+                return toX == x && toY == y - 1 || !hasMoved && toX == x && toY == y - 2;
             }
             else return false;
         }
@@ -101,32 +67,16 @@ public class Pawn implements Piece {
     }
 
     @Override
-    public void moveTo(int toX, int toY) {
-        x = toX;
-        y = toY;
-        if (!hasMoved){
-            hasMoved = true;
-        }
+    public void toggleIsAvailable() {
+        isAvailable = !isAvailable;
     }
 
     private boolean isDiagonalMove(int toX, int toY){
-        if (color==Color.BLACK){
-            if (toX == x+1 && toY == y+1){
-                return true;
-            }
-            else if (toX == x-1 && toY == y+1){
-                return true;
-            }
-            else return false;
-        }
-        else {
-            if (toX == x+1 && toY == y-1){
-                return true;
-            }
-            else if (toX == x-1 && toY == y-1){
-                return true;
-            }
-            else return false;
-        }
+        if (color==Color.BLACK)     return toX == x + 1 && toY == y + 1 || toX == x - 1 && toY == y + 1;
+        else                        return toX == x + 1 && toY == y - 1 || toX == x - 1 && toY == y - 1;
+    }
+
+    public void checkHasMoved() {
+
     }
 }

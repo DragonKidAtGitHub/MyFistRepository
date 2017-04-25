@@ -8,6 +8,5 @@ public interface Piece {
     Color getColor();
     int getX();
     int getY();
-
-    void moveTo(int toX, int toY);
+    void toggleIsAvailable();
 }

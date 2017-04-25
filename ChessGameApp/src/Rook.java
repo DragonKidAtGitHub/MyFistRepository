@@ -7,7 +7,7 @@ public class Rook implements Piece {
     private int y;
     private boolean isAvailable;
 
-    public Rook(Color color, int x){
+    Rook(Color color, int x){
         this.color = color;
         isAvailable = true;
         this.x = x;
@@ -26,8 +26,7 @@ public class Rook implements Piece {
     public boolean isValidMove(int toX, int toY) {
         if (isNoMove(toX,toY))                  return false;
         else if (isOutOfBoundsMove(toX,toY))    return false;
-        else if (isStraightMove(toX,toY))       return true;
-        else                                    return false;
+        else return isStraightMove(toX, toY);
     }
 
     @Override
@@ -40,7 +39,7 @@ public class Rook implements Piece {
         return (toX < 0 || toX > 7 || toY < 0 || toY > 7);
     }
 
-    public boolean isStraightMove(int toX, int toY){
+    private boolean isStraightMove(int toX, int toY){
         return (toX==x || toY ==y);
     }
 
@@ -60,8 +59,7 @@ public class Rook implements Piece {
     }
 
     @Override
-    public void moveTo(int toX, int toY) {
-        this.x = x;
-        this.y = y;
+    public void toggleIsAvailable() {
+        isAvailable = !isAvailable;
     }
 }

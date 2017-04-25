@@ -7,7 +7,7 @@ public class Bishop implements Piece {
     private int y;
     private boolean isAvailable;
 
-    public Bishop(Color color, int x){
+    Bishop(Color color, int x){
         this.color = color;
         isAvailable = true;
         this.x = x;
@@ -26,8 +26,7 @@ public class Bishop implements Piece {
     public boolean isValidMove(int toX, int toY) {
         if (isNoMove(toX,toY))                  return false;
         else if (isOutOfBoundsMove(toX,toY))    return false;
-        else if (isDiagonalMove(toX,toY))       return true;
-        else                                    return false;
+        else return isDiagonalMove(toX, toY);
     }
 
     @Override
@@ -40,7 +39,7 @@ public class Bishop implements Piece {
         return (toX < 0 || toX > 7 || toY < 0 || toY > 7);
     }
 
-    public boolean isDiagonalMove(int toX, int toY){
+    private boolean isDiagonalMove(int toX, int toY){
         return (Math.abs(x-toX) == Math.abs(y-toY));
     }
 
@@ -60,8 +59,8 @@ public class Bishop implements Piece {
     }
 
     @Override
-    public void moveTo(int toX, int toY) {
-        this.x = x;
-        this.y = y;
+    public void toggleIsAvailable() {
+
     }
+
 }

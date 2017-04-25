@@ -7,7 +7,7 @@ public class King implements Piece {
     private int y;
     private boolean isAvailable;
 
-    public King(Color color) {
+    King(Color color) {
         this.color = color;
         x = 4;
         if (color == Color.BLACK){
@@ -40,9 +40,8 @@ public class King implements Piece {
     }
 
     @Override
-    public void moveTo(int toX, int toY) {
-        x = toX;
-        y = toY;
+    public void toggleIsAvailable() {
+        isAvailable = !isAvailable;
     }
 
     @Override
@@ -53,12 +52,7 @@ public class King implements Piece {
         else if (isOutOfBoundsMove(toX, toY)){
             return false;
         }
-        else if (Math.abs(x-toX)<=1 && Math.abs(y-toY)<=1){
-            return true;
-        }
-        else{
-            return false;
-        }
+        else return Math.abs(x - toX) <= 1 && Math.abs(y - toY) <= 1;
     }
 
     @Override

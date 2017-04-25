@@ -1,7 +1,7 @@
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ChessGameTest {
+class ChessGameTest {
     @Test
     public void testColor() throws Exception {
         Color c1, c2;
@@ -14,8 +14,8 @@ public class ChessGameTest {
 
     @Test
     public void testMakeKing() throws Exception {
-        Piece p1 = new King(Color.BLACK);
-        Piece p2 = new King(Color.WHITE);
+        King p1 = new King(Color.BLACK);
+        King p2 = new King(Color.WHITE);
         assertEquals(Color.BLACK, p1.getColor());
         assertEquals(Color.WHITE, p2.getColor());
         assertEquals(4, p1.getX());
@@ -26,7 +26,7 @@ public class ChessGameTest {
 
     @Test
     public void  testPossibleKingMoves() throws Exception {
-        Piece p = new King(Color.BLACK);
+        King p = new King(Color.BLACK);
         assertFalse(p.isValidMove(p.getX(),p.getY())); // No move
         assertTrue(p.isValidMove(p.getX()+1,p.getY()+1)); //Diagonal move
         assertFalse(p.isValidMove(p.getX(),p.getY()-1)); // Out of bounds move
@@ -36,8 +36,8 @@ public class ChessGameTest {
 
     @Test
     public void testMakePawn() throws Exception {
-        Piece p1 = new Pawn(Color.BLACK, 1);
-        Piece p2 = new Pawn(Color.WHITE, 2);
+        Pawn p1 = new Pawn(Color.BLACK, 1);
+        Pawn p2 = new Pawn(Color.WHITE, 2);
         assertEquals(Color.BLACK, p1.getColor());
         assertEquals(Color.WHITE, p2.getColor());
         assertEquals(1, p1.getY());
@@ -72,11 +72,6 @@ public class ChessGameTest {
         assertFalse(p1.isValidMove(p1.getX()-1,p1.getY()-1)); // Diagonal move
         assertFalse(p2.isValidMove(p2.getX()+1,p2.getY()+1)); // Diagonal move
         assertFalse(p2.isValidMove(p2.getX()-1,p2.getY()+1)); // Diagonal move
-
-        p1.moveTo(p1.getX(),p1.getY()+1);
-        p2.moveTo(p2.getX(),p2.getY()-1);
-        assertFalse(p1.isValidMove(p1.getX(), p1.getY()+2)); // Only allowed first time
-        assertFalse(p2.isValidMove(p2.getX(), p2.getY()-2)); // Only allowed first time
     }
 
     @Test
@@ -217,5 +212,45 @@ public class ChessGameTest {
         assertTrue(p2.isValidMove(p2.getX()+1,p2.getY()-2));        // Knight move
         assertTrue(p2.isValidMove(p2.getX()-1,p2.getY()-2));        // Knight move
         assertTrue(p2.isValidMove(p2.getX()+2,p2.getY()-1));        // Knight move
+    }
+
+    @Test
+    public void testInitializeChessBoard() throws Exception {
+        ChessBoard chessBoard = new ChessBoard();
+        chessBoard.initialize();
+
+        assertTrue(chessBoard.getPiece(0,0) instanceof Rook);
+        assertTrue(chessBoard.getPiece(0,1) instanceof Knight);
+        assertTrue(chessBoard.getPiece(0,2) instanceof Bishop);
+        assertTrue(chessBoard.getPiece(0,3) instanceof Queen);
+        assertTrue(chessBoard.getPiece(0,4) instanceof King);
+        assertTrue(chessBoard.getPiece(0,5) instanceof Bishop);
+        assertTrue(chessBoard.getPiece(0,6) instanceof Knight);
+        assertTrue(chessBoard.getPiece(0,7) instanceof Rook);
+        assertTrue(chessBoard.getPiece(1,0) instanceof Pawn);
+        assertTrue(chessBoard.getPiece(1,1) instanceof Pawn);
+        assertTrue(chessBoard.getPiece(1,2) instanceof Pawn);
+        assertTrue(chessBoard.getPiece(1,3) instanceof Pawn);
+        assertTrue(chessBoard.getPiece(1,4) instanceof Pawn);
+        assertTrue(chessBoard.getPiece(1,5) instanceof Pawn);
+        assertTrue(chessBoard.getPiece(1,6) instanceof Pawn);
+        assertTrue(chessBoard.getPiece(1,7) instanceof Pawn);
+
+        assertTrue(chessBoard.getPiece(7,0) instanceof Rook);
+        assertTrue(chessBoard.getPiece(7,1) instanceof Knight);
+        assertTrue(chessBoard.getPiece(7,2) instanceof Bishop);
+        assertTrue(chessBoard.getPiece(7,3) instanceof Queen);
+        assertTrue(chessBoard.getPiece(7,4) instanceof King);
+        assertTrue(chessBoard.getPiece(7,5) instanceof Bishop);
+        assertTrue(chessBoard.getPiece(7,6) instanceof Knight);
+        assertTrue(chessBoard.getPiece(7,7) instanceof Rook);
+        assertTrue(chessBoard.getPiece(6,0) instanceof Pawn);
+        assertTrue(chessBoard.getPiece(6,1) instanceof Pawn);
+        assertTrue(chessBoard.getPiece(6,2) instanceof Pawn);
+        assertTrue(chessBoard.getPiece(6,3) instanceof Pawn);
+        assertTrue(chessBoard.getPiece(6,4) instanceof Pawn);
+        assertTrue(chessBoard.getPiece(6,5) instanceof Pawn);
+        assertTrue(chessBoard.getPiece(6,6) instanceof Pawn);
+        assertTrue(chessBoard.getPiece(6,7) instanceof Pawn);
     }
 }

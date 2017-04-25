@@ -27,8 +27,7 @@ public class Queen implements Piece {
         if (isNoMove(toX,toY))                  return false;
         else if (isOutOfBoundsMove(toX,toY))    return false;
         else if (isDiagonalMove(toX,toY))       return true;
-        else if (isStraightMove(toX,toY))       return true;
-        else                                    return false;
+        else return isStraightMove(toX, toY);
     }
 
     @Override
@@ -41,11 +40,11 @@ public class Queen implements Piece {
         return (toX < 0 || toX > 7 || toY < 0 || toY > 7);
     }
 
-    public boolean isDiagonalMove(int toX, int toY){
+    private boolean isDiagonalMove(int toX, int toY){
         return (Math.abs(x-toX) == Math.abs(y-toY));
     }
 
-    public boolean isStraightMove(int toX, int toY){
+    private boolean isStraightMove(int toX, int toY){
         return (toX==x || toY ==y);
     }
 
@@ -65,8 +64,7 @@ public class Queen implements Piece {
     }
 
     @Override
-    public void moveTo(int toX, int toY) {
-        this.x = x;
-        this.y = y;
+    public void toggleIsAvailable() {
+        isAvailable = !isAvailable;
     }
 }

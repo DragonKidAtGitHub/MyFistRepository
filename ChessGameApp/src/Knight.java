@@ -7,7 +7,7 @@ public class Knight implements Piece {
     private int y;
     private boolean isAvailable;
 
-    public Knight(Color color, int x){
+    Knight(Color color, int x){
         this.color = color;
         isAvailable = true;
         this.x = x;
@@ -26,8 +26,7 @@ public class Knight implements Piece {
     public boolean isValidMove(int toX, int toY) {
         if (isNoMove(toX,toY))                  return false;
         else if (isOutOfBoundsMove(toX,toY))    return false;
-        else if (isKnightMove(toX,toY))         return true;
-        else                                    return false;
+        else return isKnightMove(toX, toY);
     }
 
     @Override
@@ -40,7 +39,7 @@ public class Knight implements Piece {
         return (toX < 0 || toX > 7 || toY < 0 || toY > 7);
     }
 
-    public boolean isKnightMove(int toX, int toY){
+    private boolean isKnightMove(int toX, int toY){
         return ((Math.abs(x-toX)==1 && Math.abs(y-toY)==2) || (Math.abs(x-toX)==2 && Math.abs(y-toY)==1));
     }
 
@@ -60,9 +59,9 @@ public class Knight implements Piece {
     }
 
     @Override
-    public void moveTo(int toX, int toY) {
-        this.x = x;
-        this.y = y;
+    public void toggleIsAvailable() {
+        isAvailable = !isAvailable;
     }
+
 }
 

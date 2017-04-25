@@ -5,12 +5,20 @@ public class Spot {
     private Piece piece;
     private Color color;
 
-    public Spot(Color color) {
+    Spot(Color color) {
         this.color = color;
     }
 
     public Spot(Piece piece, Color color) {
         this.piece = piece;
         this.color = color;
+    }
+
+    public void setPiece(Piece piece){
+        this.piece = piece;
+    }
+
+    public Piece getPiece(){
+        return piece;
     }
 }
