@@ -5,11 +5,9 @@ public class Bishop implements Piece {
     private Color color;
     private int x;
     private int y;
-    private boolean isAvailable;
 
     Bishop(Color color, int x){
         this.color = color;
-        isAvailable = true;
         this.x = x;
         if (color==Color.BLACK) y = 0;
         else                    y = 7;
@@ -19,7 +17,6 @@ public class Bishop implements Piece {
         this.color = color;
         this.x = x;
         this.y = y;
-        isAvailable = true;
     }
 
     @Override
@@ -56,11 +53,6 @@ public class Bishop implements Piece {
     @Override
     public int getY() {
         return y;
-    }
-
-    @Override
-    public void toggleIsAvailable() {
-
     }
 
 }

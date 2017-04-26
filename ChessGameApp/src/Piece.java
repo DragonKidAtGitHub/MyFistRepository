@@ -8,5 +8,4 @@ public interface Piece {
     Color getColor();
     int getX();
     int getY();
-    void toggleIsAvailable();
 }

@@ -7,6 +7,7 @@ public class Spot {
 
     Spot(Color color) {
         this.color = color;
+        this.piece = null;
     }
 
     public Spot(Piece piece, Color color) {
@@ -20,5 +21,9 @@ public class Spot {
 
     public Piece getPiece(){
         return piece;
+    }
+
+    public void removePiece() {
+        this.piece = null;
     }
 }

@@ -63,4 +63,8 @@ public class ChessBoard {
         Piece p = getPiece(fromX,fromY);
         setPiece(p,toX,toY);
     }
+
+    public void removePiece(int x, int y) {
+        spots[x][y].removePiece();
+    }
 }

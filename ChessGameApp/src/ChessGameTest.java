@@ -253,4 +253,17 @@ class ChessGameTest {
         assertTrue(chessBoard.getPiece(6,6) instanceof Pawn);
         assertTrue(chessBoard.getPiece(6,7) instanceof Pawn);
     }
+
+    @Test
+    public void testRemovePiece() throws Exception {
+        ChessBoard cb = new ChessBoard();
+        Piece p = cb.getPiece(0,0);
+        assertNull(p);
+        cb.initialize();
+        p = cb.getPiece(0,0);
+        assertTrue(p instanceof Rook);
+        cb.removePiece(0,0);
+        p = cb.getPiece(0,0);
+        assertNull(p);
+    }
 }

@@ -6,11 +6,9 @@ public class Pawn implements Piece {
     private int x;
     private int y;
     private boolean hasMoved;
-    private boolean isAvailable;
 
     Pawn(Color color, int x){
         this.color = color;
-        isAvailable = true;
         hasMoved = false;
         if (color == Color.BLACK)   y = 1;
         else                        y = 6;
@@ -22,7 +20,6 @@ public class Pawn implements Piece {
         this.color = color;
         this.x = x;
         this.y = y;
-        isAvailable = true;
     }
 
     @Override
@@ -64,11 +61,6 @@ public class Pawn implements Piece {
     @Override
     public int getY() {
         return y;
-    }
-
-    @Override
-    public void toggleIsAvailable() {
-        isAvailable = !isAvailable;
     }
 
     private boolean isDiagonalMove(int toX, int toY){

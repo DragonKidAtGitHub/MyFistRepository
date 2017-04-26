@@ -5,11 +5,9 @@ public class Queen implements Piece {
     private Color color;
     private int x;
     private int y;
-    private boolean isAvailable;
 
     public Queen(Color color){
         this.color = color;
-        isAvailable = true;
         x = 3;
         if (color==Color.BLACK) y = 0;
         else                    y = 7;
@@ -19,7 +17,6 @@ public class Queen implements Piece {
         this.color = color;
         this.x = x;
         this.y = y;
-        isAvailable = true;
     }
 
     @Override
@@ -63,8 +60,4 @@ public class Queen implements Piece {
         return y;
     }
 
-    @Override
-    public void toggleIsAvailable() {
-        isAvailable = !isAvailable;
-    }
 }

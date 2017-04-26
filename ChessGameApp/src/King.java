@@ -5,7 +5,6 @@ public class King implements Piece {
     private Color color;
     private int x;
     private int y;
-    private boolean isAvailable;
 
     King(Color color) {
         this.color = color;
@@ -16,14 +15,12 @@ public class King implements Piece {
         else{
             y = 7;
         }
-        isAvailable = true;
     }
 
     public King(Color color, int x, int y) {
         this.color = color;
         this.x = x;
         this.y = y;
-        isAvailable = true;
     }
 
     public Color getColor() {
@@ -37,11 +34,6 @@ public class King implements Piece {
     @Override
     public int getY() {
         return y;
-    }
-
-    @Override
-    public void toggleIsAvailable() {
-        isAvailable = !isAvailable;
     }
 
     @Override
