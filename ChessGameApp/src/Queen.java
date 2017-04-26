@@ -3,61 +3,37 @@
  */
 public class Queen implements Piece {
     private Color color;
-    private int x;
-    private int y;
 
     public Queen(Color color){
         this.color = color;
-        x = 3;
-        if (color==Color.BLACK) y = 0;
-        else                    y = 7;
-    }
-
-    public Queen(Color color, int x, int y){
-        this.color = color;
-        this.x = x;
-        this.y = y;
     }
 
     @Override
-    public boolean isValidMove(int toX, int toY) {
-        if (isNoMove(toX,toY))                  return false;
-        else if (isOutOfBoundsMove(toX,toY))    return false;
-        else if (isDiagonalMove(toX,toY))       return true;
-        else return isStraightMove(toX, toY);
+    public boolean isValidMove(int fromX, int fromY, int toX, int toY) {
+        if (isNoMove(fromX, fromY, toX, toY))               return false;
+        else if (isOutOfBoundsMove(toX, toY))               return false;
+        else if (isDiagonalMove(fromX, fromY, toX, toY))    return true;
+        else return isStraightMove(fromX, fromY, toX, toY);
     }
 
-    @Override
-    public boolean isNoMove(int toX, int toY) {
-        return (toX==x && toY==y);
+    public boolean isNoMove(int fromX, int fromY, int toX, int toY) {
+        return (toX==fromX && toY==fromY);
     }
 
-    @Override
     public boolean isOutOfBoundsMove(int toX, int toY) {
         return (toX < 0 || toX > 7 || toY < 0 || toY > 7);
     }
 
-    private boolean isDiagonalMove(int toX, int toY){
-        return (Math.abs(x-toX) == Math.abs(y-toY));
+    private boolean isDiagonalMove(int fromX, int fromY, int toX, int toY){
+        return (Math.abs(fromX-toX) == Math.abs(fromY-toY));
     }
 
-    private boolean isStraightMove(int toX, int toY){
-        return (toX==x || toY ==y);
+    private boolean isStraightMove(int fromX, int fromY, int toX, int toY){
+        return (toX==fromX || toY ==fromY);
     }
 
     @Override
     public Color getColor() {
         return color;
     }
-
-    @Override
-    public int getX() {
-        return x;
-    }
-
-    @Override
-    public int getY() {
-        return y;
-    }
-
 }

@@ -25,29 +25,29 @@ public class ChessBoard {
 
     void initialize() {
         Color color = Color.BLACK;
-        spots[0][0].setPiece(new Rook(color,0));
-        spots[0][1].setPiece(new Knight(color,1));
-        spots[0][2].setPiece(new Bishop(color,2));
+        spots[0][0].setPiece(new Rook(color));
+        spots[0][1].setPiece(new Knight(color));
+        spots[0][2].setPiece(new Bishop(color));
         spots[0][3].setPiece(new Queen(color));
         spots[0][4].setPiece(new King(color));
-        spots[0][5].setPiece(new Bishop(color,5));
-        spots[0][6].setPiece(new Knight(color,6));
-        spots[0][7].setPiece(new Rook(color,7));
+        spots[0][5].setPiece(new Bishop(color));
+        spots[0][6].setPiece(new Knight(color));
+        spots[0][7].setPiece(new Rook(color));
         for (int column = 0; column < columns; column++){
-            spots[1][column].setPiece(new Pawn(color,column));
+            spots[1][column].setPiece(new Pawn(color));
         }
 
         color = Color.WHITE;
-        spots[7][0].setPiece(new Rook(color,0));
-        spots[7][1].setPiece(new Knight(color,1));
-        spots[7][2].setPiece(new Bishop(color,2));
+        spots[7][0].setPiece(new Rook(color));
+        spots[7][1].setPiece(new Knight(color));
+        spots[7][2].setPiece(new Bishop(color));
         spots[7][3].setPiece(new Queen(color));
         spots[7][4].setPiece(new King(color));
-        spots[7][5].setPiece(new Bishop(color,5));
-        spots[7][6].setPiece(new Knight(color,6));
-        spots[7][7].setPiece(new Rook(color,7));
+        spots[7][5].setPiece(new Bishop(color));
+        spots[7][6].setPiece(new Knight(color));
+        spots[7][7].setPiece(new Rook(color));
         for (int column = 0; column < columns; column++){
-            spots[6][column].setPiece(new Pawn(color,column));
+            spots[6][column].setPiece(new Pawn(color));
         }
     }
 
