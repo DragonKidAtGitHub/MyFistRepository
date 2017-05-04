@@ -265,14 +265,14 @@ class ChessGameTest {
         cb.initialize();
 
         String[][] cb_true = new String[][]{
-                {"R", "k", "B", "Q", "K", "B", "k", "R"},
-                {"p", "p", "p", "p", "p", "p", "p", "p"},
-                {" ", " ", " ", " ", " ", " ", " ", " "},
-                {" ", " ", " ", " ", " ", " ", " ", " "},
-                {" ", " ", " ", " ", " ", " ", " ", " "},
-                {" ", " ", " ", " ", " ", " ", " ", " "},
-                {"p", "p", "p", "p", "p", "p", "p", "p"},
-                {"R", "k", "B", "Q", "K", "B", "k", "R"}
+                {"bR", "bk", "bB", "bQ", "bK", "bB", "bk", "bR"},
+                {"bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"},
+                {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+                {"wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"},
+                {"wR", "wk", "wB", "wQ", "wK", "wB", "wk", "wR"}
         };
 
         assertArrayEquals(cb_true,cb.boardLayout());
@@ -280,15 +280,31 @@ class ChessGameTest {
         cb.movePiece(1,0,4,0); // should not be possible
         assertArrayEquals(cb_true,cb.boardLayout());
         cb.movePiece(1,0,2,0);
-        cb_true[1][0] = " ";
-        cb_true[2][0] = "p";
+        cb_true[1][0] = "  ";
+        cb_true[2][0] = "bP";
         assertArrayEquals(cb_true,cb.boardLayout());
         cb.movePiece(0,1,2,0); // should not be possible
         assertArrayEquals(cb_true,cb.boardLayout());
         cb.movePiece(0,1,2,2);
-        cb_true[0][1] = " ";
-        cb_true[2][2] = "k";
-        cb.printBoardLayout();
+        cb_true[0][1] = "  ";
+        cb_true[2][2] = "bk";
         assertArrayEquals(cb_true,cb.boardLayout());
+
+
+        cb.movePiece(7,0,6,0); // should not be possible
+        cb.movePiece(6,0,3,0); // should not be possible
+        assertArrayEquals(cb_true,cb.boardLayout());
+        cb.movePiece(6,0,5,0);
+        cb_true[6][0] = "  ";
+        cb_true[5][0] = "wP";
+        assertArrayEquals(cb_true,cb.boardLayout());
+        cb.movePiece(7,1,5,0); // should not be possible
+        assertArrayEquals(cb_true,cb.boardLayout());
+        cb.movePiece(7,1,5,2);
+        cb_true[7][1] = "  ";
+        cb_true[5][2] = "wk";
+        assertArrayEquals(cb_true,cb.boardLayout());
+
+        cb.printBoardLayout();
     }
 }

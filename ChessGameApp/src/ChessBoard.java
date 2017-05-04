@@ -79,13 +79,19 @@ public class ChessBoard {
         for (int x = 0; x < rows; x++){
             for (int y = 0; y < columns; y++) {
                 Piece p = spots[x][y].getPiece();
-                if (p instanceof Rook)          row += "R";
-                else if (p instanceof Knight)   row += "k";
-                else if (p instanceof Bishop)   row += "B";
-                else if (p instanceof Queen)    row += "Q";
-                else if (p instanceof King)     row += "K";
-                else if (p instanceof Pawn)     row += "p";
-                else                            row += "_";
+                if (p != null) {
+                    String c;
+                    if (p.getColor() == Color.BLACK)    c = "b";
+                    else                                c = "w";
+                    row += c;
+                    if (p instanceof Rook)              row += "R";
+                    else if (p instanceof Knight)       row += "k";
+                    else if (p instanceof Bishop)       row += "B";
+                    else if (p instanceof Queen)        row += "Q";
+                    else if (p instanceof King)         row += "K";
+                    else if (p instanceof Pawn)         row += "P";
+                }
+                else row += "__";
                 row += " ";
             }
             row += "\n";
@@ -98,14 +104,20 @@ public class ChessBoard {
         for (int x = 0; x < rows; x++){
             for (int y = 0; y < columns; y++) {
                 Piece p = spots[x][y].getPiece();
-                if (p instanceof Rook)          array[x][y] = "R";
-                else if (p instanceof Knight)   array[x][y] = "k";
-                else if (p instanceof Bishop)   array[x][y] = "B";
-                else if (p instanceof Queen)    array[x][y] = "Q";
-                else if (p instanceof King)     array[x][y] = "K";
-                else if (p instanceof Pawn)     array[x][y] = "p";
-                else                            array[x][y] = " ";
+                if (p != null) {
+                    String c;
+                    if (p.getColor() == Color.BLACK)    c = "b";
+                    else                                c = "w";
+                    if (p instanceof Rook)              array[x][y] = c + "R";
+                    else if (p instanceof Knight)       array[x][y] = c + "k";
+                    else if (p instanceof Bishop)       array[x][y] = c + "B";
+                    else if (p instanceof Queen)        array[x][y] = c + "Q";
+                    else if (p instanceof King)         array[x][y] = c + "K";
+                    else if (p instanceof Pawn)         array[x][y] = c + "P";
+                }
+                else array[x][y] = "  ";
             }
+
         }
         return array;
     }
@@ -113,12 +125,12 @@ public class ChessBoard {
     static void print2DArray(String[][] array) {
         int rows = array.length;
         int columns = array[0].length;
-        String row = "\n";
+        String row = "";
         for (int x = 0; x < rows; x++){
             for (int y = 0; y < columns; y++) {
                 String c = array[x][y];
-                if (c != " ")   row += c;
-                else            row += "_";
+                if (c != "  ")  row += c;
+                else            row += "__";
                 row += " ";
             }
             row += "\n";
