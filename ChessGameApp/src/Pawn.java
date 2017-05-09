@@ -40,4 +40,11 @@ public class Pawn implements Piece {
         else                        return (toX == fromX - 1 && toY == fromY) || (!hasMoved && toX == fromX - 2 && toY == fromY);
     }
 
+    public void setHasMoved() {
+        this.hasMoved = true;
+    }
+
+    public boolean hasMoved() {
+        return this.hasMoved;
+    }
 }
