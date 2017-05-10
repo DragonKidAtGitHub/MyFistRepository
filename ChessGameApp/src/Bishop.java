@@ -1,7 +1,7 @@
 /**
  * Created by ujo on 21.04.2017.
  */
-public class Bishop implements Piece {
+public class Bishop extends Piece {
     private Color color;
 
     Bishop(Color color){

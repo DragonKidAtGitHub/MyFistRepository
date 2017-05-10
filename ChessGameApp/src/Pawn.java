@@ -1,26 +1,13 @@
 /**
  * Created by ujo on 06.04.2017.
  */
-public class Pawn implements Piece {
-    private Color color;
-    private boolean hasMoved;
+public class Pawn extends Piece {
 
-    public Pawn(Color color){
+    Pawn(Color color){
         this.color = color;
     }
 
-    public boolean isNoMove(int fromX, int fromY, int toX, int toY) {
-        return (toX==fromX && toY==fromY);
-    }
 
-    public boolean isOutOfBoundsMove(int toX, int toY) {
-        return (toX < 0 || toX > 7 || toY < 0 || toY > 7);
-    }
-
-    @Override
-    public Color getColor() {
-        return color;
-    }
 
     @Override
     public boolean isValidMove(int fromX, int fromY, int toX, int toY) {
@@ -40,11 +27,4 @@ public class Pawn implements Piece {
         else                        return (toX == fromX - 1 && toY == fromY) || (!hasMoved && toX == fromX - 2 && toY == fromY);
     }
 
-    public void setHasMoved() {
-        this.hasMoved = true;
-    }
-
-    public boolean hasMoved() {
-        return this.hasMoved;
-    }
 }

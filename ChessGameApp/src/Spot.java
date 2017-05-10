@@ -23,7 +23,10 @@ public class Spot {
         return piece;
     }
 
-    public void removePiece() {
+    Piece removePiece() {
+        Piece p = getPiece();
         this.piece = null;
+        return p;
     }
+
 }
