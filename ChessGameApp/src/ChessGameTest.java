@@ -336,7 +336,16 @@ class ChessGameTest {
 
     @Test
     public void testDoublePawnMove() throws Exception {
+        ChessBoard cb = new ChessBoard();
+        cb.initialize();
 
+        Color c1 = Color.WHITE;
+        Color c2 = Color.BLACK;
+        assertTrue(cb.getPiece(1,0).isValidMove(1,0,3,0));
+        cb.movePiece(1,0,3,0, c2);
+        assertFalse(cb.getPiece(3,0).isValidMove(3,0,5,0));
+        cb.movePiece(6,0,5,0, c1);
+        assertFalse(cb.getPiece(5,0).isValidMove(5,0,3,0));
     }
 
     @Test
@@ -358,6 +367,15 @@ class ChessGameTest {
         correctBoardLayout[0][1] = "  ";
         correctBoardLayout[6][0] = "  ";
         correctBoardLayout[7][2] = "bk";
+
+        //Move black pawn
+        cb.movePiece(6,6,4, 6, c1);
+        cb.movePiece(4,6,3, 6, c1);
+        cb.movePiece(3,6,2, 6, c1);
+        cb.movePiece(2,6,1, 6, c1);
+        cb.movePiece(2,6,1, 7, c1);
+        correctBoardLayout[6][6] = "  ";
+        correctBoardLayout[1][7] = "wP";
         cb.printBoardLayout();
 
         assertArrayEquals(correctBoardLayout,cb.boardLayout());

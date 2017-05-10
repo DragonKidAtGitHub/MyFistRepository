@@ -61,9 +61,24 @@ public class ChessBoard {
             boolean toSpotIsEnemy       = isEnemyPiece(toX,toY,color);
             boolean isValidMove         = getPiece(fromX,fromY).isValidMove(fromX,fromY,toX,toY);
             boolean isNoPieceBetween    = !isPieceBetween(fromX,fromY,toX,toY);
-            if (isValidMove && isNoPieceBetween && (toSpotIsEmpty || toSpotIsEnemy)) {
-                Piece p = removePiece(fromX,fromY);
-                setPiece(toX,toY,p);
+            if (isValidMove && isNoPieceBetween) {
+                if (toSpotIsEmpty) {
+                    Piece p = removePiece(fromX, fromY);
+                    boolean isFirstTimeMoved = !p.hasMoved();
+                    if (isFirstTimeMoved) p.setHasMoved();
+                    setPiece(toX, toY, p);
+                }
+                else if (toSpotIsEnemy) {
+                    Piece ownPiece = getPiece(fromX,fromY);
+                    boolean isOkayToTakeEnemy = true;
+                    if (ownPiece instanceof Pawn) isOkayToTakeEnemy = ((Pawn) ownPiece).isDiagonalMove(fromX,fromY,toX,toY);
+                    if (isOkayToTakeEnemy) {
+                        removePiece(fromX, fromY);
+                        boolean isFirstTimeMoved = !ownPiece.hasMoved();
+                        if (isFirstTimeMoved) ownPiece.setHasMoved();
+                        setPiece(toX, toY, ownPiece);
+                    }
+                }
             }
         }
     }
@@ -91,6 +106,60 @@ public class ChessBoard {
         if (ownColor == Color.BLACK)    enemyColor = Color.WHITE;
         else                            enemyColor = Color.BLACK;
         return spots[x][y].getPiece().getColor() == enemyColor;
+    }
+
+    public boolean isPieceBetween(int fromX, int fromY, int toX, int toY) {
+        Piece p = getPiece(fromX,fromY);
+        if (p instanceof Knight) {
+            return false;
+        }
+        else {
+            if ((fromX == toX) || (fromY == toY)) { // straight move
+                if ((fromX == toX) && (toY > fromY)) { // straight right move
+                    for (int i = 1; i < Math.abs(toY-fromY); i++) {
+                        if (!isEmpty(fromX, fromY+i)) return true;
+                    }
+                }
+                else if ((fromX == toX) && (toY < fromY)) { // straight left move
+                    for (int i = 1; i < Math.abs(toY-fromY); i++) {
+                        if (!isEmpty(fromX, fromY-i)) return true;
+                    }
+                }
+                else if ((toX > fromX) && (fromY == toY)) { // straight down move
+                    for (int i = 1; i < Math.abs(toX-fromX); i++) {
+                        if (!isEmpty(fromX+i, fromY)) return true;
+                    }
+                }
+                else if ((toX < fromX) && (fromY == toY)) { // straight up move
+                    for (int i = 1; i < Math.abs(toX-fromX); i++) {
+                        if (!isEmpty(fromX-i, fromY)) return true;
+                    }
+                }
+            }
+            else if (Math.abs(toX-fromX) == Math.abs(toY-fromY)) { //diagonal move
+                if ((fromX < toX) && (fromY < toY)) { //diagonal down-right move
+                    for (int i = 1; i < Math.abs(fromX-toX); i++) {
+                        if (!isEmpty(fromX+i,fromY+i)) return true;
+                    }
+                }
+                else if ((fromX < toX) && (fromY > toY)) { //diagonal down-left move
+                    for (int i = 1; i < Math.abs(fromX-toX); i++) {
+                        if (!isEmpty(fromX+i,fromY-i)) return true;
+                    }
+                }
+                else if ((fromX > toX) && (fromY < toY)) { //diagonal up-left move
+                    for (int i = 1; i < Math.abs(fromX-toX); i++) {
+                        if (!isEmpty(fromX-i,fromY+i)) return true;
+                    }
+                }
+                else if ((fromX > toX) && (fromY > toY)) { //diagonal up-right move
+                    for (int i = 1; i < Math.abs(fromX-toX); i++) {
+                        if (!isEmpty(fromX-i,fromY-i)) return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public void printBoardLayout() {
@@ -157,57 +226,5 @@ public class ChessBoard {
         System.out.print(row);
     }
 
-    public boolean isPieceBetween(int fromX, int fromY, int toX, int toY) {
-        Piece p = getPiece(fromX,fromY);
-        if (p instanceof Knight) {
-            return false;
-        }
-        else {
-            if ((fromX == toX) || (fromY == toY)) { // straight move
-                if ((fromX == toX) && (toY > fromY)) { // straight right move
-                    for (int i = 1; i < Math.abs(toY-fromY); i++) {
-                        if (!isEmpty(fromX, fromY+i)) return true;
-                    }
-                }
-                else if ((fromX == toX) && (toY < fromY)) { // straight left move
-                    for (int i = 1; i < Math.abs(toY-fromY); i++) {
-                        if (!isEmpty(fromX, fromY-i)) return true;
-                    }
-                }
-                else if ((toX > fromX) && (fromY == toY)) { // straight down move
-                    for (int i = 1; i < Math.abs(toX-fromX); i++) {
-                        if (!isEmpty(fromX+i, fromY)) return true;
-                    }
-                }
-                else if ((toX < fromX) && (fromY == toY)) { // straight up move
-                    for (int i = 1; i < Math.abs(toX-fromX); i++) {
-                        if (!isEmpty(fromX-i, fromY)) return true;
-                    }
-                }
-            }
-            else if (Math.abs(toX-fromX) == Math.abs(toY-fromY)) { //diagonal move
-                if ((fromX < toX) && (fromY < toY)) { //diagonal down-right move
-                    for (int i = 1; i < Math.abs(fromX-toX); i++) {
-                        if (!isEmpty(fromX+i,fromY+i)) return true;
-                    }
-                }
-                else if ((fromX < toX) && (fromY > toY)) { //diagonal down-left move
-                    for (int i = 1; i < Math.abs(fromX-toX); i++) {
-                        if (!isEmpty(fromX+i,fromY-i)) return true;
-                    }
-                }
-                else if ((fromX > toX) && (fromY < toY)) { //diagonal up-left move
-                    for (int i = 1; i < Math.abs(fromX-toX); i++) {
-                        if (!isEmpty(fromX-i,fromY+i)) return true;
-                    }
-                }
-                else if ((fromX > toX) && (fromY > toY)) { //diagonal up-right move
-                    for (int i = 1; i < Math.abs(fromX-toX); i++) {
-                        if (!isEmpty(fromX-i,fromY-i)) return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
+
 }
