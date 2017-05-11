@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by ujo on 06.04.2017.
  */
@@ -5,6 +8,7 @@ public class ChessBoard {
     private final int rows = 8;
     private final int columns = 8;
     private Spot[][] spots = new Spot[rows][columns];
+    private ArrayList<Piece> removedPieces = new ArrayList<Piece>();
 
     ChessBoard() {
         for (int row = 0; row < rows; row++){
@@ -64,19 +68,20 @@ public class ChessBoard {
             if (isValidMove && isNoPieceBetween) {
                 if (toSpotIsEmpty) {
                     Piece p = removePiece(fromX, fromY);
-                    boolean isFirstTimeMoved = !p.hasMoved();
-                    if (isFirstTimeMoved) p.setHasMoved();
+                    boolean firstTimeMoved = !p.hasMoved();
+                    if (firstTimeMoved) p.setHasMoved();
                     setPiece(toX, toY, p);
                 }
                 else if (toSpotIsEnemy) {
-                    Piece ownPiece = getPiece(fromX,fromY);
+                    Piece temp = getPiece(fromX,fromY);
                     boolean isOkayToTakeEnemy = true;
-                    if (ownPiece instanceof Pawn) isOkayToTakeEnemy = ((Pawn) ownPiece).isDiagonalMove(fromX,fromY,toX,toY);
+                    if (temp instanceof Pawn) isOkayToTakeEnemy = ((Pawn) temp).isDiagonalMove(fromX,fromY,toX,toY);
                     if (isOkayToTakeEnemy) {
-                        removePiece(fromX, fromY);
-                        boolean isFirstTimeMoved = !ownPiece.hasMoved();
-                        if (isFirstTimeMoved) ownPiece.setHasMoved();
-                        setPiece(toX, toY, ownPiece);
+                        Piece p = removePiece(fromX, fromY);
+                        boolean firstTimeMoved = !p.hasMoved();
+                        if (firstTimeMoved) p.setHasMoved();
+                        removedPieces.add(getPiece(toX,toY));
+                        setPiece(toX, toY, p);
                     }
                 }
             }
