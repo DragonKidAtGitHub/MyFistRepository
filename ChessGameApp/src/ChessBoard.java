@@ -1,12 +1,10 @@
 import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by ujo on 06.04.2017.
  */
 public class ChessBoard {
-    private final int rows = 8;
-    private final int columns = 8;
+    public static final int rows = 8;
+    public static final int columns = 8;
     private Spot[][] spots = new Spot[rows][columns];
     private ArrayList<Piece> removedPieces = new ArrayList<Piece>();
 
@@ -70,7 +68,9 @@ public class ChessBoard {
             boolean isValidMove         = getPiece(fromX,fromY).isValidMove(fromX,fromY,toX,toY);
             boolean isNoPieceBetween    = !isPieceBetween(fromX,fromY,toX,toY);
             if (isValidMove && isNoPieceBetween) {
-                if (toSpotIsEmpty) captureSpot(fromX, fromY, toX, toY);
+                if (toSpotIsEmpty) {
+                    captureSpot(fromX, fromY, toX, toY);
+                }
                 else if (toSpotIsEnemy) {
                     Piece temp = getPiece(fromX,fromY);
                     if (temp instanceof Pawn) {
@@ -80,6 +80,39 @@ public class ChessBoard {
                 }
             }
         }
+    }
+
+    public boolean isChecked(Color c) {
+        int kingPosX = -1;
+        int kingPosY = -1;
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                Piece p = getPiece(row,column);
+                if (p instanceof King && c == p.getColor()) {
+                    kingPosX = row;
+                    kingPosY = column;
+                    break;
+                }
+            }
+        }
+
+        Color oppositeColor = Color.BLACK;
+        if (c == oppositeColor) oppositeColor = Color.WHITE;
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                if (isOwnPiece(row, column, oppositeColor)) {
+                    Piece p = getPiece(row,column);
+                    boolean isValidMove = p.isValidMove(row, column, kingPosX, kingPosY);
+                    boolean isNoPieceBetween = !isPieceBetween(row, column, kingPosX, kingPosY);
+                    boolean isPawnAndNoDiagonalMove = ((p instanceof Pawn) && (!((Pawn) p).isDiagonalMove(row, column, kingPosX, kingPosY)));
+                    if (isValidMove && isNoPieceBetween) {
+                        if (isPawnAndNoDiagonalMove)    return false;
+                        else                            return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private void captureSpot(int fromX, int fromY, int toX, int toY) {
@@ -103,7 +136,7 @@ public class ChessBoard {
     }
 
     public boolean isOwnPiece(int x, int y, Color color) {
-        return (!isEmpty(x, y) && spots[x][y].getPiece().getColor() == color);
+        return (!isEmpty(x,y) && spots[x][y].getPiece().getColor() == color);
     }
 
     public boolean isEnemyPiece(int x, int y, Color ownColor) {
@@ -167,10 +200,6 @@ public class ChessBoard {
             }
         }
         return false;
-    }
-
-    private void takeEnemyPiece(int fromX, int fromY, int toX, int toY) {
-
     }
 
     public void printBoardLayout() {

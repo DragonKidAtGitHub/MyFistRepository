@@ -26,6 +26,6 @@ public abstract class Piece {
     }
 
     boolean isOutOfBoundsMove(int toX, int toY) {
-        return (toX < 0 || toX > 7 || toY < 0 || toY > 7);
+        return (toX < 0 || toX >= ChessBoard.rows || toY < 0 || toY >= ChessBoard.columns);
     }
 }

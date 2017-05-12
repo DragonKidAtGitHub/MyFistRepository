@@ -1,4 +1,8 @@
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ChessGameTest {
@@ -376,9 +380,24 @@ class ChessGameTest {
         cb.movePiece(2,6,1, 7, c1);
         correctBoardLayout[6][6] = "  ";
         correctBoardLayout[1][7] = "wP";
-        cb.printBoardLayout();
 
         assertArrayEquals(correctBoardLayout,cb.boardLayout());
+    }
+
+    @Test
+    public void testIsChecked() throws Exception {
+        ChessBoard cb = new ChessBoard();
+        cb.initialize();
+
+        String[][] correctBoardLayout = makeInitialBoardLayout();
+        Color c1 = Color.WHITE;
+        Color c2 = Color.BLACK;
+        cb.movePiece(1,2,3,2,c2);
+        cb.movePiece(0,3,3,0,c2);
+        cb.movePiece(6,3,4,3,c1);
+        cb.printBoardLayout();
+
+        assertTrue(cb.isChecked(c1));
     }
 
     private String[][] makeInitialBoardLayout(){
