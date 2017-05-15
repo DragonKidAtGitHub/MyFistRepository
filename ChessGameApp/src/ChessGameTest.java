@@ -1,8 +1,5 @@
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class ChessGameTest {
@@ -395,9 +392,26 @@ class ChessGameTest {
         cb.movePiece(1,2,3,2,c2);
         cb.movePiece(0,3,3,0,c2);
         cb.movePiece(6,3,4,3,c1);
-        cb.printBoardLayout();
 
         assertTrue(cb.isChecked(c1));
+    }
+
+    @Test
+    public void testIsCheckedAfterMove() throws Exception {
+        ChessBoard cb = new ChessBoard();
+        cb.initialize();
+
+        String[][] correctBoardLayout = makeInitialBoardLayout();
+        Color c1 = Color.WHITE;
+        Color c2 = Color.BLACK;
+        cb.movePiece(1,2,2,2,c2);
+        cb.movePiece(0,3,3,0,c2);
+
+
+        assertFalse(cb.isCheckedAfterMove(6,2,5,2, c1));
+        assertTrue(cb.isCheckedAfterMove(6,3,4,3, c1));
+        cb.printBoardLayout();
+
     }
 
     private String[][] makeInitialBoardLayout(){

@@ -115,6 +115,16 @@ public class ChessBoard {
         return false;
     }
 
+    public boolean isCheckedAfterMove(int fromX, int fromY, int toX, int toY, Color color) {
+        Piece fromPiece = getPiece(fromX,fromY);
+        Piece toPiece   = getPiece(toX,toY);
+        movePiece(fromX,fromY,toX,toY,color);
+        boolean isChecked = isChecked(color);
+        setPiece(fromX,fromY,fromPiece);
+        setPiece(toX,toY,toPiece);
+        return isChecked;
+    }
+
     private void captureSpot(int fromX, int fromY, int toX, int toY) {
         Piece p = removePiece(fromX, fromY);
         boolean firstTimeMoved = !p.hasMoved();
