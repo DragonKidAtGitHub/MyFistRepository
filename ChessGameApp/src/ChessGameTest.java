@@ -27,8 +27,10 @@ class ChessGameTest {
         assertFalse(p.isValidMove(  0,0,0,0)); // No move
         assertTrue(p.isValidMove(   0,4,1,5)); //Diagonal move
         assertFalse(p.isValidMove(  0,4,-1,4)); // Out of bounds move
-        assertFalse(p.isValidMove(  0,4,0,6)); //Too long x-dir move
+        assertFalse(p.isValidMove(  0,4,0,1)); //Too long x-dir move
         assertFalse(p.isValidMove(  0,4,2,4)); //Too long y-dir move
+        assertTrue(p.isValidMove(   0,4,0,2)); //Castling move
+        assertTrue(p.isValidMove(   0,4,0,6)); //Castling move
     }
 
     @Test
@@ -126,6 +128,8 @@ class ChessGameTest {
         assertTrue(p2.isValidMove(  7,2, 7-3,2  ));          //Straight move
         assertFalse(p2.isValidMove( 7,2, 7+1,2  ));         // Out of bounds move
         assertFalse(p2.isValidMove( 7,2, 7-8,2  ));         // Out of bounds move
+        assertTrue(p1.isValidMove(  0,7, 0,  5  ));         // Castling move
+        assertTrue(p1.isValidMove(  0,0, 0,  3  ));         // Castling move
     }
 
     @Test
@@ -402,8 +406,80 @@ class ChessGameTest {
 
         assertFalse(cb.isCheckedAfterMove(6,2,5,2, c1));
         assertTrue(cb.isCheckedAfterMove(6,3,4,3, c1));
-        cb.printBoardLayout();
+    }
 
+    @Test
+    public void testCastlingMove() throws Exception {
+        ChessBoard cb = new ChessBoard();
+        cb.initialize();
+        Color c1 = Color.WHITE;
+        Color c2 = Color.BLACK;
+
+        String[][] correctBoardLayout = makeInitialBoardLayout();
+        cb.movePiece(6,6,5,6,c1);
+        cb.movePiece(7,6,5,5,c1);
+        cb.movePiece(7,5,5,7,c1);
+        cb.movePiece(7,4,7,6,c1);
+
+        correctBoardLayout[5][5] = "wk";
+        correctBoardLayout[5][6] = "wP";
+        correctBoardLayout[5][7] = "wB";
+        correctBoardLayout[6][6] = "  ";
+        correctBoardLayout[7][4] = "wK";
+        correctBoardLayout[7][5] = "  ";
+        correctBoardLayout[7][6] = "  ";
+        correctBoardLayout[7][4] = "  ";
+        correctBoardLayout[7][6] = "wK";
+        correctBoardLayout[7][7] = "  ";
+        correctBoardLayout[7][5] = "wR";
+
+        assertArrayEquals(correctBoardLayout,cb.boardLayout());
+
+        cb.movePiece(1,0,3,0,c2);
+        cb.movePiece(1,1,3,1,c2);
+        cb.movePiece(1,2,3,2,c2);
+        cb.movePiece(1,3,3,3,c2);
+        cb.movePiece(0,1,2,0,c2);
+        cb.movePiece(0,2,3,5,c2);
+        cb.movePiece(0,3,2,3,c2);
+        cb.movePiece(0,4,0,2,c2);
+
+        correctBoardLayout[0][0] = "  ";
+        correctBoardLayout[0][1] = "  ";
+        correctBoardLayout[0][2] = "bK";
+        correctBoardLayout[0][3] = "bR";
+        correctBoardLayout[0][4] = "  ";
+        correctBoardLayout[1][0] = "  ";
+        correctBoardLayout[1][1] = "  ";
+        correctBoardLayout[1][2] = "  ";
+        correctBoardLayout[1][3] = "  ";
+        correctBoardLayout[2][0] = "bk";
+        correctBoardLayout[2][1] = "  ";
+        correctBoardLayout[2][2] = "  ";
+        correctBoardLayout[2][3] = "bQ";
+        correctBoardLayout[3][0] = "bP";
+        correctBoardLayout[3][1] = "bP";
+        correctBoardLayout[3][2] = "bP";
+        correctBoardLayout[3][3] = "bP";
+        correctBoardLayout[3][5] = "bB";
+
+        assertArrayEquals(correctBoardLayout,cb.boardLayout());
+
+        cb.movePiece(0,3,1,3,c2);
+        cb.movePiece(1,3,1,0,c2);
+        cb.movePiece(1,0,0,0,c2);
+        cb.movePiece(0,2,0,3,c2);
+        cb.movePiece(0,3,0,4,c2);
+        cb.movePiece(0,4,0,2,c2);
+
+        correctBoardLayout[0][0] = "bR";
+        correctBoardLayout[0][1] = "  ";
+        correctBoardLayout[0][2] = "  ";
+        correctBoardLayout[0][3] = "  ";
+        correctBoardLayout[0][4] = "bK";
+
+        cb.printBoardLayout();
+        assertArrayEquals(correctBoardLayout,cb.boardLayout());
     }
 
     private String[][] makeInitialBoardLayout(){

@@ -67,10 +67,18 @@ public class ChessBoard {
             boolean toSpotIsAnEnemy     = isEnemyPiece(toX,toY,color);
             boolean isValidMove         = getPiece(fromX,fromY).isValidMove(fromX,fromY,toX,toY);
             boolean isNoPieceBetween    = !isPieceBetween(fromX,fromY,toX,toY);
-            boolean isNotexposingCheck  = !isCheckedAfterMove(fromX,fromY,toX,toY,color);
-            if (isValidMove && isNoPieceBetween && isNotexposingCheck) {
+            boolean isNotExposingCheck  = !isCheckedAfterMove(fromX,fromY,toX,toY,color);
+            boolean isCastlingMove      = isCastlingMove(fromX,fromY,toX,toY,color);
+            if (isCastlingMove) {
+                captureSpot(fromX,fromY,toX,toY);
+                boolean isRightCastling     = (toY == 6);
+                boolean isLeftCastling      = (toY == 2);
+                if (isRightCastling)        captureSpot(fromX,7,fromX,5);
+                else if (isLeftCastling)    captureSpot(fromX,0,fromX,3);
+            }
+            else if (isValidMove && isNoPieceBetween && isNotExposingCheck) {
                 if (toSpotIsEmpty) {
-                    captureSpot(fromX, fromY, toX, toY);
+                    gotoSpot(fromX, fromY, toX, toY);
                 }
                 else if (toSpotIsAnEnemy) {
                     Piece temp = getPiece(fromX,fromY);
@@ -84,7 +92,8 @@ public class ChessBoard {
     }
 
     private void forceMovePiece(int fromX, int fromY, int toX, int toY){
-        captureSpot(fromX,fromY,toX,toY);
+        Piece p = removePiece(fromX, fromY);
+        setPiece(toX, toY, p);
     }
 
     public boolean isChecked(Color c) {
@@ -135,6 +144,13 @@ public class ChessBoard {
         boolean firstTimeMoved = !p.hasMoved();
         if (firstTimeMoved) p.setHasMoved();
         removedPieces.add(getPiece(toX,toY));
+        setPiece(toX, toY, p);
+    }
+
+    private void gotoSpot(int fromX, int fromY, int toX, int toY) {
+        Piece p = removePiece(fromX, fromY);
+        boolean firstTimeMoved = !p.hasMoved();
+        if (firstTimeMoved) p.setHasMoved();
         setPiece(toX, toY, p);
     }
 
@@ -263,6 +279,41 @@ public class ChessBoard {
 
         }
         return array;
+    }
+
+    public boolean isCastlingMove(int fromX, int fromY, int toX, int toY, Color color) {
+        Piece p = getPiece(fromX,fromY);
+        if (p == null) return false;
+        if (p.isCastlingMove(fromX,fromY,toX,toY)) {
+            boolean isRightCastling             = (toY == 6);
+            boolean isLeftCastling              = (toY == 2);
+            boolean rookReadyToCastle           = false;
+            boolean noPiecesBetweenKingAndRook  = false;
+            boolean isInCheck                   = false;
+            boolean moveThroughCheckSpot        = false;
+            boolean endPositionIsInCheck        = false;
+            if (isRightCastling) {
+                Piece r = getPiece(fromX, 7);
+                if (r != null) {
+                    rookReadyToCastle = r.isCastlingMove(fromX, 7, toX, 5);
+                    noPiecesBetweenKingAndRook = ((getPiece(fromX, 5) == null) && (getPiece(fromX, 6) == null));
+                    isInCheck = isChecked(color);
+                    moveThroughCheckSpot = isCheckedAfterMove(fromX, fromY, fromX, 5, color);
+                    endPositionIsInCheck = isCheckedAfterMove(fromX, fromY, fromX, 6, color);
+                }
+            } else if (isLeftCastling) {
+                Piece r = getPiece(fromX, 0);
+                if (r != null) {
+                    rookReadyToCastle = r.isCastlingMove(fromX, 0, toX, 3);
+                    noPiecesBetweenKingAndRook = ((getPiece(fromX, 1) == null) && (getPiece(fromX, 2) == null) && (getPiece(fromX, 3) == null));
+                    isInCheck = isChecked(color);
+                    moveThroughCheckSpot = isCheckedAfterMove(fromX, fromY, fromX, 3, color);
+                    endPositionIsInCheck = isCheckedAfterMove(fromX, fromY, fromX, 2, color);
+                }
+            }
+            return (rookReadyToCastle && noPiecesBetweenKingAndRook && !isInCheck && !moveThroughCheckSpot && !endPositionIsInCheck);
+        }
+        else return false;
     }
 
     static void print2DArray(String[][] array) {

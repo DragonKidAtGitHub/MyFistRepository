@@ -9,6 +9,10 @@ public abstract class Piece {
 
     public abstract boolean isValidMove(int fromX, int fromY, int toX, int toY);
 
+    boolean isCastlingMove(int fromX, int fromY, int toX, int toY) {
+        return false;
+    }
+
     Color getColor() {
         return this.color;
     }
