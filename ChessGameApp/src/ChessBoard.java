@@ -81,11 +81,8 @@ public class ChessBoard {
                     gotoSpot(fromX, fromY, toX, toY);
                 }
                 else if (toSpotIsAnEnemy) {
-                    Piece temp = getPiece(fromX,fromY);
-                    if (temp instanceof Pawn) {
-                        if (((Pawn) temp).isDiagonalMove(fromX,fromY,toX,toY)) captureSpot(fromX,fromY,toX,toY);
-                    }
-                    else captureSpot(fromX, fromY, toX, toY);
+                    Piece p = getPiece(fromX,fromY);
+                    if (p.isOkayToCapture(fromX,fromY,toX,toY)) captureSpot(fromX, fromY, toX, toY);
                 }
             }
         }

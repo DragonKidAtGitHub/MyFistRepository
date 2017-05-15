@@ -13,6 +13,10 @@ public abstract class Piece {
         return false;
     }
 
+    boolean isOkayToCapture(int fromX, int fromY, int toX, int toY) {
+        return true;
+    }
+
     Color getColor() {
         return this.color;
     }

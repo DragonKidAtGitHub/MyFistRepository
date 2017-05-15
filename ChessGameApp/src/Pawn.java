@@ -17,6 +17,11 @@ public class Pawn extends Piece {
         else return isNormalPawnMove(fromX, fromY, toX, toY);
     }
 
+    @Override
+    boolean isOkayToCapture(int fromX, int fromY, int toX, int toY) {
+        return isDiagonalMove(fromX,fromY,toX,toY);
+    }
+
     protected boolean isDiagonalMove(int fromX, int fromY, int toX, int toY){
         if (color==Color.BLACK)     return (toX == fromX + 1 && toY == fromY + 1) || (toX == fromX + 1 && toY == fromY - 1);
         else                        return (toX == fromX - 1 && toY == fromY + 1) || (toX == fromX - 1 && toY == fromY - 1);
