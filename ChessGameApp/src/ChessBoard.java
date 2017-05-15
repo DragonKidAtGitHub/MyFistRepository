@@ -64,14 +64,15 @@ public class ChessBoard {
     public void movePiece(int fromX, int fromY, int toX, int toY, Color color){
         if (isOwnPiece(fromX,fromY,color)) {
             boolean toSpotIsEmpty       = isEmpty(toX,toY);
-            boolean toSpotIsEnemy       = isEnemyPiece(toX,toY,color);
+            boolean toSpotIsAnEnemy     = isEnemyPiece(toX,toY,color);
             boolean isValidMove         = getPiece(fromX,fromY).isValidMove(fromX,fromY,toX,toY);
             boolean isNoPieceBetween    = !isPieceBetween(fromX,fromY,toX,toY);
-            if (isValidMove && isNoPieceBetween) {
+            boolean isNotexposingCheck  = !isCheckedAfterMove(fromX,fromY,toX,toY,color);
+            if (isValidMove && isNoPieceBetween && isNotexposingCheck) {
                 if (toSpotIsEmpty) {
                     captureSpot(fromX, fromY, toX, toY);
                 }
-                else if (toSpotIsEnemy) {
+                else if (toSpotIsAnEnemy) {
                     Piece temp = getPiece(fromX,fromY);
                     if (temp instanceof Pawn) {
                         if (((Pawn) temp).isDiagonalMove(fromX,fromY,toX,toY)) captureSpot(fromX,fromY,toX,toY);
@@ -80,6 +81,10 @@ public class ChessBoard {
                 }
             }
         }
+    }
+
+    private void forceMovePiece(int fromX, int fromY, int toX, int toY){
+        captureSpot(fromX,fromY,toX,toY);
     }
 
     public boolean isChecked(Color c) {
@@ -118,7 +123,7 @@ public class ChessBoard {
     public boolean isCheckedAfterMove(int fromX, int fromY, int toX, int toY, Color color) {
         Piece fromPiece = getPiece(fromX,fromY);
         Piece toPiece   = getPiece(toX,toY);
-        movePiece(fromX,fromY,toX,toY,color);
+        forceMovePiece(fromX,fromY,toX,toY);
         boolean isChecked = isChecked(color);
         setPiece(fromX,fromY,fromPiece);
         setPiece(toX,toY,toPiece);

@@ -264,16 +264,7 @@ class ChessGameTest {
         ChessBoard cb = new ChessBoard();
         cb.initialize();
 
-        String[][] cb_true = new String[][]{
-                {"bR", "bk", "bB", "bQ", "bK", "bB", "bk", "bR"},
-                {"bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"},
-                {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
-                {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
-                {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
-                {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
-                {"wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"},
-                {"wR", "wk", "wB", "wQ", "wK", "wB", "wk", "wR"}
-        };
+        String[][] cb_true = makeInitialBoardLayout();
 
         Color c1 = Color.WHITE;
         Color c2 = Color.BLACK;
@@ -391,7 +382,8 @@ class ChessGameTest {
         Color c2 = Color.BLACK;
         cb.movePiece(1,2,3,2,c2);
         cb.movePiece(0,3,3,0,c2);
-        cb.movePiece(6,3,4,3,c1);
+        assertFalse(cb.isChecked(c1));
+        cb.movePiece(3,0,6,3,c2);
 
         assertTrue(cb.isChecked(c1));
     }
