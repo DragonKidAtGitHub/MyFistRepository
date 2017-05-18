@@ -69,23 +69,21 @@ public class ChessBoard {
             boolean isNoPieceBetween    = !isPieceBetween(fromX,fromY,toX,toY);
             boolean isNotExposingCheck  = !isCheckedAfterMove(fromX,fromY,toX,toY,color);
             boolean isCastlingMove      = isCastlingMove(fromX,fromY,toX,toY,color);
-            if (isCastlingMove) {
-                captureSpot(fromX,fromY,toX,toY);
-                boolean isRightCastling     = (toY == 6);
-                boolean isLeftCastling      = (toY == 2);
-                if (isRightCastling)        captureSpot(fromX,7,fromX,5);
-                else if (isLeftCastling)    captureSpot(fromX,0,fromX,3);
-            }
+
+            if (isCastlingMove) performCastlingMove(fromX, fromY, toX, toY);
             else if (isValidMove && isNoPieceBetween && isNotExposingCheck) {
-                if (toSpotIsEmpty) {
-                    gotoSpot(fromX, fromY, toX, toY);
-                }
-                else if (toSpotIsAnEnemy) {
-                    Piece p = getPiece(fromX,fromY);
-                    if (p.isOkayToCapture(fromX,fromY,toX,toY)) captureSpot(fromX, fromY, toX, toY);
-                }
+                if (toSpotIsEmpty) gotoSpot(fromX, fromY, toX, toY);
+                else if (toSpotIsAnEnemy && getPiece(fromX,fromY).isOkayToCapture(fromX,fromY,toX,toY)) captureSpot(fromX, fromY, toX, toY);
             }
         }
+    }
+
+    private void performCastlingMove(int fromX, int fromY, int toX, int toY) {
+        captureSpot(fromX,fromY,toX,toY);
+        boolean isRightCastling     = (toY == 6);
+        boolean isLeftCastling      = (toY == 2);
+        if (isRightCastling)        captureSpot(fromX,7,fromX,5);
+        else if (isLeftCastling)    captureSpot(fromX,0,fromX,3);
     }
 
     private void forceMovePiece(int fromX, int fromY, int toX, int toY){
@@ -93,37 +91,13 @@ public class ChessBoard {
         setPiece(toX, toY, p);
     }
 
-    public boolean isChecked(Color c) {
-        int kingPosX = -1;
-        int kingPosY = -1;
-        for (int row = 0; row < rows; row++) {
-            for (int column = 0; column < columns; column++) {
-                Piece p = getPiece(row,column);
-                if (p instanceof King && c == p.getColor()) {
-                    kingPosX = row;
-                    kingPosY = column;
-                    break;
-                }
-            }
-        }
+    public boolean isChecked(Color kingColor) {
+        return kingCanBeCaptured(kingColor);
+    }
 
-        Color oppositeColor = Color.BLACK;
-        if (c == oppositeColor) oppositeColor = Color.WHITE;
-        for (int row = 0; row < rows; row++) {
-            for (int column = 0; column < columns; column++) {
-                if (isOwnPiece(row, column, oppositeColor)) {
-                    Piece p = getPiece(row,column);
-                    boolean isValidMove = p.isValidMove(row, column, kingPosX, kingPosY);
-                    boolean isNoPieceBetween = !isPieceBetween(row, column, kingPosX, kingPosY);
-                    boolean isPawnAndNoDiagonalMove = ((p instanceof Pawn) && (!((Pawn) p).isDiagonalMove(row, column, kingPosX, kingPosY)));
-                    if (isValidMove && isNoPieceBetween) {
-                        if (isPawnAndNoDiagonalMove)    return false;
-                        else                            return true;
-                    }
-                }
-            }
-        }
-        return false;
+    private boolean kingCanBeCaptured(Color kingColor) {
+        ArrayList<Position> kingAttackerList = findKingAttackers(kingColor);
+        return !kingAttackerList.isEmpty();
     }
 
     public boolean isCheckedAfterMove(int fromX, int fromY, int toX, int toY, Color color) {
@@ -134,6 +108,73 @@ public class ChessBoard {
         setPiece(fromX,fromY,fromPiece);
         setPiece(toX,toY,toPiece);
         return isChecked;
+    }
+
+    private boolean isCheckMate(Color c) {
+        if (!isChecked(c)) return false;
+        else {
+            boolean isPossibleToMoveOutOfCheck    = possibleToMoveOutOfCheck(c);
+            boolean isPossibleToTakeAttacker      = false;
+            boolean isPossibleToBlockCheck        = false;
+            return (!isPossibleToMoveOutOfCheck && !isPossibleToBlockCheck && !isPossibleToTakeAttacker);
+        }
+    }
+
+    private boolean possibleToMoveOutOfCheck(Color c) {
+        Position kingPos = findKing(c);
+        if (        !isCheckedAfterMove(kingPos.getX(),kingPos.getY(),kingPos.getX()+1,kingPos.getY()+1,c))     return true;
+        else if (   !isCheckedAfterMove(kingPos.getX(),kingPos.getY(),kingPos.getX()+1,kingPos.getY()+0,c))     return true;
+        else if (   !isCheckedAfterMove(kingPos.getX(),kingPos.getY(),kingPos.getX()+1,kingPos.getY()-1,c))     return true;
+        else if (   !isCheckedAfterMove(kingPos.getX(),kingPos.getY(),kingPos.getX()+0,kingPos.getY()-1,c))     return true;
+        else if (   !isCheckedAfterMove(kingPos.getX(),kingPos.getY(),kingPos.getX()-1,kingPos.getY()-1,c))     return true;
+        else if (   !isCheckedAfterMove(kingPos.getX(),kingPos.getY(),kingPos.getX()-1,kingPos.getY()+0,c))     return true;
+        else if (   !isCheckedAfterMove(kingPos.getX(),kingPos.getY(),kingPos.getX()-1,kingPos.getY()+1,c))     return true;
+        else if (   !isCheckedAfterMove(kingPos.getX(),kingPos.getY(),kingPos.getX()+0,kingPos.getY()+1,c))     return true;
+        else return false;
+    }
+
+    private boolean possibleToTakeKingAttacker(Color kingColor) {
+        ArrayList<Position> attackerPositionList = findKingAttackers(kingColor);
+
+        return false;
+    }
+
+    private ArrayList<Position> findKingAttackers(Color kingColor) {
+        ArrayList<Position> attackerPositionList = new ArrayList<>();
+        Position kingPos = findKing(kingColor);
+        if (kingPos != null) {
+            int x = kingPos.getX();
+            int y = kingPos.getY();
+            Color attackerColor = Color.BLACK;
+            if (kingColor == Color.BLACK) attackerColor = Color.WHITE;
+            for (int row = 0; row < rows; row++) {
+                for (int column = 0; column < columns; column++) {
+                    if (isOwnPiece(row, column, attackerColor)) {
+                        Piece p = getPiece(row, column);
+                        boolean isValidMove = p.isValidMove(row, column, x, y);
+                        boolean isNoPieceBetween = !isPieceBetween(row, column, x, y);
+                        boolean isOkayToCapture = p.isOkayToCapture(row, column, x, y);
+                        Position attackerPos = new Position(row, column);
+                        if (isValidMove && isNoPieceBetween && isOkayToCapture) attackerPositionList.add(attackerPos);
+                    }
+                }
+            }
+        }
+        return attackerPositionList;
+    }
+
+    private Position findKing(Color c) {
+        Position pos = null;
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                Piece p = getPiece(row,column);
+                if (p instanceof King && c == p.getColor()) {
+                    pos = new Position(row,column);
+                    break;
+                }
+            }
+        }
+        return pos;
     }
 
     private void captureSpot(int fromX, int fromY, int toX, int toY) {
@@ -328,6 +369,5 @@ public class ChessBoard {
         }
         System.out.print(row);
     }
-
 
 }
