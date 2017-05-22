@@ -478,8 +478,80 @@ class ChessGameTest {
         correctBoardLayout[0][3] = "  ";
         correctBoardLayout[0][4] = "bK";
 
-        cb.printBoardLayout();
         assertArrayEquals(correctBoardLayout,cb.boardLayout());
+    }
+
+    @Test
+    public void testPossibleToMoveOutOfCheck() throws Exception {
+        ChessBoard cb = new ChessBoard();
+        cb.setPiece(7,7,new King(Color.WHITE));
+        cb.setPiece(0,7,new Queen(Color.BLACK));
+        assertTrue(cb.possibleToMoveKingOutOfCheck(Color.WHITE));
+
+        cb.setPiece(0,6,new Rook(Color.BLACK));
+        assertFalse(cb.possibleToMoveKingOutOfCheck(Color.WHITE));
+
+        cb = new ChessBoard();
+        cb.setPiece(7,7,new King(Color.WHITE));
+        cb.setPiece(6,6,new Bishop(Color.BLACK));
+        assertTrue(cb.possibleToMoveKingOutOfCheck(Color.WHITE));
+
+        cb.setPiece(6,7,new Rook(Color.BLACK));
+        assertTrue(cb.possibleToMoveKingOutOfCheck(Color.WHITE));
+    }
+
+    @Test
+    public void testPossibleToTakeKingAttacker() throws Exception {
+        ChessBoard cb = new ChessBoard();
+        cb.setPiece(7,7,new King(Color.WHITE));
+        cb.setPiece(4,7,new Queen(Color.BLACK));
+
+        assertFalse(cb.possibleToTakeKingAttackerNotUsingKing(Color.WHITE));
+
+        cb.setPiece(5,6,new Pawn(Color.WHITE));
+        assertTrue(cb.possibleToTakeKingAttackerNotUsingKing(Color.WHITE));
+
+        cb = new ChessBoard();
+        cb.setPiece(7,7,new King(Color.WHITE));
+        cb.setPiece(6,6,new Queen(Color.BLACK));
+
+        assertFalse(cb.possibleToTakeKingAttackerNotUsingKing(Color.WHITE));
+    }
+
+    @Test
+    public void testPossibleToBlockKingAttacker() throws Exception {
+        ChessBoard cb = new ChessBoard();
+        cb.setPiece(7,7,new King(Color.WHITE));
+        cb.setPiece(4,7,new Queen(Color.BLACK));
+
+        assertFalse(cb.possibleToBlockCheckNotUsingKing(Color.WHITE));
+
+        cb.setPiece(6,0,new Rook(Color.WHITE));
+
+        assertTrue(cb.possibleToBlockCheckNotUsingKing(Color.WHITE));
+    }
+
+    @Test
+    public void testCheckMate() throws Exception {
+        ChessBoard cb = new ChessBoard();
+        cb.setPiece(7,7,new King(Color.WHITE));
+        cb.setPiece(5,6,new Queen(Color.BLACK));
+        cb.setPiece(7,0,new Rook(Color.BLACK));
+
+        assertTrue(cb.isCheckMate(Color.WHITE));
+
+        cb.removePiece(7,0);
+        assertFalse(cb.isCheckMate(Color.WHITE));
+
+        cb.movePiece(5,6,6,6,Color.BLACK);
+
+        assertTrue(cb.isChecked(Color.WHITE));
+        assertFalse(cb.isCheckMate(Color.WHITE));
+
+        cb.setPiece(0,6,new Rook(Color.BLACK));
+        cb.printBoardLayout();
+        assertTrue(cb.isChecked(Color.WHITE));
+        assertTrue(cb.isCheckMate(Color.WHITE));
     }
 
     private String[][] makeInitialBoardLayout(){

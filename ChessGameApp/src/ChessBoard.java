@@ -56,7 +56,8 @@ public class ChessBoard {
     }
 
     public Piece getPiece(int x, int y){
-        return spots[x][y].getPiece();
+        if (!isOutOfBounds(x,y))    return spots[x][y].getPiece();
+        else                        return null;
     }
 
     public ArrayList<Piece> getRemovedPieces() {
@@ -85,7 +86,7 @@ public class ChessBoard {
     }
 
     public void setPiece(int x, int y, Piece p) {
-        spots[x][y].setPiece(p);
+        if (!isOutOfBounds(x,y)) spots[x][y].setPiece(p);
     }
 
     public boolean isEmpty(int x, int y) {
@@ -242,8 +243,22 @@ public class ChessBoard {
         else return false;
     }
 
+    public boolean isEnPassant() {
+        return false;
+    }
+
     public boolean isChecked(Color kingColor) {
         return kingCanBeCaptured(kingColor);
+    }
+
+    public boolean isCheckMate(Color kingColor) {
+        if (!isChecked(kingColor)) return false;
+        else {
+            boolean isPossibleToMoveOutOfCheck    = possibleToMoveKingOutOfCheck(kingColor);
+            boolean isPossibleToTakeAttacker      = possibleToTakeKingAttackerNotUsingKing(kingColor);
+            boolean isPossibleToBlockCheck        = possibleToBlockCheckNotUsingKing(kingColor);
+            return (!isPossibleToMoveOutOfCheck && !isPossibleToBlockCheck && !isPossibleToTakeAttacker);
+        }
     }
 
     public boolean isCheckedAfterMove(int fromX, int fromY, int toX, int toY, Color color) {
@@ -265,8 +280,10 @@ public class ChessBoard {
     }
 
     private void forceMovePiece(int fromX, int fromY, int toX, int toY){
-        Piece p = removePiece(fromX, fromY);
-        setPiece(toX, toY, p);
+        if (!isOutOfBounds(fromX,fromY) && !isOutOfBounds(toX,toY)) {
+            Piece p = removePiece(fromX, fromY);
+            setPiece(toX, toY, p);
+        }
     }
 
     private boolean kingCanBeCaptured(Color kingColor) {
@@ -274,43 +291,130 @@ public class ChessBoard {
         return !kingAttackerList.isEmpty();
     }
 
-    private boolean isCheckMate(Color kingColor) {
-        if (!isChecked(kingColor)) return false;
-        else {
-            boolean isPossibleToMoveOutOfCheck    = possibleToMoveOutOfCheck(kingColor);
-            boolean isPossibleToTakeAttacker      = possibleToTakeKingAttacker(kingColor);
-            boolean isPossibleToBlockCheck        = false;
-            return (!isPossibleToMoveOutOfCheck && !isPossibleToBlockCheck && !isPossibleToTakeAttacker);
+    protected boolean possibleToMoveKingOutOfCheck(Color kingColor) {
+        Position kingPos = findKing(kingColor);
+        if (kingPos != null) {
+            int x = kingPos.getX();
+            int y = kingPos.getY();
+            if (        !isCheckedAfterMove(x, y, x+1, y+1, kingColor))     return true;
+            else if (   !isCheckedAfterMove(x, y, x+1, y+0, kingColor))     return true;
+            else if (   !isCheckedAfterMove(x, y, x+1, y-1, kingColor))     return true;
+            else if (   !isCheckedAfterMove(x, y, x+0, y-1, kingColor))     return true;
+            else if (   !isCheckedAfterMove(x, y, x-1, y-1, kingColor))     return true;
+            else if (   !isCheckedAfterMove(x, y, x-1, y+0, kingColor))     return true;
+            else if (   !isCheckedAfterMove(x, y, x-1, y+1, kingColor))     return true;
+            else if (   !isCheckedAfterMove(x, y, x+0, x+1, kingColor))     return true;
+            else return false;
         }
-    }
-
-    private boolean possibleToMoveOutOfCheck(Color c) {
-        Position kingPos = findKing(c);
-        if (        !isCheckedAfterMove(kingPos.getX(),kingPos.getY(),kingPos.getX()+1,kingPos.getY()+1,c))     return true;
-        else if (   !isCheckedAfterMove(kingPos.getX(),kingPos.getY(),kingPos.getX()+1,kingPos.getY()+0,c))     return true;
-        else if (   !isCheckedAfterMove(kingPos.getX(),kingPos.getY(),kingPos.getX()+1,kingPos.getY()-1,c))     return true;
-        else if (   !isCheckedAfterMove(kingPos.getX(),kingPos.getY(),kingPos.getX()+0,kingPos.getY()-1,c))     return true;
-        else if (   !isCheckedAfterMove(kingPos.getX(),kingPos.getY(),kingPos.getX()-1,kingPos.getY()-1,c))     return true;
-        else if (   !isCheckedAfterMove(kingPos.getX(),kingPos.getY(),kingPos.getX()-1,kingPos.getY()+0,c))     return true;
-        else if (   !isCheckedAfterMove(kingPos.getX(),kingPos.getY(),kingPos.getX()-1,kingPos.getY()+1,c))     return true;
-        else if (   !isCheckedAfterMove(kingPos.getX(),kingPos.getY(),kingPos.getX()+0,kingPos.getY()+1,c))     return true;
         else return false;
     }
 
-    private boolean possibleToTakeKingAttacker(Color kingColor) {
+    protected boolean possibleToTakeKingAttackerNotUsingKing(Color kingColor) {
         ArrayList<Position> attackerPositionList = findKingAttackers(kingColor);
         Iterator<Position> itr = attackerPositionList.iterator();
         while (itr.hasNext()) {
             Position attackerPos = itr.next();
             for (int row = 0; row < rows; row++) {
                 for (int column = 0; column < columns; column++) {
-                    if (isOwnPiece(row, column, kingColor)) {
-                        Piece p = getPiece(row, column);
-                        boolean isValidMove         = p.isValidMove(row, column, attackerPos.getX(), attackerPos.getY());
-                        boolean isNoPieceBetween    = !isPieceBetween(row, column, attackerPos.getX(), attackerPos.getY());
-                        boolean isOkayToCapture     = p.isOkayToCapture(row, column, attackerPos.getX(), attackerPos.getY());
+                    Piece p = getPiece(row, column);
+                    if (isOwnPiece(row, column, kingColor) && !(p instanceof King)) {
+                        boolean isValidMove             = p.isValidMove(row, column, attackerPos.getX(), attackerPos.getY());
+                        boolean isNoPieceBetween        = !isPieceBetween(row, column, attackerPos.getX(), attackerPos.getY());
+                        boolean isOkayToCapture         = p.isOkayToCapture(row, column, attackerPos.getX(), attackerPos.getY());
                         if (isValidMove && isNoPieceBetween && isOkayToCapture) return true;
                     }
+                }
+            }
+        }
+        return false;
+    }
+
+    protected boolean possibleToBlockCheckNotUsingKing(Color kingColor) {
+        ArrayList<Position> attackerList = findKingAttackers(kingColor);
+        Position kingPos = findKing(kingColor);
+        int kingPosX = kingPos.getX();
+        int kingPosY = kingPos.getY();
+        Iterator<Position> itr = attackerList.iterator();
+        while (itr.hasNext()) {
+            Position attackerPos = itr.next();
+            int attackerPosX = attackerPos.getX();
+            int attackerPosY = attackerPos.getY();
+            Piece attackerPiece = getPiece(attackerPosX,attackerPosY);
+            boolean attackerIsNotKnight = !(attackerPiece instanceof Knight);
+            if (attackerIsNotKnight) {
+                if ((attackerPosX == kingPosX) || (attackerPosY == kingPosY)) { // straight attack move
+                    if ((attackerPosX == kingPosX) && (attackerPosY > kingPosY)) { // straight right attack move
+                        for (int i = 1; i < Math.abs(attackerPosY-kingPosY); i++) {
+                            if (canMoveToWithoutKing(attackerPosX, kingPosY+i, kingColor)) return true;
+                        }
+                    }
+                    else if ((attackerPosX == kingPosX) && (kingPosY < attackerPosY)) { // straight left attack move
+                        for (int i = 1; i < Math.abs(kingPosY-attackerPosY); i++) {
+                            if (canMoveToWithoutKing(attackerPosX, attackerPosY-i, kingColor)) return true;
+                        }
+                    }
+                    else if ((kingPosX > attackerPosX) && (attackerPosY == kingPosY)) { // straight down attack move
+                        for (int i = 1; i < Math.abs(kingPosX-attackerPosX); i++) {
+                            if (canMoveToWithoutKing(attackerPosX+i, attackerPosY, kingColor)) return true;
+                        }
+                    }
+                    else if ((kingPosX < attackerPosX) && (attackerPosY == kingPosY)) { // straight up attack move
+                        for (int i = 1; i < Math.abs(kingPosX-attackerPosX); i++) {
+                            if (canMoveToWithoutKing(attackerPosX-i, attackerPosY, kingColor)) return true;
+                        }
+                    }
+                }
+                else if (Math.abs(kingPosX-attackerPosX) == Math.abs(kingPosY-attackerPosY)) { //diagonal attack move
+                    if ((attackerPosX < kingPosX) && (attackerPosY < kingPosY)) { //diagonal down-right attack move
+                        for (int i = 1; i < Math.abs(attackerPosX-kingPosX); i++) {
+                            if (canMoveToWithoutKing(attackerPosX+i,attackerPosY+i, kingColor)) return true;
+                        }
+                    }
+                    else if ((attackerPosX < kingPosX) && (attackerPosY > kingPosY)) { //diagonal down-left attack move
+                        for (int i = 1; i < Math.abs(attackerPosX-kingPosX); i++) {
+                            if (canMoveToWithoutKing(attackerPosX+i,attackerPosY-i, kingColor)) return true;
+                        }
+                    }
+                    else if ((attackerPosX > kingPosX) && (attackerPosY < kingPosY)) { //diagonal up-left attack move
+                        for (int i = 1; i < Math.abs(attackerPosX-kingPosX); i++) {
+                            if (canMoveToWithoutKing(attackerPosX-i,attackerPosY+i, kingColor)) return true;
+                        }
+                    }
+                    else if ((attackerPosX > kingPosX) && (attackerPosY > kingPosY)) { //diagonal up-right attack move
+                        for (int i = 1; i < Math.abs(attackerPosX-kingPosX); i++) {
+                            if (canMoveToWithoutKing(attackerPosX-i,attackerPosY-i, kingColor)) return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isLegalMove(int fromX, int fromY, int toX, int toY) {
+        Piece p = getPiece(fromX,fromY);
+        boolean isValidMove = p.isValidMove(fromX, fromY, toX, toY);
+        boolean isNoPieceBetween = !isPieceBetween(fromX, fromY, toX, toY);
+        return (isValidMove && isNoPieceBetween);
+    }
+
+    private boolean canMoveTo(int toX, int toY, Color c) {
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                if (isOwnPiece(row, column, c)) {
+                    if (isLegalMove(row, column, toX, toY)) return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean canMoveToWithoutKing(int toX, int toY, Color c) {
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                Piece p = getPiece(row,column);
+                if (isOwnPiece(row, column, c) && !(p instanceof King)) {
+                    if (isLegalMove(row, column, toX, toY)) return true;
                 }
             }
         }
@@ -384,6 +488,10 @@ public class ChessBoard {
             row += "\n";
         }
         System.out.print(row);
+    }
+
+    static boolean isOutOfBounds(int x, int y) {
+        return (x<0 || x>=rows || y<0 || y>=columns);
     }
 
 }
