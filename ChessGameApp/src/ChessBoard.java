@@ -68,17 +68,19 @@ public class ChessBoard {
         if (isOwnPiece(fromX,fromY,color)) {
             boolean toSpotIsEmpty       = isEmpty(toX,toY);
             boolean toSpotIsAnEnemy     = isEnemyPiece(toX,toY,color);
-            boolean isValidMove         = getPiece(fromX,fromY).isValidMove(fromX,fromY,toX,toY);
-            boolean isNoPieceBetween    = !isPieceBetween(fromX,fromY,toX,toY);
-            boolean isNotExposingCheck  = !isCheckedAfterMove(fromX,fromY,toX,toY,color);
             boolean isCastlingMove      = isCastlingMove(fromX,fromY,toX,toY,color);
+            boolean isEnPassantMove     = isEnPassant(fromX,fromY,toX,toY,color);
+            boolean isLegalMove         = isLegalMove(fromX,fromY,toX,toY,color);
+            boolean isOkayToCapture     = getPiece(fromX,fromY).isOkayToCapture(fromX,fromY,toX,toY);
 
-            if (isCastlingMove) performCastlingMove(fromX, fromY, toX, toY);
-            else if (isValidMove && isNoPieceBetween && isNotExposingCheck) {
-                if (toSpotIsEmpty) gotoSpot(fromX, fromY, toX, toY);
-                else if (toSpotIsAnEnemy && getPiece(fromX,fromY).isOkayToCapture(fromX,fromY,toX,toY)) captureSpot(fromX, fromY, toX, toY);
-            }
+            if (isCastlingMove)                                         performCastlingMove(fromX, fromY, toX, toY);
+            else if (isEnPassantMove)                                   performEnPassantMove(fromX, fromY, toX, toY);
+            else if (isLegalMove && toSpotIsEmpty)                      gotoSpot(fromX, fromY, toX, toY);
+            else if (isLegalMove && toSpotIsAnEnemy && isOkayToCapture) captureSpot(fromX, fromY, toX, toY);
         }
+    }
+
+    private void performEnPassantMove(int fromX, int fromY, int toX, int toY) {
     }
 
     public Piece removePiece(int x, int y) {
@@ -242,8 +244,26 @@ public class ChessBoard {
         }
         else return false;
     }
+    
+    public boolean isEnPassant(int fromX, int fromY, int toX, int toY, Color ownColor) {
+        /*
+        if (ownColor==Color.WHITE) {
+            Color enemyColor = Color.BLACK;
+            boolean isOwnPiece                      = isOwnPiece(fromX, fromY, ownColor);
+            boolean isEnemyPiece                    = isOwnPiece(toX-1, toY, enemyColor);
+            boolean isInAttackingEnPassantPosition  = (fromX==3);
+            if (isOwnPiece && isEnemyPiece && isInAttackingEnPassantPosition) {
+                Piece ownPiece      = getPiece(fromX, fromY);
+                Piece enemyPiece    = getPiece(toX-1, toY);
+                boolean isOwnPawn   = (ownPiece != null);
+                boolean isEnemyPawn = (enemyPiece != null);
+                if (isOwnPawn && isEnemyPawn) {
+                    boolean isPossibleEnPassant = enemyPiece.possibleEnPassant()
+                }
+            }
 
-    public boolean isEnPassant() {
+        }
+        */
         return false;
     }
 
@@ -391,18 +411,19 @@ public class ChessBoard {
         return false;
     }
 
-    private boolean isLegalMove(int fromX, int fromY, int toX, int toY) {
+    private boolean isLegalMove(int fromX, int fromY, int toX, int toY, Color color) {
         Piece p = getPiece(fromX,fromY);
-        boolean isValidMove = p.isValidMove(fromX, fromY, toX, toY);
-        boolean isNoPieceBetween = !isPieceBetween(fromX, fromY, toX, toY);
-        return (isValidMove && isNoPieceBetween);
+        boolean isValidMove         = p.isValidMove(fromX, fromY, toX, toY);
+        boolean isNoPieceBetween    = !isPieceBetween(fromX, fromY, toX, toY);
+        boolean isNotExposingCheck  = !isCheckedAfterMove(fromX, fromY, toX, toY, color);
+        return (isValidMove && isNoPieceBetween && isNotExposingCheck);
     }
 
     private boolean canMoveTo(int toX, int toY, Color c) {
         for (int row = 0; row < rows; row++) {
             for (int column = 0; column < columns; column++) {
                 if (isOwnPiece(row, column, c)) {
-                    if (isLegalMove(row, column, toX, toY)) return true;
+                    if (isLegalMove(row, column, toX, toY, c)) return true;
                 }
             }
         }
@@ -414,7 +435,7 @@ public class ChessBoard {
             for (int column = 0; column < columns; column++) {
                 Piece p = getPiece(row,column);
                 if (isOwnPiece(row, column, c) && !(p instanceof King)) {
-                    if (isLegalMove(row, column, toX, toY)) return true;
+                    if (isLegalMove(row, column, toX, toY, c)) return true;
                 }
             }
         }
