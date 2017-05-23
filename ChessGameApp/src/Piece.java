@@ -17,6 +17,10 @@ public abstract class Piece {
         return true;
     }
 
+    boolean possibleEnPassant(int fromX, int fromY, int toX, int toY) {
+        return false;
+    }
+
     Color getColor() {
         return this.color;
     }
@@ -34,6 +38,6 @@ public abstract class Piece {
     }
 
     boolean isOutOfBoundsMove(int toX, int toY) {
-        return (toX < 0 || toX >= ChessBoard.rows || toY < 0 || toY >= ChessBoard.columns);
+        return ChessBoard.isOutOfBounds(toX,toY);
     }
 }
