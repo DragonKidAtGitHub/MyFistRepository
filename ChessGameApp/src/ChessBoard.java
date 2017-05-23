@@ -69,18 +69,13 @@ public class ChessBoard {
             boolean toSpotIsEmpty       = isEmpty(toX,toY);
             boolean toSpotIsAnEnemy     = isEnemyPiece(toX,toY,color);
             boolean isCastlingMove      = isCastlingMove(fromX,fromY,toX,toY,color);
-            boolean isEnPassantMove     = isEnPassant(fromX,fromY,toX,toY,color);
             boolean isLegalMove         = isLegalMove(fromX,fromY,toX,toY,color);
             boolean isOkayToCapture     = getPiece(fromX,fromY).isOkayToCapture(fromX,fromY,toX,toY);
 
             if (isCastlingMove)                                         performCastlingMove(fromX, fromY, toX, toY);
-            else if (isEnPassantMove)                                   performEnPassantMove(fromX, fromY, toX, toY);
             else if (isLegalMove && toSpotIsEmpty)                      gotoSpot(fromX, fromY, toX, toY);
             else if (isLegalMove && toSpotIsAnEnemy && isOkayToCapture) captureSpot(fromX, fromY, toX, toY);
         }
-    }
-
-    private void performEnPassantMove(int fromX, int fromY, int toX, int toY) {
     }
 
     public Piece removePiece(int x, int y) {
@@ -243,28 +238,6 @@ public class ChessBoard {
             return (rookReadyToCastle && noPiecesBetweenKingAndRook && !isInCheck && !moveThroughCheckSpot && !endPositionIsInCheck);
         }
         else return false;
-    }
-    
-    public boolean isEnPassant(int fromX, int fromY, int toX, int toY, Color ownColor) {
-        /*
-        if (ownColor==Color.WHITE) {
-            Color enemyColor = Color.BLACK;
-            boolean isOwnPiece                      = isOwnPiece(fromX, fromY, ownColor);
-            boolean isEnemyPiece                    = isOwnPiece(toX-1, toY, enemyColor);
-            boolean isInAttackingEnPassantPosition  = (fromX==3);
-            if (isOwnPiece && isEnemyPiece && isInAttackingEnPassantPosition) {
-                Piece ownPiece      = getPiece(fromX, fromY);
-                Piece enemyPiece    = getPiece(toX-1, toY);
-                boolean isOwnPawn   = (ownPiece != null);
-                boolean isEnemyPawn = (enemyPiece != null);
-                if (isOwnPawn && isEnemyPawn) {
-                    boolean isPossibleEnPassant = enemyPiece.possibleEnPassant()
-                }
-            }
-
-        }
-        */
-        return false;
     }
 
     public boolean isChecked(Color kingColor) {

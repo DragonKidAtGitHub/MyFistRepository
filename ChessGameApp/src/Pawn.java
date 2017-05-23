@@ -2,11 +2,9 @@
  * Created by ujo on 06.04.2017.
  */
 public class Pawn extends Piece {
-    boolean possibleEnPassant;
 
     Pawn(Color color){
         this.color = color;
-        possibleEnPassant = false;
     }
 
     @Override
@@ -21,11 +19,6 @@ public class Pawn extends Piece {
     @Override
     boolean isOkayToCapture(int fromX, int fromY, int toX, int toY) {
         return isDiagonalMove(fromX,fromY,toX,toY);
-    }
-
-    @Override
-    boolean possibleEnPassant(int fromX, int fromY, int toX, int toY) {
-        return  (isDoubleFirstMove(fromX, fromY, toX, toY));
     }
 
     protected boolean isDiagonalMove(int fromX, int fromY, int toX, int toY){

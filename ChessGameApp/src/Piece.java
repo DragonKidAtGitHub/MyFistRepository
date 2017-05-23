@@ -17,10 +17,6 @@ public abstract class Piece {
         return true;
     }
 
-    boolean possibleEnPassant(int fromX, int fromY, int toX, int toY) {
-        return false;
-    }
-
     Color getColor() {
         return this.color;
     }

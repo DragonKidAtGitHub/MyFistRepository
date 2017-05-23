@@ -548,12 +548,12 @@ class ChessGameTest {
         assertTrue(cb.isChecked(Color.WHITE));
         assertFalse(cb.isCheckMate(Color.WHITE));
 
-        cb.setPiece(0,6,new Rook(Color.BLACK));
-        cb.printBoardLayout();
+        cb.setPiece(0,6,new Rook(Color.BLACK));;
         assertTrue(cb.isChecked(Color.WHITE));
         assertTrue(cb.isCheckMate(Color.WHITE));
     }
 
+    
     private String[][] makeInitialBoardLayout(){
         ChessBoard cb = new ChessBoard();
         cb.initialize();
