@@ -66,16 +66,25 @@ public class ChessBoard {
 
     public void movePiece(int fromX, int fromY, int toX, int toY, Color color){
         if (isOwnPiece(fromX,fromY,color)) {
+            Piece p = getPiece(fromX, fromY);
             boolean toSpotIsEmpty       = isEmpty(toX,toY);
             boolean toSpotIsAnEnemy     = isEnemyPiece(toX,toY,color);
             boolean isCastlingMove      = isCastlingMove(fromX,fromY,toX,toY,color);
             boolean isLegalMove         = isLegalMove(fromX,fromY,toX,toY,color);
-            boolean isOkayToCapture     = getPiece(fromX,fromY).isOkayToCapture(fromX,fromY,toX,toY);
+            boolean isOkayToCapture     = p.isOkayToCapture(fromX,fromY,toX,toY);
+            boolean isPromoted          = p.checkIsPromoted(fromX,fromY,toX,toY);
 
             if (isCastlingMove)                                         performCastlingMove(fromX, fromY, toX, toY);
             else if (isLegalMove && toSpotIsEmpty)                      gotoSpot(fromX, fromY, toX, toY);
             else if (isLegalMove && toSpotIsAnEnemy && isOkayToCapture) captureSpot(fromX, fromY, toX, toY);
+
+            if (isLegalMove && isPromoted)                              promotePiece(toX, toY, color);
         }
+    }
+
+    private void promotePiece(int x, int y, Color color) {
+        Piece p = getPiece(x,y);
+        if (p != null && !isOutOfBounds(x,y)) spots[x][y].setPiece(new Queen(color));
     }
 
     public Piece removePiece(int x, int y) {

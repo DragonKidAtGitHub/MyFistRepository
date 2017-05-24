@@ -1,5 +1,3 @@
-import org.jetbrains.annotations.Contract;
-
 /**
  * Created by ujo on 21.04.2017.
  */

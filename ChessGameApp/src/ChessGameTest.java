@@ -110,7 +110,7 @@ class ChessGameTest {
     }
 
     @Test
-    public void  testPossibleRookMoves() throws Exception {
+    public void testPossibleRookMoves() throws Exception {
         Piece p1 = new Rook(Color.BLACK);
         Piece p2 = new Rook(Color.WHITE);
         assertFalse(p1.isValidMove( 0,2, 0  ,2  ));               // No move
@@ -141,7 +141,7 @@ class ChessGameTest {
     }
 
     @Test
-    public void  testPossibleBishopMoves() throws Exception {
+    public void testPossibleBishopMoves() throws Exception {
         Piece p1 = new Bishop(Color.BLACK);
         Piece p2 = new Bishop(Color.WHITE);
         assertFalse(p1.isValidMove( 0,2, 0  ,2  ));               // No move
@@ -171,7 +171,7 @@ class ChessGameTest {
     }
 
     @Test
-    public void  testPossibleKnightMoves() throws Exception {
+    public void testPossibleKnightMoves() throws Exception {
         Piece p1 = new Knight(Color.BLACK);
         Piece p2 = new Knight(Color.WHITE);
         assertFalse(p1.isValidMove( 0,2, 0  ,2  ));                   // No move
@@ -553,7 +553,32 @@ class ChessGameTest {
         assertTrue(cb.isCheckMate(Color.WHITE));
     }
 
-    
+    @Test
+    public void testCheckPromote() throws Exception {
+        ChessBoard cb = new ChessBoard();
+        cb.initialize();
+
+        Color c1 = Color.WHITE;
+        Color c2 = Color.BLACK;
+        cb.movePiece(1,1,3,1, c2);
+        cb.movePiece(3,1,4,1, c2);
+        cb.movePiece(4,1,5,1, c2);
+        cb.movePiece(5,1,6,2, c2);
+        cb.movePiece(6,2,7,1, c2);
+        cb.movePiece(7,1,4,4, c2);
+
+        String[][] correctBoardLayout = makeInitialBoardLayout();
+        correctBoardLayout[1][1] = "  ";
+        correctBoardLayout[6][2] = "  ";
+        correctBoardLayout[7][1] = "  ";
+        correctBoardLayout[4][4] = "bQ";
+
+        cb.printBoardLayout();
+
+        assertArrayEquals(correctBoardLayout,cb.boardLayout());
+    }
+
+
     private String[][] makeInitialBoardLayout(){
         ChessBoard cb = new ChessBoard();
         cb.initialize();
