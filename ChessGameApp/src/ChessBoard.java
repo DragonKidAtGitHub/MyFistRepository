@@ -70,15 +70,16 @@ public class ChessBoard {
             boolean toSpotIsEmpty       = isEmpty(toX,toY);
             boolean toSpotIsAnEnemy     = isEnemyPiece(toX,toY,color);
             boolean isCastlingMove      = isCastlingMove(fromX,fromY,toX,toY,color);
+            boolean isEnPassantMove     = isEnPassantMove(fromX,fromY,toX,toY,color);
             boolean isLegalMove         = isLegalMove(fromX,fromY,toX,toY,color);
-            boolean isOkayToCapture     = p.isOkayToCapture(fromX,fromY,toX,toY);
             boolean isPromoted          = p.checkIsPromoted(fromX,fromY,toX,toY);
 
-            if (isCastlingMove)                         performCastlingMove(fromX, fromY, toX, toY);
-            else if (isLegalMove && toSpotIsEmpty)      gotoSpot(fromX, fromY, toX, toY);
-            else if (isLegalMove && toSpotIsAnEnemy)    captureSpot(fromX, fromY, toX, toY);
+            if (isCastlingMove)                         performCastlingMove(fromX,fromY,toX,toY);
+            else if (isEnPassantMove)                   performEnPassantMove(fromX,fromY,toX,toY);
+            else if (isLegalMove && toSpotIsEmpty)      gotoSpot(fromX,fromY,toX,toY);
+            else if (isLegalMove && toSpotIsAnEnemy)    captureSpot(fromX,fromY,toX,toY);
 
-            if (isLegalMove && isPromoted)              promotePiece(toX, toY, color);
+            if (isLegalMove && isPromoted)              promotePiece(toX,toY,color);
         }
     }
 
@@ -249,6 +250,14 @@ public class ChessBoard {
         else return false;
     }
 
+    public boolean isEnPassantMove(int fromX, int fromY, int toX, int toY, Color color) {
+        boolean isOnFifthRank           = (color==Color.WHITE && fromX==3) || (color==Color.BLACK && fromX==4);
+        boolean isEnemyPawnWithinReach  = false;
+        boolean isEnemyPawnDoubleMoved  = false;
+        boolean isEnemyPawnJustMoved    = false;
+        return (isOnFifthRank && isEnemyPawnWithinReach && isEnemyPawnDoubleMoved && isEnemyPawnJustMoved);
+    }
+
     public boolean isChecked(Color kingColor) {
         return kingCanBeCaptured(kingColor);
     }
@@ -294,6 +303,14 @@ public class ChessBoard {
         boolean isLeftCastling      = (toY == 2);
         if (isRightCastling)        captureSpot(fromX,7,fromX,5);
         else if (isLeftCastling)    captureSpot(fromX,0,fromX,3);
+    }
+
+    public void performEnPassantMove(int fromX, int fromY, int toX, int toY) {
+        gotoSpot(fromX,fromY,toX,toY);
+        Piece p = null;
+        if (toX<(rows/2))   p = removePiece(toX+1,toY);
+        else                p = removePiece(toX-1,toY);
+        if (p != null) removedPieces.add(p);
     }
 
     private void forceMovePiece(int fromX, int fromY, int toX, int toY){

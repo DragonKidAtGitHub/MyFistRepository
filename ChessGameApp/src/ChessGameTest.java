@@ -597,9 +597,31 @@ class ChessGameTest {
         assertFalse(cb.isStaleMate(c1));
 
         cb.setPiece(2,6,new Queen(c2));
-        cb.printBoardLayout();
         assertTrue(cb.isStaleMate(c1));
 
+    }
+
+    @Test
+    public void testEnPassantMove() throws Exception {
+        ChessBoard cb = new ChessBoard();
+        cb.initialize();
+        Color c1 = Color.WHITE;
+        Color c2 = Color.BLACK;
+
+        cb.setPiece(1,1, new Pawn(c2));
+        cb.setPiece(6,2, new Pawn(c1));
+        cb.movePiece(6,2,4,2,c1);
+        cb.movePiece(4,2,3,2,c1);
+        cb.movePiece(1,1,3,1,c2);
+        cb.movePiece(3,2,2,1,c1);
+
+        String[][] correctBoardLayout = makeInitialBoardLayout();
+        correctBoardLayout[1][1] = "  ";
+        correctBoardLayout[6][2] = "  ";
+        correctBoardLayout[2][1] = "wP";
+        cb.printBoardLayout();
+
+        assertArrayEquals(correctBoardLayout, cb.boardLayout());
     }
 
     private String[][] makeInitialBoardLayout(){
