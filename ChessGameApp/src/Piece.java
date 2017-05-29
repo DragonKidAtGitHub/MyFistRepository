@@ -17,6 +17,10 @@ public abstract class Piece {
         return true;
     }
 
+    boolean isOkayToMoveWithoutCapturing(int fromX, int fromY, int toX, int toY) {
+        return true;
+    }
+
     boolean checkIsPromoted(int fromX, int fromY, int toX, int toY) {
         return false;
     }

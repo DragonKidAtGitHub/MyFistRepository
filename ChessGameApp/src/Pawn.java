@@ -22,12 +22,17 @@ public class Pawn extends Piece {
     }
 
     @Override
+    boolean isOkayToMoveWithoutCapturing(int fromX, int fromY, int toX, int toY) {
+        return (isNormalPawnMove(fromX,fromY,toX,toY) || isDoubleFirstMove(fromX,fromY,toX,toY));
+    }
+
+    @Override
     boolean checkIsPromoted(int fromX, int fromY, int toX, int toY) {
         if (color==Color.WHITE) return (toX==0);
         else                    return (toX==7);
     }
 
-    protected boolean isDiagonalMove(int fromX, int fromY, int toX, int toY){
+    private boolean isDiagonalMove(int fromX, int fromY, int toX, int toY){
         if (color==Color.BLACK)     return (toX == fromX + 1 && toY == fromY + 1) || (toX == fromX + 1 && toY == fromY - 1);
         else                        return (toX == fromX - 1 && toY == fromY + 1) || (toX == fromX - 1 && toY == fromY - 1);
     }

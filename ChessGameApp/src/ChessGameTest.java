@@ -573,11 +573,34 @@ class ChessGameTest {
         correctBoardLayout[7][1] = "  ";
         correctBoardLayout[4][4] = "bQ";
 
-        cb.printBoardLayout();
-
         assertArrayEquals(correctBoardLayout,cb.boardLayout());
     }
 
+    @Test
+    public void testStaleMate() throws Exception {
+        ChessBoard cb = new ChessBoard();
+
+        Color c1 = Color.WHITE;
+        Color c2 = Color.BLACK;
+        cb.setPiece(7,7,new King(c1));
+        cb.setPiece(0,6, new Rook(c2));
+        assertFalse(cb.isStaleMate(c1));
+
+        cb.setPiece(6,0, new Rook(c2));
+        assertTrue(cb.isStaleMate(c1));
+
+        cb.setPiece(1,1,new Rook(c1));
+        assertFalse(cb.isStaleMate(c1));
+
+        cb.removePiece(1,1);
+        cb.setPiece(1,6,new Pawn(c1));
+        assertFalse(cb.isStaleMate(c1));
+
+        cb.setPiece(2,6,new Queen(c2));
+        cb.printBoardLayout();
+        assertTrue(cb.isStaleMate(c1));
+
+    }
 
     private String[][] makeInitialBoardLayout(){
         ChessBoard cb = new ChessBoard();

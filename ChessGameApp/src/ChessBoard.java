@@ -74,11 +74,11 @@ public class ChessBoard {
             boolean isOkayToCapture     = p.isOkayToCapture(fromX,fromY,toX,toY);
             boolean isPromoted          = p.checkIsPromoted(fromX,fromY,toX,toY);
 
-            if (isCastlingMove)                                         performCastlingMove(fromX, fromY, toX, toY);
-            else if (isLegalMove && toSpotIsEmpty)                      gotoSpot(fromX, fromY, toX, toY);
-            else if (isLegalMove && toSpotIsAnEnemy && isOkayToCapture) captureSpot(fromX, fromY, toX, toY);
+            if (isCastlingMove)                         performCastlingMove(fromX, fromY, toX, toY);
+            else if (isLegalMove && toSpotIsEmpty)      gotoSpot(fromX, fromY, toX, toY);
+            else if (isLegalMove && toSpotIsAnEnemy)    captureSpot(fromX, fromY, toX, toY);
 
-            if (isLegalMove && isPromoted)                              promotePiece(toX, toY, color);
+            if (isLegalMove && isPromoted)              promotePiece(toX, toY, color);
         }
     }
 
@@ -263,14 +263,29 @@ public class ChessBoard {
         }
     }
 
+    public boolean isStaleMate(Color kingColor) {
+        boolean isCheck = isChecked(kingColor);
+        boolean possibleToMoveKingAway = possibleToMoveKingOutOfCheck(kingColor);
+        if (isCheck || possibleToMoveKingAway) return false;
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                if (canMoveToWithoutKing(row,column,kingColor)) return false;
+            }
+        }
+        return true;
+    }
+
     public boolean isCheckedAfterMove(int fromX, int fromY, int toX, int toY, Color color) {
-        Piece fromPiece = getPiece(fromX,fromY);
-        Piece toPiece   = getPiece(toX,toY);
-        forceMovePiece(fromX,fromY,toX,toY);
-        boolean isChecked = isChecked(color);
-        setPiece(fromX,fromY,fromPiece);
-        setPiece(toX,toY,toPiece);
-        return isChecked;
+        if (!isOutOfBounds(toX,toY)) {
+            Piece fromPiece = getPiece(fromX, fromY);
+            Piece toPiece = getPiece(toX, toY);
+            forceMovePiece(fromX, fromY, toX, toY);
+            boolean isChecked = isChecked(color);
+            setPiece(fromX, fromY, fromPiece);
+            setPiece(toX, toY, toPiece);
+            return isChecked;
+        }
+        else return true;
     }
 
     private void performCastlingMove(int fromX, int fromY, int toX, int toY) {
@@ -398,7 +413,15 @@ public class ChessBoard {
         boolean isValidMove         = p.isValidMove(fromX, fromY, toX, toY);
         boolean isNoPieceBetween    = !isPieceBetween(fromX, fromY, toX, toY);
         boolean isNotExposingCheck  = !isCheckedAfterMove(fromX, fromY, toX, toY, color);
-        return (isValidMove && isNoPieceBetween && isNotExposingCheck);
+        boolean isLegalMove         = isValidMove && isNoPieceBetween && isNotExposingCheck;
+
+        if (isLegalMove) {
+            boolean toSpotIsEmpty   = isEmpty(toX,toY);
+            boolean toSpotIsAnEnemy = isEnemyPiece(toX,toY,color);
+            if (toSpotIsEmpty && p.isOkayToMoveWithoutCapturing(fromX,fromY,toX,toY))   return true;
+            else if (toSpotIsAnEnemy && p.isOkayToCapture(fromX,fromY,toX,toY))         return true;
+        }
+        return false;
     }
 
     private boolean canMoveTo(int toX, int toY, Color c) {
