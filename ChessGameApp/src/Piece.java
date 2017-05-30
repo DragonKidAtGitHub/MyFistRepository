@@ -21,6 +21,18 @@ public abstract class Piece {
         return true;
     }
 
+    boolean checkIfEnPassantIsPossible() {
+        return false;
+    }
+
+    void setEnPassantPossible() {}
+
+    void setEnPassantNotPossible() {}
+
+    boolean isSpecialFirstMove(int fromX, int fromY, int toX, int toY) {
+        return false;
+    }
+
     boolean checkIsPromoted(int fromX, int fromY, int toX, int toY) {
         return false;
     }

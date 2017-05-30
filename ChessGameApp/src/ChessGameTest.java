@@ -619,6 +619,7 @@ class ChessGameTest {
         correctBoardLayout[1][1] = "  ";
         correctBoardLayout[6][2] = "  ";
         correctBoardLayout[2][1] = "wP";
+
         cb.printBoardLayout();
 
         assertArrayEquals(correctBoardLayout, cb.boardLayout());

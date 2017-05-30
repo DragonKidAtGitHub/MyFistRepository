@@ -2,6 +2,7 @@
  * Created by ujo on 06.04.2017.
  */
 public class Pawn extends Piece {
+    private boolean enPassantIsPossible = false;
 
     Pawn(Color color){
         this.color = color;
@@ -24,6 +25,26 @@ public class Pawn extends Piece {
     @Override
     boolean isOkayToMoveWithoutCapturing(int fromX, int fromY, int toX, int toY) {
         return (isNormalPawnMove(fromX,fromY,toX,toY) || isDoubleFirstMove(fromX,fromY,toX,toY));
+    }
+
+    @Override
+    boolean checkIfEnPassantIsPossible() {
+        return enPassantIsPossible;
+    }
+
+    @Override
+    void setEnPassantPossible() {
+        enPassantIsPossible = true;
+    }
+
+    @Override
+    void setEnPassantNotPossible() {
+        enPassantIsPossible = false;
+    }
+
+    @Override
+    boolean isSpecialFirstMove(int fromX, int fromY, int toX, int toY) {
+        return isDoubleFirstMove(fromX,fromY,toX,toY);
     }
 
     @Override

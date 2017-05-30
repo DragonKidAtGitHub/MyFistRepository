@@ -73,6 +73,7 @@ public class ChessBoard {
             boolean isEnPassantMove     = isEnPassantMove(fromX,fromY,toX,toY,color);
             boolean isLegalMove         = isLegalMove(fromX,fromY,toX,toY,color);
             boolean isPromoted          = p.checkIsPromoted(fromX,fromY,toX,toY);
+            boolean isPawnDoubleMove    = p.isSpecialFirstMove(fromX,fromY,toX,toY);
 
             if (isCastlingMove)                         performCastlingMove(fromX,fromY,toX,toY);
             else if (isEnPassantMove)                   performEnPassantMove(fromX,fromY,toX,toY);
@@ -80,6 +81,7 @@ public class ChessBoard {
             else if (isLegalMove && toSpotIsAnEnemy)    captureSpot(fromX,fromY,toX,toY);
 
             if (isLegalMove && isPromoted)              promotePiece(toX,toY,color);
+            if (isLegalMove && isPawnDoubleMove)        p.setEnPassantPossible();
         }
     }
 
@@ -251,11 +253,15 @@ public class ChessBoard {
     }
 
     public boolean isEnPassantMove(int fromX, int fromY, int toX, int toY, Color color) {
-        boolean isOnFifthRank           = (color==Color.WHITE && fromX==3) || (color==Color.BLACK && fromX==4);
-        boolean isEnemyPawnWithinReach  = false;
-        boolean isEnemyPawnDoubleMoved  = false;
-        boolean isEnemyPawnJustMoved    = false;
-        return (isOnFifthRank && isEnemyPawnWithinReach && isEnemyPawnDoubleMoved && isEnemyPawnJustMoved);
+        Piece ownPiece                  = getPiece(fromX,fromY);
+        Piece enemyPiece                = (color==Color.WHITE) ? getPiece(toX+1,toY) : getPiece(toX-1,toY);
+        boolean isValidMove             = ownPiece.isValidMove(fromX,fromY,toX,toY);
+        boolean isNoPieceBetween        = !isPieceBetween(fromX,fromY,toX,toY);
+        boolean isNotExposingCheck      = !isCheckedAfterMove(fromX,fromY,toX,toY,color);
+        boolean isOnFifthRank           = ((color==Color.WHITE) && (fromX==3)) || ((color==Color.BLACK) && (fromX==4));
+        boolean enemyIsInEnPassantState = (enemyPiece!=null) ? enemyPiece.checkIfEnPassantIsPossible() : false;
+
+        return (isValidMove && isNoPieceBetween && isNotExposingCheck && isOnFifthRank && enemyIsInEnPassantState);
     }
 
     public boolean isChecked(Color kingColor) {
