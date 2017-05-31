@@ -602,6 +602,71 @@ class ChessGameTest {
     }
 
     @Test
+    public void testEnPassantState() throws Exception {
+        ChessBoard cb = new ChessBoard();
+        cb.initialize();
+        Color c1 = Color.WHITE;
+        Color c2 = Color.BLACK;
+
+        assertFalse(cb.getPiece(1,0).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(1,1).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(1,2).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(1,3).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(1,4).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(1,5).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(1,6).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(1,7).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(6,0).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(6,1).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(6,2).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(6,3).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(6,4).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(6,5).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(6,6).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(6,7).checkIfEnPassantIsPossible());
+
+        cb.movePiece(6,0,5, 0, c1);
+        cb.movePiece(6,1,4, 1, c1);
+        cb.movePiece(1,0,2, 0, c2);
+        cb.movePiece(1,1,3, 1, c2);
+        assertFalse(cb.getPiece(2,0).checkIfEnPassantIsPossible());
+        assertTrue(cb.getPiece(3,1).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(1,2).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(1,3).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(1,4).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(1,5).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(1,6).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(1,7).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(5,0).checkIfEnPassantIsPossible());
+        assertTrue(cb.getPiece(4,1).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(6,2).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(6,3).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(6,4).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(6,5).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(6,6).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(6,7).checkIfEnPassantIsPossible());
+
+        cb.movePiece(6,6,4, 6, c1);
+        cb.movePiece(1,6,3, 6, c2);
+        assertFalse(cb.getPiece(2,0).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(3,1).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(1,2).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(1,3).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(1,4).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(1,5).checkIfEnPassantIsPossible());
+        assertTrue(cb.getPiece(3,6).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(1,7).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(5,0).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(4,1).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(6,2).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(6,3).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(6,4).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(6,5).checkIfEnPassantIsPossible());
+        assertTrue(cb.getPiece(4,6).checkIfEnPassantIsPossible());
+        assertFalse(cb.getPiece(6,7).checkIfEnPassantIsPossible());
+    }
+
+    @Test
     public void testEnPassantMove() throws Exception {
         ChessBoard cb = new ChessBoard();
         cb.initialize();
@@ -619,10 +684,29 @@ class ChessGameTest {
         correctBoardLayout[1][1] = "  ";
         correctBoardLayout[6][2] = "  ";
         correctBoardLayout[2][1] = "wP";
+        assertArrayEquals(correctBoardLayout, cb.boardLayout());
+
+        cb.movePiece(1,0,3,0,c2);
+        cb.movePiece(3,0,4,0,c2);
+        cb.movePiece(6,1,4,1,c1);
+        cb.movePiece(1,7,3,7,c2);
+        cb.movePiece(6,3,5,3,c1);
+        cb.movePiece(4,0,5,1,c2);
+        correctBoardLayout[1][0] = "  ";
+        correctBoardLayout[1][1] = "  ";
+        correctBoardLayout[1][7] = "  ";
+        correctBoardLayout[2][1] = "wP";
+        correctBoardLayout[3][7] = "bP";
+        correctBoardLayout[4][0] = "bP";
+        correctBoardLayout[4][1] = "wP";
+        correctBoardLayout[5][3] = "wP";
+        correctBoardLayout[6][1] = "  ";
+        correctBoardLayout[6][2] = "  ";
+        correctBoardLayout[6][3] = "  ";
 
         cb.printBoardLayout();
-
         assertArrayEquals(correctBoardLayout, cb.boardLayout());
+
     }
 
     private String[][] makeInitialBoardLayout(){

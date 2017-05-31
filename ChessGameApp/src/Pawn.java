@@ -38,8 +38,8 @@ public class Pawn extends Piece {
     }
 
     @Override
-    void setEnPassantNotPossible() {
-        enPassantIsPossible = false;
+    void setEnPassantState() {
+        if (super.hasMoved && enPassantIsPossible)  enPassantIsPossible = false;
     }
 
     @Override

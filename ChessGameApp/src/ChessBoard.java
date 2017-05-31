@@ -75,6 +75,8 @@ public class ChessBoard {
             boolean isPromoted          = p.checkIsPromoted(fromX,fromY,toX,toY);
             boolean isPawnDoubleMove    = p.isSpecialFirstMove(fromX,fromY,toX,toY);
 
+            setEnPassantStates(color);
+
             if (isCastlingMove)                         performCastlingMove(fromX,fromY,toX,toY);
             else if (isEnPassantMove)                   performEnPassantMove(fromX,fromY,toX,toY);
             else if (isLegalMove && toSpotIsEmpty)      gotoSpot(fromX,fromY,toX,toY);
@@ -82,6 +84,17 @@ public class ChessBoard {
 
             if (isLegalMove && isPromoted)              promotePiece(toX,toY,color);
             if (isLegalMove && isPawnDoubleMove)        p.setEnPassantPossible();
+        }
+    }
+
+    public void setEnPassantStates(Color c) {
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                if (isOwnPiece(row,column,c)) {
+                    Piece p = getPiece(row,column);
+                    p.setEnPassantState();
+                }
+            }
         }
     }
 

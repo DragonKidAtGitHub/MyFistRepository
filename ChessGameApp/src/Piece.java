@@ -27,7 +27,7 @@ public abstract class Piece {
 
     void setEnPassantPossible() {}
 
-    void setEnPassantNotPossible() {}
+    void setEnPassantState() {}
 
     boolean isSpecialFirstMove(int fromX, int fromY, int toX, int toY) {
         return false;
