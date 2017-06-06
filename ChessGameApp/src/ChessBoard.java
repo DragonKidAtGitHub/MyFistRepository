@@ -64,7 +64,8 @@ public class ChessBoard {
         return removedPieces;
     }
 
-    public void movePiece(int fromX, int fromY, int toX, int toY, Color color){
+    public boolean movePiece(int fromX, int fromY, int toX, int toY, Color color){
+        boolean pieceIsMoved = false;
         if (isOwnPiece(fromX,fromY,color)) {
             Piece p = getPiece(fromX, fromY);
             boolean toSpotIsEmpty       = isEmpty(toX,toY);
@@ -84,7 +85,11 @@ public class ChessBoard {
 
             if (isLegalMove && isPromoted)              promotePiece(toX,toY,color);
             if (isLegalMove && isPawnDoubleMove)        p.setEnPassantPossible();
+
+            pieceIsMoved = isCastlingMove || isEnPassantMove || (isLegalMove && toSpotIsEmpty) || (isLegalMove && toSpotIsAnEnemy);
         }
+
+        return pieceIsMoved;
     }
 
     public void setEnPassantStates(Color c) {

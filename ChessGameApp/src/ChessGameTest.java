@@ -709,6 +709,7 @@ class ChessGameTest {
 
     }
 
+
     private String[][] makeInitialBoardLayout(){
         ChessBoard cb = new ChessBoard();
         cb.initialize();
