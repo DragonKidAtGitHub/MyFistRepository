@@ -551,6 +551,15 @@ class ChessGameTest {
         cb.setPiece(0,6,new Rook(Color.BLACK));;
         assertTrue(cb.isChecked(Color.WHITE));
         assertTrue(cb.isCheckMate(Color.WHITE));
+
+        cb.initialize();
+        cb.movePiece(6,5,5,5,Color.WHITE);
+        cb.movePiece(1,4,3,4,Color.BLACK);
+        cb.movePiece(6,6,4,6,Color.WHITE);
+        cb.movePiece(0,3,4,7,Color.BLACK);
+
+        assertTrue(cb.isChecked(Color.WHITE));
+        assertTrue(cb.isCheckMate(Color.WHITE));
     }
 
     @Test
@@ -704,7 +713,6 @@ class ChessGameTest {
         correctBoardLayout[6][2] = "  ";
         correctBoardLayout[6][3] = "  ";
 
-        cb.printBoardLayout();
         assertArrayEquals(correctBoardLayout, cb.boardLayout());
 
     }

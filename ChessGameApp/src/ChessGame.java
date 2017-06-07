@@ -66,13 +66,37 @@ public class ChessGame {
         System.out.println("\nCurrent layout:");
         cb.printBoardLayout();
         performMove();
-        switchPlayersTurn();
     }
 
     public void playGame() {
         if (!gameIsSetup) setupGame();
-        while (true) {
+        boolean gameIsOver = false;
+        do {
             playTurn();
+            switchPlayersTurn();
+            gameIsOver = checkIfGameIsOver();
+        }
+        while (!gameIsOver);
+        finishGame();
+    }
+
+    private void finishGame() {
+        boolean isCheckMate = cb.isCheckMate(selectedPieceColor.get(playersTurn));
+        boolean isStaleMate = cb.isStaleMate(selectedPieceColor.get(playersTurn));
+        System.out.println("Game Over!");
+        switchPlayersTurn();
+        if (isCheckMate) {
+            System.out.println(playersTurn.getName() + " is the winner!");
+            playersTurn.increaseWinNumber();
+            switchPlayersTurn();
+            playersTurn.increaseLossNumber();
+            switchPlayersTurn();
+        }
+        else if (isStaleMate) {
+            System.out.println("The game is a draw.");
+            playersTurn.increaseDrawNumber();
+            switchPlayersTurn();
+            playersTurn.increaseDrawNumber();
         }
     }
 
@@ -90,7 +114,7 @@ public class ChessGame {
                 userInput.add(s.nextInt());
             }
             if (userInput.size()==4) {
-                System.out.println("Chosen move: (" + userInput.get(0) + "," +userInput.get(1) + ") -> (" + userInput.get(2) +"," +userInput.get(3) + ")");
+                System.out.println("Chosen move: (" + userInput.get(0) + "," +userInput.get(1) + ")->(" + userInput.get(2) +"," +userInput.get(3) + ")");
                 pieceIsMoved = cb.movePiece(userInput.get(0),userInput.get(1),userInput.get(2),userInput.get(3),selectedPieceColor.get(playersTurn));
                 isOkayMove = isOkayMoveInput(inputs) && pieceIsMoved;
             }
@@ -110,10 +134,11 @@ public class ChessGame {
         return true;
     }
 
-    public String printInput(List<Integer> array) {
-        String printString = "";
-        Iterator<Integer> itr = array.iterator();
-        while (itr.hasNext()) printString += itr.next() + " ";
-        return printString;
+    public boolean checkIfGameIsOver() {
+        Color color = selectedPieceColor.get(playersTurn);
+        boolean isCheckMate = cb.isCheckMate(color);
+        boolean isStaleMate = cb.isStaleMate(color);
+        boolean isRepetition = false;
+        return isCheckMate || isStaleMate || isRepetition;
     }
 }

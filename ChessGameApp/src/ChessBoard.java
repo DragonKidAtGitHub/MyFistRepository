@@ -28,6 +28,12 @@ public class ChessBoard {
     }
 
     public void initialize() {
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column<columns; column++) {
+                spots[row][column].removePiece();
+            }
+        }
+
         Color color = Color.BLACK;
         spots[0][0].setPiece(new Rook(color));
         spots[0][1].setPiece(new Knight(color));
@@ -310,7 +316,7 @@ public class ChessBoard {
 
     public boolean isCheckedAfterMove(int fromX, int fromY, int toX, int toY, Color color) {
         if (!isOutOfBounds(toX,toY)) {
-            Piece fromPiece = getPiece(fromX, fromY);
+            Piece fromPiece = getPiece(fromX,fromY);
             Piece toPiece = getPiece(toX, toY);
             forceMovePiece(fromX, fromY, toX, toY);
             boolean isChecked = isChecked(color);
@@ -354,14 +360,14 @@ public class ChessBoard {
         if (kingPos != null) {
             int x = kingPos.getX();
             int y = kingPos.getY();
-            if (        !isCheckedAfterMove(x, y, x+1, y+1, kingColor))     return true;
-            else if (   !isCheckedAfterMove(x, y, x+1, y+0, kingColor))     return true;
-            else if (   !isCheckedAfterMove(x, y, x+1, y-1, kingColor))     return true;
-            else if (   !isCheckedAfterMove(x, y, x+0, y-1, kingColor))     return true;
-            else if (   !isCheckedAfterMove(x, y, x-1, y-1, kingColor))     return true;
-            else if (   !isCheckedAfterMove(x, y, x-1, y+0, kingColor))     return true;
-            else if (   !isCheckedAfterMove(x, y, x-1, y+1, kingColor))     return true;
-            else if (   !isCheckedAfterMove(x, y, x+0, x+1, kingColor))     return true;
+            if (     isLegalMove(x,y,x+1,y+1,kingColor) && !isCheckedAfterMove(x,y,x+1,y+1,kingColor))     return true;
+            else if (isLegalMove(x,y,x+1,y+0,kingColor) && !isCheckedAfterMove(x,y,x+1,y+0,kingColor))     return true;
+            else if (isLegalMove(x,y,x+1,y-1,kingColor) && !isCheckedAfterMove(x,y,x+1,y-1,kingColor))     return true;
+            else if (isLegalMove(x,y,x+0,y-1,kingColor) && !isCheckedAfterMove(x,y,x+0,y-1,kingColor))     return true;
+            else if (isLegalMove(x,y,x-1,y-1,kingColor) && !isCheckedAfterMove(x,y,x-1,y-1,kingColor))     return true;
+            else if (isLegalMove(x,y,x-1,y+0,kingColor) && !isCheckedAfterMove(x,y,x-1,y+0,kingColor))     return true;
+            else if (isLegalMove(x,y,x-1,y+1,kingColor) && !isCheckedAfterMove(x,y,x-1,y+1,kingColor))     return true;
+            else if (isLegalMove(x,y,x+0,x+1,kingColor) && !isCheckedAfterMove(x,y,x+0,x+1,kingColor))     return true;
             else return false;
         }
         else return false;
