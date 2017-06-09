@@ -27,7 +27,7 @@ public class ChessBoard {
         }
     }
 
-    public void initialize() {
+    void initialize() {
         for (int row = 0; row < rows; row++) {
             for (int column = 0; column<columns; column++) {
                 spots[row][column].removePiece();
@@ -61,7 +61,7 @@ public class ChessBoard {
         }
     }
 
-    public Piece getPiece(int x, int y){
+    Piece getPiece(int x, int y){
         if (!isOutOfBounds(x,y))    return spots[x][y].getPiece();
         else                        return null;
     }
@@ -70,7 +70,7 @@ public class ChessBoard {
         return removedPieces;
     }
 
-    public boolean movePiece(int fromX, int fromY, int toX, int toY, Color color){
+    boolean movePiece(int fromX, int fromY, int toX, int toY, Color color){
         boolean pieceIsMoved = false;
         if (isOwnPiece(fromX,fromY,color)) {
             Piece p = getPiece(fromX, fromY);
@@ -98,7 +98,7 @@ public class ChessBoard {
         return pieceIsMoved;
     }
 
-    public void setEnPassantStates(Color c) {
+    private void setEnPassantStates(Color c) {
         for (int row = 0; row < rows; row++) {
             for (int column = 0; column < columns; column++) {
                 if (isOwnPiece(row,column,c)) {
@@ -114,23 +114,23 @@ public class ChessBoard {
         if (p != null && !isOutOfBounds(x,y)) spots[x][y].setPiece(new Queen(color));
     }
 
-    public Piece removePiece(int x, int y) {
+    Piece removePiece(int x, int y) {
         return spots[x][y].removePiece();
     }
 
-    public void setPiece(int x, int y, Piece p) {
+    void setPiece(int x, int y, Piece p) {
         if (!isOutOfBounds(x,y)) spots[x][y].setPiece(p);
     }
 
-    public boolean isEmpty(int x, int y) {
+    private boolean isEmpty(int x, int y) {
         return spots[x][y].getPiece() == null;
     }
 
-    public boolean isOwnPiece(int x, int y, Color color) {
+    boolean isOwnPiece(int x, int y, Color color) {
         return (!isEmpty(x,y) && spots[x][y].getPiece().getColor() == color);
     }
 
-    public boolean isEnemyPiece(int x, int y, Color ownColor) {
+    private boolean isEnemyPiece(int x, int y, Color ownColor) {
         Piece p = spots[x][y].getPiece();
         if (isEmpty(x,y))  return false;
         Color enemyColor;
@@ -139,7 +139,7 @@ public class ChessBoard {
         return spots[x][y].getPiece().getColor() == enemyColor;
     }
 
-    public boolean isPieceBetween(int fromX, int fromY, int toX, int toY) {
+    boolean isPieceBetween(int fromX, int fromY, int toX, int toY) {
         Piece p = getPiece(fromX,fromY);
         if (p instanceof Knight) {
             return false;
@@ -193,7 +193,7 @@ public class ChessBoard {
         return false;
     }
 
-    public void printBoardLayout() {
+    void printBoardLayout() {
         String row = "";
         for (int x = 0; x < rows; x++){
             for (int y = 0; y < columns; y++) {
@@ -218,7 +218,7 @@ public class ChessBoard {
         System.out.print(row);
     }
 
-    public String[][] boardLayout() {
+    String[][] boardLayout() {
         String[][] array = new String[rows][columns];
         for (int x = 0; x < rows; x++){
             for (int y = 0; y < columns; y++) {
@@ -241,7 +241,7 @@ public class ChessBoard {
         return array;
     }
 
-    public boolean isCastlingMove(int fromX, int fromY, int toX, int toY, Color color) {
+    private boolean isCastlingMove(int fromX, int fromY, int toX, int toY, Color color) {
         Piece p = getPiece(fromX,fromY);
         if (p == null) return false;
         if (p.isCastlingMove(fromX,fromY,toX,toY)) {
@@ -276,7 +276,7 @@ public class ChessBoard {
         else return false;
     }
 
-    public boolean isEnPassantMove(int fromX, int fromY, int toX, int toY, Color color) {
+    private boolean isEnPassantMove(int fromX, int fromY, int toX, int toY, Color color) {
         Piece ownPiece                  = getPiece(fromX,fromY);
         Piece enemyPiece                = (color==Color.WHITE) ? getPiece(toX+1,toY) : getPiece(toX-1,toY);
         boolean isValidMove             = ownPiece.isValidMove(fromX,fromY,toX,toY);
@@ -288,11 +288,11 @@ public class ChessBoard {
         return (isValidMove && isNoPieceBetween && isNotExposingCheck && isOnFifthRank && enemyIsInEnPassantState);
     }
 
-    public boolean isChecked(Color kingColor) {
+    boolean isChecked(Color kingColor) {
         return kingCanBeCaptured(kingColor);
     }
 
-    public boolean isCheckMate(Color kingColor) {
+    boolean isCheckMate(Color kingColor) {
         if (!isChecked(kingColor)) return false;
         else {
             boolean isPossibleToMoveOutOfCheck    = possibleToMoveKingOutOfCheck(kingColor);
@@ -302,7 +302,7 @@ public class ChessBoard {
         }
     }
 
-    public boolean isStaleMate(Color kingColor) {
+    boolean isStaleMate(Color kingColor) {
         boolean isCheck = isChecked(kingColor);
         boolean possibleToMoveKingAway = possibleToMoveKingOutOfCheck(kingColor);
         if (isCheck || possibleToMoveKingAway) return false;
@@ -314,7 +314,7 @@ public class ChessBoard {
         return true;
     }
 
-    public boolean isCheckedAfterMove(int fromX, int fromY, int toX, int toY, Color color) {
+    boolean isCheckedAfterMove(int fromX, int fromY, int toX, int toY, Color color) {
         if (!isOutOfBounds(toX,toY)) {
             Piece fromPiece = getPiece(fromX,fromY);
             Piece toPiece = getPiece(toX, toY);
@@ -335,7 +335,7 @@ public class ChessBoard {
         else if (isLeftCastling)    captureSpot(fromX,0,fromX,3);
     }
 
-    public void performEnPassantMove(int fromX, int fromY, int toX, int toY) {
+    private void performEnPassantMove(int fromX, int fromY, int toX, int toY) {
         gotoSpot(fromX,fromY,toX,toY);
         Piece p = null;
         if (toX<(rows/2))   p = removePiece(toX+1,toY);
@@ -355,7 +355,7 @@ public class ChessBoard {
         return !kingAttackerList.isEmpty();
     }
 
-    protected boolean possibleToMoveKingOutOfCheck(Color kingColor) {
+    boolean possibleToMoveKingOutOfCheck(Color kingColor) {
         Position kingPos = findKing(kingColor);
         if (kingPos != null) {
             int x = kingPos.getX();
@@ -373,7 +373,7 @@ public class ChessBoard {
         else return false;
     }
 
-    protected boolean possibleToTakeKingAttackerNotUsingKing(Color kingColor) {
+    boolean possibleToTakeKingAttackerNotUsingKing(Color kingColor) {
         ArrayList<Position> attackerPositionList = findKingAttackers(kingColor);
         Iterator<Position> itr = attackerPositionList.iterator();
         while (itr.hasNext()) {
@@ -393,7 +393,7 @@ public class ChessBoard {
         return false;
     }
 
-    protected boolean possibleToBlockCheckNotUsingKing(Color kingColor) {
+    boolean possibleToBlockCheckNotUsingKing(Color kingColor) {
         ArrayList<Position> attackerList = findKingAttackers(kingColor);
         Position kingPos = findKing(kingColor);
         int kingPosX = kingPos.getX();
