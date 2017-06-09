@@ -315,6 +315,22 @@ public class ChessBoard {
         return true;
     }
 
+    boolean isPossibleDraw() {
+        boolean fiftyMoveRuleIsActive = (listOfLayouts.size() >= 50);
+        boolean threefoldRepetition = false;
+
+        return fiftyMoveRuleIsActive || threefoldRepetition;
+    }
+
+    boolean isDraw(Color kingColor) {
+        if (isStaleMate(kingColor))                 return true;
+        else if (isKingVsKing())                    return true;
+        else if (isKingVsKingAndBishop())           return true;
+        //else if (isKingVsKingAndKnight())           return true;
+        //else if (isKingAndBishopVsKingAndBishop())  return true;
+        else                                        return false;
+    }
+
     boolean isCheckedAfterMove(int fromX, int fromY, int toX, int toY, Color color) {
         if (!isOutOfBounds(toX,toY)) {
             Piece fromPiece = getPiece(fromX,fromY);
@@ -572,4 +588,24 @@ public class ChessBoard {
         return (x<0 || x>=rows || y<0 || y>=columns);
     }
 
+    boolean isKingVsKing() {
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                Piece p = getPiece(row, column);
+                if (p != null && !(p instanceof King)) return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isKingVsKingAndBishop() {
+        int counter = 0;
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                Piece p = getPiece(row, column);
+                if (p != null && ((p instanceof King) || (p instanceof Bishop))) counter++;
+            }
+        }
+        return (counter==3);
+    }
 }
