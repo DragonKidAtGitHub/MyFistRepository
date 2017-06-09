@@ -53,6 +53,11 @@ public class Pawn extends Piece {
         else                    return (toX==7);
     }
 
+    @Override
+    boolean isReversibleMove() {
+        return false;
+    }
+
     private boolean isDiagonalMove(int fromX, int fromY, int toX, int toY){
         if (color==Color.BLACK)     return (toX == fromX + 1 && toY == fromY + 1) || (toX == fromX + 1 && toY == fromY - 1);
         else                        return (toX == fromX - 1 && toY == fromY + 1) || (toX == fromX - 1 && toY == fromY - 1);

@@ -9,6 +9,7 @@ public class ChessBoard {
     public static final int columns = 8;
     private Spot[][] spots = new Spot[rows][columns];
     private ArrayList<Piece> removedPieces = new ArrayList<Piece>();
+    private ArrayList<String[][]> listOfLayouts = new ArrayList<String[][]>();
 
     ChessBoard() {
         for (int row = 0; row < rows; row++){
@@ -538,6 +539,8 @@ public class ChessBoard {
         if (firstTimeMoved) p.setHasMoved();
         removedPieces.add(getPiece(toX,toY));
         setPiece(toX, toY, p);
+        listOfLayouts.clear();
+        listOfLayouts.add(boardLayout());
     }
 
     private void gotoSpot(int fromX, int fromY, int toX, int toY) {
@@ -545,6 +548,8 @@ public class ChessBoard {
         boolean firstTimeMoved = !p.hasMoved();
         if (firstTimeMoved) p.setHasMoved();
         setPiece(toX, toY, p);
+        if (!p.isReversibleMove()) listOfLayouts.clear();
+        listOfLayouts.add(boardLayout());
     }
 
     static void print2DArray(String[][] array) {

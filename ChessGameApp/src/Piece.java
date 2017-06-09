@@ -37,6 +37,10 @@ public abstract class Piece {
         return false;
     }
 
+    boolean isReversibleMove() {
+        return true;
+    }
+
     Color getColor() {
         return this.color;
     }

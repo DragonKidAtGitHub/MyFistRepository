@@ -717,6 +717,20 @@ class ChessGameTest {
 
     }
 
+    @Test
+    public void testLayoutList() throws Exception {
+        ChessBoard cb = new ChessBoard();
+        cb.initialize();
+        Color c1 = Color.WHITE;
+        Color c2 = Color.BLACK;
+
+        cb.movePiece(6,1,4,1,c1);
+        cb.movePiece(1,1,3,1,c2);
+        cb.movePiece(7,1,5,2,c1);
+        cb.movePiece(0,6,2,5,c2);
+        cb.printBoardLayout();
+    }
+
 
     private String[][] makeInitialBoardLayout(){
         ChessBoard cb = new ChessBoard();
