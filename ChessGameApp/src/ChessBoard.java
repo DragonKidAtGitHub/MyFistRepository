@@ -326,8 +326,8 @@ public class ChessBoard {
         if (isStaleMate(kingColor))                 return true;
         else if (isKingVsKing())                    return true;
         else if (isKingVsKingAndBishop())           return true;
-        //else if (isKingVsKingAndKnight())           return true;
-        //else if (isKingAndBishopVsKingAndBishop())  return true;
+        else if (isKingVsKingAndKnight())           return true;
+        else if (isKingAndBishopVsKingAndBishop())  return true;
         else                                        return false;
     }
 
@@ -588,7 +588,7 @@ public class ChessBoard {
         return (x<0 || x>=rows || y<0 || y>=columns);
     }
 
-    boolean isKingVsKing() {
+    private boolean isKingVsKing() {
         for (int row = 0; row < rows; row++) {
             for (int column = 0; column < columns; column++) {
                 Piece p = getPiece(row, column);
@@ -607,5 +607,27 @@ public class ChessBoard {
             }
         }
         return (counter==3);
+    }
+
+    private boolean isKingVsKingAndKnight() {
+        int counter = 0;
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                Piece p = getPiece(row, column);
+                if (p != null && ((p instanceof King) || (p instanceof Knight))) counter++;
+            }
+        }
+        return (counter==3);
+    }
+
+    private boolean isKingAndBishopVsKingAndBishop() {
+        int counter = 0;
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                Piece p = getPiece(row, column);
+                if (p != null && ((p instanceof King) || (p instanceof Bishop))) counter++;
+            }
+        }
+        return (counter==4);
     }
 }
