@@ -75,6 +75,7 @@ public class ChessGame {
             playTurn();
             switchPlayersTurn();
             gameIsOver = checkIfGameIsOver();
+
         }
         while (!gameIsOver);
         finishGame();
@@ -137,8 +138,7 @@ public class ChessGame {
     public boolean checkIfGameIsOver() {
         Color color = selectedPieceColor.get(playersTurn);
         boolean isCheckMate = cb.isCheckMate(color);
-        boolean isStaleMate = cb.isStaleMate(color);
-        boolean isRepetition = false;
-        return isCheckMate || isStaleMate || isRepetition;
+        boolean isDraw = cb.isDraw(color);
+        return isCheckMate || isDraw;
     }
 }
