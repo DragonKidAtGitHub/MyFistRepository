@@ -8,11 +8,11 @@ public class Player {
     private int noOfLoss = 0;
     private int noOfDraws = 0;
 
-    Player(String name) {
+    public Player(String name) {
         this.name = name;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
@@ -20,15 +20,15 @@ public class Player {
         this.name = name;
     }
 
-    void increaseWinNumber() {
+    public void increaseWinNumber() {
         noOfWins++;
     }
 
-    void increaseLossNumber() {
+    public void increaseLossNumber() {
         noOfLoss++;
     }
 
-    void increaseDrawNumber() {
+    public void increaseDrawNumber() {
         noOfDraws++;
     }
 }

@@ -1,5 +1,6 @@
 import no.chess.game.board.*;
 import no.chess.game.piece.*;
+import no.chess.game.player.*;
 
 import java.util.*;
 
