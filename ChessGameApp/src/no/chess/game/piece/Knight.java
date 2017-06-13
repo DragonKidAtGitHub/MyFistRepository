@@ -1,9 +1,11 @@
+package no.chess.game.piece;
+
 /**
  * Created by ujo on 21.04.2017.
  */
 public class Knight extends Piece {
 
-    Knight(Color color){
+    public Knight(PieceColor color){
         this.color = color;
     }
 

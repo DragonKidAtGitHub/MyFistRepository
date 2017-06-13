@@ -1,3 +1,6 @@
+package no.chess.game.board;
+import no.chess.game.piece.*;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -11,31 +14,31 @@ public class ChessBoard {
     private ArrayList<Piece> removedPieces = new ArrayList<Piece>();
     private ArrayList<String[][]> listOfLayouts = new ArrayList<String[][]>();
 
-    ChessBoard() {
+    public ChessBoard() {
         for (int row = 0; row < rows; row++){
             for (int column = 0; column < columns; column++){
                 boolean rowIsEven = ((row % 2) == 0);
                 boolean columnIsEven = ((column % 2) == 0);
                 if (rowIsEven){
-                    if (columnIsEven)   spots[row][column] = new Spot(Color.WHITE);
-                    else                spots[row][column] = new Spot(Color.BLACK);
+                    if (columnIsEven)   spots[row][column] = new Spot(SpotColor.WHITE);
+                    else                spots[row][column] = new Spot(SpotColor.BLACK);
                 }
                 else {
-                    if (columnIsEven)   spots[row][column] = new Spot(Color.BLACK);
-                    else                spots[row][column] = new Spot(Color.WHITE);
+                    if (columnIsEven)   spots[row][column] = new Spot(SpotColor.BLACK);
+                    else                spots[row][column] = new Spot(SpotColor.WHITE);
                 }
             }
         }
     }
 
-    void initialize() {
+    public void initialize() {
         for (int row = 0; row < rows; row++) {
             for (int column = 0; column<columns; column++) {
                 spots[row][column].removePiece();
             }
         }
 
-        Color color = Color.BLACK;
+        PieceColor color = PieceColor.BLACK;
         spots[0][0].setPiece(new Rook(color));
         spots[0][1].setPiece(new Knight(color));
         spots[0][2].setPiece(new Bishop(color));
@@ -48,7 +51,7 @@ public class ChessBoard {
             spots[1][column].setPiece(new Pawn(color));
         }
 
-        color = Color.WHITE;
+        color = PieceColor.WHITE;
         spots[7][0].setPiece(new Rook(color));
         spots[7][1].setPiece(new Knight(color));
         spots[7][2].setPiece(new Bishop(color));
@@ -62,7 +65,7 @@ public class ChessBoard {
         }
     }
 
-    Piece getPiece(int x, int y){
+    public Piece getPiece(int x, int y){
         if (!isOutOfBounds(x,y))    return spots[x][y].getPiece();
         else                        return null;
     }
@@ -71,7 +74,7 @@ public class ChessBoard {
         return removedPieces;
     }
 
-    boolean movePiece(int fromX, int fromY, int toX, int toY, Color color){
+    public boolean movePiece(int fromX, int fromY, int toX, int toY, PieceColor color){
         boolean pieceIsMoved = false;
         if (isOwnPiece(fromX,fromY,color)) {
             Piece p = getPiece(fromX, fromY);
@@ -99,7 +102,7 @@ public class ChessBoard {
         return pieceIsMoved;
     }
 
-    private void setEnPassantStates(Color c) {
+    private void setEnPassantStates(PieceColor c) {
         for (int row = 0; row < rows; row++) {
             for (int column = 0; column < columns; column++) {
                 if (isOwnPiece(row,column,c)) {
@@ -110,16 +113,16 @@ public class ChessBoard {
         }
     }
 
-    private void promotePiece(int x, int y, Color color) {
+    private void promotePiece(int x, int y, PieceColor color) {
         Piece p = getPiece(x,y);
         if (p != null && !isOutOfBounds(x,y)) spots[x][y].setPiece(new Queen(color));
     }
 
-    Piece removePiece(int x, int y) {
+    public Piece removePiece(int x, int y) {
         return spots[x][y].removePiece();
     }
 
-    void setPiece(int x, int y, Piece p) {
+    public void setPiece(int x, int y, Piece p) {
         if (!isOutOfBounds(x,y)) spots[x][y].setPiece(p);
     }
 
@@ -127,20 +130,20 @@ public class ChessBoard {
         return spots[x][y].getPiece() == null;
     }
 
-    boolean isOwnPiece(int x, int y, Color color) {
+    public boolean isOwnPiece(int x, int y, PieceColor color) {
         return (!isEmpty(x,y) && spots[x][y].getPiece().getColor() == color);
     }
 
-    private boolean isEnemyPiece(int x, int y, Color ownColor) {
+    private boolean isEnemyPiece(int x, int y, PieceColor ownColor) {
         Piece p = spots[x][y].getPiece();
         if (isEmpty(x,y))  return false;
-        Color enemyColor;
-        if (ownColor == Color.BLACK)    enemyColor = Color.WHITE;
-        else                            enemyColor = Color.BLACK;
+        PieceColor enemyColor;
+        if (ownColor == PieceColor.BLACK)   enemyColor = PieceColor.WHITE;
+        else                                enemyColor = PieceColor.BLACK;
         return spots[x][y].getPiece().getColor() == enemyColor;
     }
 
-    boolean isPieceBetween(int fromX, int fromY, int toX, int toY) {
+    public boolean isPieceBetween(int fromX, int fromY, int toX, int toY) {
         Piece p = getPiece(fromX,fromY);
         if (p instanceof Knight) {
             return false;
@@ -194,22 +197,22 @@ public class ChessBoard {
         return false;
     }
 
-    void printBoardLayout() {
+    public void printBoardLayout() {
         String row = "";
         for (int x = 0; x < rows; x++){
             for (int y = 0; y < columns; y++) {
                 Piece p = spots[x][y].getPiece();
                 if (p != null) {
                     String c;
-                    if (p.getColor() == Color.BLACK)    c = "b";
-                    else                                c = "w";
+                    if (p.getColor() == PieceColor.BLACK)   c = "b";
+                    else                                    c = "w";
                     row += c;
-                    if (p instanceof Rook)              row += "R";
-                    else if (p instanceof Knight)       row += "k";
-                    else if (p instanceof Bishop)       row += "B";
-                    else if (p instanceof Queen)        row += "Q";
-                    else if (p instanceof King)         row += "K";
-                    else if (p instanceof Pawn)         row += "P";
+                    if (p instanceof Rook)                  row += "R";
+                    else if (p instanceof Knight)           row += "k";
+                    else if (p instanceof Bishop)           row += "B";
+                    else if (p instanceof Queen)            row += "Q";
+                    else if (p instanceof King)             row += "K";
+                    else if (p instanceof Pawn)             row += "P";
                 }
                 else row += "__";
                 row += " ";
@@ -219,21 +222,21 @@ public class ChessBoard {
         System.out.print(row);
     }
 
-    String[][] boardLayout() {
+    public String[][] boardLayout() {
         String[][] array = new String[rows][columns];
         for (int x = 0; x < rows; x++){
             for (int y = 0; y < columns; y++) {
                 Piece p = spots[x][y].getPiece();
                 if (p != null) {
                     String c;
-                    if (p.getColor() == Color.BLACK)    c = "b";
-                    else                                c = "w";
-                    if (p instanceof Rook)              array[x][y] = c + "R";
-                    else if (p instanceof Knight)       array[x][y] = c + "k";
-                    else if (p instanceof Bishop)       array[x][y] = c + "B";
-                    else if (p instanceof Queen)        array[x][y] = c + "Q";
-                    else if (p instanceof King)         array[x][y] = c + "K";
-                    else if (p instanceof Pawn)         array[x][y] = c + "P";
+                    if (p.getColor() == PieceColor.BLACK)   c = "b";
+                    else                                    c = "w";
+                    if (p instanceof Rook)                  array[x][y] = c + "R";
+                    else if (p instanceof Knight)           array[x][y] = c + "k";
+                    else if (p instanceof Bishop)           array[x][y] = c + "B";
+                    else if (p instanceof Queen)            array[x][y] = c + "Q";
+                    else if (p instanceof King)             array[x][y] = c + "K";
+                    else if (p instanceof Pawn)             array[x][y] = c + "P";
                 }
                 else array[x][y] = "  ";
             }
@@ -242,7 +245,7 @@ public class ChessBoard {
         return array;
     }
 
-    private boolean isCastlingMove(int fromX, int fromY, int toX, int toY, Color color) {
+    private boolean isCastlingMove(int fromX, int fromY, int toX, int toY, PieceColor color) {
         Piece p = getPiece(fromX,fromY);
         if (p == null) return false;
         if (p.isCastlingMove(fromX,fromY,toX,toY)) {
@@ -277,23 +280,23 @@ public class ChessBoard {
         else return false;
     }
 
-    private boolean isEnPassantMove(int fromX, int fromY, int toX, int toY, Color color) {
+    private boolean isEnPassantMove(int fromX, int fromY, int toX, int toY, PieceColor color) {
         Piece ownPiece                  = getPiece(fromX,fromY);
-        Piece enemyPiece                = (color==Color.WHITE) ? getPiece(toX+1,toY) : getPiece(toX-1,toY);
-        boolean isValidMove             = ownPiece.isValidMove(fromX,fromY,toX,toY);
+        Piece enemyPiece                = (color== PieceColor.WHITE) ? getPiece(toX+1,toY) : getPiece(toX-1,toY);
+        boolean isValidMove             = (ownPiece!=null) ? ownPiece.isValidMove(fromX,fromY,toX,toY) : false;
         boolean isNoPieceBetween        = !isPieceBetween(fromX,fromY,toX,toY);
         boolean isNotExposingCheck      = !isCheckedAfterMove(fromX,fromY,toX,toY,color);
-        boolean isOnFifthRank           = ((color==Color.WHITE) && (fromX==3)) || ((color==Color.BLACK) && (fromX==4));
+        boolean isOnFifthRank           = ((color== PieceColor.WHITE) && (fromX==3)) || ((color== PieceColor.BLACK) && (fromX==4));
         boolean enemyIsInEnPassantState = (enemyPiece!=null) ? enemyPiece.checkIfEnPassantIsPossible() : false;
 
         return (isValidMove && isNoPieceBetween && isNotExposingCheck && isOnFifthRank && enemyIsInEnPassantState);
     }
 
-    boolean isChecked(Color kingColor) {
+    public boolean isChecked(PieceColor kingColor) {
         return kingCanBeCaptured(kingColor);
     }
 
-    boolean isCheckMate(Color kingColor) {
+    public boolean isCheckMate(PieceColor kingColor) {
         if (!isChecked(kingColor)) return false;
         else {
             boolean isPossibleToMoveOutOfCheck    = possibleToMoveKingOutOfCheck(kingColor);
@@ -303,7 +306,7 @@ public class ChessBoard {
         }
     }
 
-    boolean isStaleMate(Color kingColor) {
+    public boolean isStaleMate(PieceColor kingColor) {
         boolean isCheck = isChecked(kingColor);
         boolean possibleToMoveKingAway = possibleToMoveKingOutOfCheck(kingColor);
         if (isCheck || possibleToMoveKingAway) return false;
@@ -317,12 +320,12 @@ public class ChessBoard {
 
     boolean isPossibleDraw() {
         boolean fiftyMoveRuleIsActive = (listOfLayouts.size() >= 50);
-        boolean threefoldRepetition = false;
+        boolean threefoldRepetition = false; //TODO: check for threefold repetition
 
         return fiftyMoveRuleIsActive || threefoldRepetition;
     }
 
-    boolean isDraw(Color kingColor) {
+    public boolean isDraw(PieceColor kingColor) {
         if (isStaleMate(kingColor))                 return true;
         else if (isKingVsKing())                    return true;
         else if (isKingVsKingAndBishop())           return true;
@@ -331,7 +334,7 @@ public class ChessBoard {
         else                                        return false;
     }
 
-    boolean isCheckedAfterMove(int fromX, int fromY, int toX, int toY, Color color) {
+    public boolean isCheckedAfterMove(int fromX, int fromY, int toX, int toY, PieceColor color) {
         if (!isOutOfBounds(toX,toY)) {
             Piece fromPiece = getPiece(fromX,fromY);
             Piece toPiece = getPiece(toX, toY);
@@ -367,12 +370,12 @@ public class ChessBoard {
         }
     }
 
-    private boolean kingCanBeCaptured(Color kingColor) {
+    private boolean kingCanBeCaptured(PieceColor kingColor) {
         ArrayList<Position> kingAttackerList = findKingAttackers(kingColor);
         return !kingAttackerList.isEmpty();
     }
 
-    boolean possibleToMoveKingOutOfCheck(Color kingColor) {
+    public boolean possibleToMoveKingOutOfCheck(PieceColor kingColor) {
         Position kingPos = findKing(kingColor);
         if (kingPos != null) {
             int x = kingPos.getX();
@@ -390,18 +393,16 @@ public class ChessBoard {
         else return false;
     }
 
-    boolean possibleToTakeKingAttackerNotUsingKing(Color kingColor) {
+    public boolean possibleToTakeKingAttackerNotUsingKing(PieceColor kingColor) {
         ArrayList<Position> attackerPositionList = findKingAttackers(kingColor);
-        Iterator<Position> itr = attackerPositionList.iterator();
-        while (itr.hasNext()) {
-            Position attackerPos = itr.next();
+        for (Position attackerPos : attackerPositionList) {
             for (int row = 0; row < rows; row++) {
                 for (int column = 0; column < columns; column++) {
                     Piece p = getPiece(row, column);
                     if (isOwnPiece(row, column, kingColor) && !(p instanceof King)) {
-                        boolean isValidMove             = p.isValidMove(row, column, attackerPos.getX(), attackerPos.getY());
-                        boolean isNoPieceBetween        = !isPieceBetween(row, column, attackerPos.getX(), attackerPos.getY());
-                        boolean isOkayToCapture         = p.isOkayToCapture(row, column, attackerPos.getX(), attackerPos.getY());
+                        boolean isValidMove = p.isValidMove(row, column, attackerPos.getX(), attackerPos.getY());
+                        boolean isNoPieceBetween = !isPieceBetween(row, column, attackerPos.getX(), attackerPos.getY());
+                        boolean isOkayToCapture = p.isOkayToCapture(row, column, attackerPos.getX(), attackerPos.getY());
                         if (isValidMove && isNoPieceBetween && isOkayToCapture) return true;
                     }
                 }
@@ -410,60 +411,51 @@ public class ChessBoard {
         return false;
     }
 
-    boolean possibleToBlockCheckNotUsingKing(Color kingColor) {
+    public boolean possibleToBlockCheckNotUsingKing(PieceColor kingColor) {
         ArrayList<Position> attackerList = findKingAttackers(kingColor);
         Position kingPos = findKing(kingColor);
         int kingPosX = kingPos.getX();
         int kingPosY = kingPos.getY();
-        Iterator<Position> itr = attackerList.iterator();
-        while (itr.hasNext()) {
-            Position attackerPos = itr.next();
+        for (Position attackerPos : attackerList) {
             int attackerPosX = attackerPos.getX();
             int attackerPosY = attackerPos.getY();
-            Piece attackerPiece = getPiece(attackerPosX,attackerPosY);
+            Piece attackerPiece = getPiece(attackerPosX, attackerPosY);
             boolean attackerIsNotKnight = !(attackerPiece instanceof Knight);
             if (attackerIsNotKnight) {
                 if ((attackerPosX == kingPosX) || (attackerPosY == kingPosY)) { // straight attack move
                     if ((attackerPosX == kingPosX) && (attackerPosY > kingPosY)) { // straight right attack move
-                        for (int i = 1; i < Math.abs(attackerPosY-kingPosY); i++) {
-                            if (canMoveToWithoutKing(attackerPosX, kingPosY+i, kingColor)) return true;
+                        for (int i = 1; i < Math.abs(attackerPosY - kingPosY); i++) {
+                            if (canMoveToWithoutKing(attackerPosX, kingPosY + i, kingColor)) return true;
+                        }
+                    } else if ((attackerPosX == kingPosX) && (kingPosY < attackerPosY)) { // straight left attack move
+                        for (int i = 1; i < Math.abs(kingPosY - attackerPosY); i++) {
+                            if (canMoveToWithoutKing(attackerPosX, attackerPosY - i, kingColor)) return true;
+                        }
+                    } else if ((kingPosX > attackerPosX) && (attackerPosY == kingPosY)) { // straight down attack move
+                        for (int i = 1; i < Math.abs(kingPosX - attackerPosX); i++) {
+                            if (canMoveToWithoutKing(attackerPosX + i, attackerPosY, kingColor)) return true;
+                        }
+                    } else if ((kingPosX < attackerPosX) && (attackerPosY == kingPosY)) { // straight up attack move
+                        for (int i = 1; i < Math.abs(kingPosX - attackerPosX); i++) {
+                            if (canMoveToWithoutKing(attackerPosX - i, attackerPosY, kingColor)) return true;
                         }
                     }
-                    else if ((attackerPosX == kingPosX) && (kingPosY < attackerPosY)) { // straight left attack move
-                        for (int i = 1; i < Math.abs(kingPosY-attackerPosY); i++) {
-                            if (canMoveToWithoutKing(attackerPosX, attackerPosY-i, kingColor)) return true;
-                        }
-                    }
-                    else if ((kingPosX > attackerPosX) && (attackerPosY == kingPosY)) { // straight down attack move
-                        for (int i = 1; i < Math.abs(kingPosX-attackerPosX); i++) {
-                            if (canMoveToWithoutKing(attackerPosX+i, attackerPosY, kingColor)) return true;
-                        }
-                    }
-                    else if ((kingPosX < attackerPosX) && (attackerPosY == kingPosY)) { // straight up attack move
-                        for (int i = 1; i < Math.abs(kingPosX-attackerPosX); i++) {
-                            if (canMoveToWithoutKing(attackerPosX-i, attackerPosY, kingColor)) return true;
-                        }
-                    }
-                }
-                else if (Math.abs(kingPosX-attackerPosX) == Math.abs(kingPosY-attackerPosY)) { //diagonal attack move
+                } else if (Math.abs(kingPosX - attackerPosX) == Math.abs(kingPosY - attackerPosY)) { //diagonal attack move
                     if ((attackerPosX < kingPosX) && (attackerPosY < kingPosY)) { //diagonal down-right attack move
-                        for (int i = 1; i < Math.abs(attackerPosX-kingPosX); i++) {
-                            if (canMoveToWithoutKing(attackerPosX+i,attackerPosY+i, kingColor)) return true;
+                        for (int i = 1; i < Math.abs(attackerPosX - kingPosX); i++) {
+                            if (canMoveToWithoutKing(attackerPosX + i, attackerPosY + i, kingColor)) return true;
                         }
-                    }
-                    else if ((attackerPosX < kingPosX) && (attackerPosY > kingPosY)) { //diagonal down-left attack move
-                        for (int i = 1; i < Math.abs(attackerPosX-kingPosX); i++) {
-                            if (canMoveToWithoutKing(attackerPosX+i,attackerPosY-i, kingColor)) return true;
+                    } else if ((attackerPosX < kingPosX) && (attackerPosY > kingPosY)) { //diagonal down-left attack move
+                        for (int i = 1; i < Math.abs(attackerPosX - kingPosX); i++) {
+                            if (canMoveToWithoutKing(attackerPosX + i, attackerPosY - i, kingColor)) return true;
                         }
-                    }
-                    else if ((attackerPosX > kingPosX) && (attackerPosY < kingPosY)) { //diagonal up-left attack move
-                        for (int i = 1; i < Math.abs(attackerPosX-kingPosX); i++) {
-                            if (canMoveToWithoutKing(attackerPosX-i,attackerPosY+i, kingColor)) return true;
+                    } else if ((attackerPosX > kingPosX) && (attackerPosY < kingPosY)) { //diagonal up-left attack move
+                        for (int i = 1; i < Math.abs(attackerPosX - kingPosX); i++) {
+                            if (canMoveToWithoutKing(attackerPosX - i, attackerPosY + i, kingColor)) return true;
                         }
-                    }
-                    else if ((attackerPosX > kingPosX) && (attackerPosY > kingPosY)) { //diagonal up-right attack move
-                        for (int i = 1; i < Math.abs(attackerPosX-kingPosX); i++) {
-                            if (canMoveToWithoutKing(attackerPosX-i,attackerPosY-i, kingColor)) return true;
+                    } else if ((attackerPosX > kingPosX) && (attackerPosY > kingPosY)) { //diagonal up-right attack move
+                        for (int i = 1; i < Math.abs(attackerPosX - kingPosX); i++) {
+                            if (canMoveToWithoutKing(attackerPosX - i, attackerPosY - i, kingColor)) return true;
                         }
                     }
                 }
@@ -472,7 +464,7 @@ public class ChessBoard {
         return false;
     }
 
-    private boolean isLegalMove(int fromX, int fromY, int toX, int toY, Color color) {
+    private boolean isLegalMove(int fromX, int fromY, int toX, int toY, PieceColor color) {
         Piece p = getPiece(fromX,fromY);
         boolean isValidMove         = p.isValidMove(fromX, fromY, toX, toY);
         boolean isNoPieceBetween    = !isPieceBetween(fromX, fromY, toX, toY);
@@ -488,18 +480,7 @@ public class ChessBoard {
         return false;
     }
 
-    private boolean canMoveTo(int toX, int toY, Color c) {
-        for (int row = 0; row < rows; row++) {
-            for (int column = 0; column < columns; column++) {
-                if (isOwnPiece(row, column, c)) {
-                    if (isLegalMove(row, column, toX, toY, c)) return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean canMoveToWithoutKing(int toX, int toY, Color c) {
+    private boolean canMoveToWithoutKing(int toX, int toY, PieceColor c) {
         for (int row = 0; row < rows; row++) {
             for (int column = 0; column < columns; column++) {
                 Piece p = getPiece(row,column);
@@ -511,14 +492,14 @@ public class ChessBoard {
         return false;
     }
 
-    private ArrayList<Position> findKingAttackers(Color kingColor) {
+    private ArrayList<Position> findKingAttackers(PieceColor kingColor) {
         ArrayList<Position> attackerPositionList = new ArrayList<>();
         Position kingPos = findKing(kingColor);
         if (kingPos != null) {
             int x = kingPos.getX();
             int y = kingPos.getY();
-            Color attackerColor = Color.BLACK;
-            if (kingColor == Color.BLACK) attackerColor = Color.WHITE;
+            PieceColor attackerColor = PieceColor.BLACK;
+            if (kingColor == PieceColor.BLACK) attackerColor = PieceColor.WHITE;
             for (int row = 0; row < rows; row++) {
                 for (int column = 0; column < columns; column++) {
                     if (isOwnPiece(row, column, attackerColor)) {
@@ -535,7 +516,7 @@ public class ChessBoard {
         return attackerPositionList;
     }
 
-    private Position findKing(Color c) {
+    private Position findKing(PieceColor c) {
         Position pos = null;
         for (int row = 0; row < rows; row++) {
             for (int column = 0; column < columns; column++) {
@@ -584,7 +565,7 @@ public class ChessBoard {
         System.out.print(row);
     }
 
-    static boolean isOutOfBounds(int x, int y) {
+    public static boolean isOutOfBounds(int x, int y) {
         return (x<0 || x>=rows || y<0 || y>=columns);
     }
 

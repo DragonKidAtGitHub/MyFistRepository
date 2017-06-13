@@ -1,3 +1,6 @@
+package no.chess.game.tests;
+import no.chess.game.board.ChessBoard;
+import no.chess.game.piece.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -5,25 +8,25 @@ import static org.junit.jupiter.api.Assertions.*;
 class ChessGameTest {
     @Test
     public void testColor() throws Exception {
-        Color c1, c2;
-        c1 = Color.WHITE;
-        c2 = Color.BLACK;
+        PieceColor c1, c2;
+        c1 = PieceColor.WHITE;
+        c2 = PieceColor.BLACK;
 
-        assertEquals(Color.WHITE, c1);
-        assertEquals(Color.BLACK, c2);
+        assertEquals(PieceColor.WHITE, c1);
+        assertEquals(PieceColor.BLACK, c2);
     }
 
     @Test
     public void testMakeKing() throws Exception {
-        King p1 = new King(Color.BLACK);
-        King p2 = new King(Color.WHITE);
-        assertEquals(Color.BLACK, p1.getColor());
-        assertEquals(Color.WHITE, p2.getColor());
+        King p1 = new King(PieceColor.BLACK);
+        King p2 = new King(PieceColor.WHITE);
+        assertEquals(PieceColor.BLACK, p1.getColor());
+        assertEquals(PieceColor.WHITE, p2.getColor());
     }
 
     @Test
     public void  testPossibleKingMoves() throws Exception {
-        King p = new King(Color.BLACK);
+        King p = new King(PieceColor.BLACK);
         assertFalse(p.isValidMove(  0,0,0,0)); // No move
         assertTrue(p.isValidMove(   0,4,1,5)); //Diagonal move
         assertFalse(p.isValidMove(  0,4,-1,4)); // Out of bounds move
@@ -35,16 +38,16 @@ class ChessGameTest {
 
     @Test
     public void testMakePawn() throws Exception {
-        Pawn p1 = new Pawn(Color.BLACK);
-        Pawn p2 = new Pawn(Color.WHITE);
-        assertEquals(Color.BLACK, p1.getColor());
-        assertEquals(Color.WHITE, p2.getColor());
+        Pawn p1 = new Pawn(PieceColor.BLACK);
+        Pawn p2 = new Pawn(PieceColor.WHITE);
+        assertEquals(PieceColor.BLACK, p1.getColor());
+        assertEquals(PieceColor.WHITE, p2.getColor());
     }
 
     @Test
     public void testPossibleMovePawn() throws Exception {
-        Piece p1 = new Pawn(Color.BLACK);
-        Piece p2 = new Pawn(Color.WHITE);
+        Piece p1 = new Pawn(PieceColor.BLACK);
+        Piece p2 = new Pawn(PieceColor.WHITE);
         assertFalse(p1.isValidMove( 1,2,1  , 2      ));       // No move
         assertFalse(p1.isValidMove( 1,2,1  , -1     ));         // Out of bounds
         assertFalse(p1.isValidMove( 1,2,1  , 8      ));          // Out of bounds
@@ -72,16 +75,16 @@ class ChessGameTest {
 
     @Test
     public void testMakeQueen() throws Exception {
-        Piece p1 = new Queen(Color.BLACK);
-        Piece p2 = new Queen(Color.WHITE);
-        assertEquals(Color.BLACK, p1.getColor());
-        assertEquals(Color.WHITE, p2.getColor());
+        Piece p1 = new Queen(PieceColor.BLACK);
+        Piece p2 = new Queen(PieceColor.WHITE);
+        assertEquals(PieceColor.BLACK, p1.getColor());
+        assertEquals(PieceColor.WHITE, p2.getColor());
     }
 
     @Test
     public void testPossibleQueenMoves() throws Exception {
-        Piece p1 = new Queen(Color.BLACK);
-        Piece p2 = new Queen(Color.WHITE);
+        Piece p1 = new Queen(PieceColor.BLACK);
+        Piece p2 = new Queen(PieceColor.WHITE);
         assertFalse(p1.isValidMove( 0,2, 0  , 2   ));               // No move
         assertTrue(p1.isValidMove(  0,2, 0+1, 2+1 ));    //Diagonal move
         assertTrue(p1.isValidMove(  0,2, 0+2, 2-2 ));    //Diagonal move
@@ -103,16 +106,16 @@ class ChessGameTest {
 
     @Test
     public void testMakeRook() throws Exception {
-        Piece p1 = new Rook(Color.BLACK);
-        Piece p2 = new Rook(Color.WHITE);
-        assertEquals(Color.BLACK, p1.getColor());
-        assertEquals(Color.WHITE, p2.getColor());
+        Piece p1 = new Rook(PieceColor.BLACK);
+        Piece p2 = new Rook(PieceColor.WHITE);
+        assertEquals(PieceColor.BLACK, p1.getColor());
+        assertEquals(PieceColor.WHITE, p2.getColor());
     }
 
     @Test
     public void testPossibleRookMoves() throws Exception {
-        Piece p1 = new Rook(Color.BLACK);
-        Piece p2 = new Rook(Color.WHITE);
+        Piece p1 = new Rook(PieceColor.BLACK);
+        Piece p2 = new Rook(PieceColor.WHITE);
         assertFalse(p1.isValidMove( 0,2, 0  ,2  ));               // No move
         assertFalse(p1.isValidMove( 0,2, 0+1,2+1));    //Diagonal move
         assertFalse(p1.isValidMove( 0,2, 0+3,2-3));    //Diagonal move
@@ -134,16 +137,16 @@ class ChessGameTest {
 
     @Test
     public void testMakeBishop() throws Exception {
-        Piece p1 = new Bishop(Color.BLACK);
-        Piece p2 = new Bishop(Color.WHITE);
-        assertEquals(Color.BLACK, p1.getColor());
-        assertEquals(Color.WHITE, p2.getColor());
+        Piece p1 = new Bishop(PieceColor.BLACK);
+        Piece p2 = new Bishop(PieceColor.WHITE);
+        assertEquals(PieceColor.BLACK, p1.getColor());
+        assertEquals(PieceColor.WHITE, p2.getColor());
     }
 
     @Test
     public void testPossibleBishopMoves() throws Exception {
-        Piece p1 = new Bishop(Color.BLACK);
-        Piece p2 = new Bishop(Color.WHITE);
+        Piece p1 = new Bishop(PieceColor.BLACK);
+        Piece p2 = new Bishop(PieceColor.WHITE);
         assertFalse(p1.isValidMove( 0,2, 0  ,2  ));               // No move
         assertTrue(p1.isValidMove(  0,2, 0+1,2+1));    //Diagonal move
         assertTrue(p1.isValidMove(  0,2, 0+2,2-2));    //Diagonal move
@@ -163,17 +166,17 @@ class ChessGameTest {
 
     @Test
     public void testMakeKnight() throws Exception {
-        Piece p1 = new Knight(Color.BLACK);
-        Piece p2 = new Knight(Color.WHITE);
-        assertEquals(Color.BLACK, p1.getColor());
-        assertEquals(Color.WHITE, p2.getColor());
+        Piece p1 = new Knight(PieceColor.BLACK);
+        Piece p2 = new Knight(PieceColor.WHITE);
+        assertEquals(PieceColor.BLACK, p1.getColor());
+        assertEquals(PieceColor.WHITE, p2.getColor());
 
     }
 
     @Test
     public void testPossibleKnightMoves() throws Exception {
-        Piece p1 = new Knight(Color.BLACK);
-        Piece p2 = new Knight(Color.WHITE);
+        Piece p1 = new Knight(PieceColor.BLACK);
+        Piece p2 = new Knight(PieceColor.WHITE);
         assertFalse(p1.isValidMove( 0,2, 0  ,2  ));                   // No move
         assertFalse(p1.isValidMove( 0,2, 0+1,2+1));       //Diagonal move
         assertFalse(p1.isValidMove( 0,2, 0+2,2-2));       //Diagonal move
@@ -181,9 +184,9 @@ class ChessGameTest {
         assertFalse(p1.isValidMove( 0,2, 0+3,2  ));             //Straight move
         assertFalse(p1.isValidMove( 0,2, 0-1,2  ));             // Out of bounds move
         assertFalse(p1.isValidMove( 0,2, 0+8,2  ));             // Out of bounds move
-        assertTrue(p1.isValidMove(  0,2, 0+2,2+1));        // Knight move
-        assertTrue(p1.isValidMove(  0,2, 0+2,2-1));        // Knight move
-        assertTrue(p1.isValidMove(  0,2, 0+1,2+2));        // Knight move
+        assertTrue(p1.isValidMove(  0,2, 0+2,2+1));        // no.chess.game.piece.Knight move
+        assertTrue(p1.isValidMove(  0,2, 0+2,2-1));        // no.chess.game.piece.Knight move
+        assertTrue(p1.isValidMove(  0,2, 0+1,2+2));        // no.chess.game.piece.Knight move
 
         assertFalse(p2.isValidMove( 7,2, 7  ,2  ));                   // No move
         assertFalse(p2.isValidMove( 7,2, 7-1,2+1));       //Diagonal move
@@ -192,9 +195,9 @@ class ChessGameTest {
         assertFalse(p2.isValidMove( 7,2, 7-3,2  ));             //Straight move
         assertFalse(p2.isValidMove( 7,2, 7+1,2  ));             // Out of bounds move
         assertFalse(p2.isValidMove( 7,2, 7-8,2  ));             // Out of bounds move
-        assertTrue(p2.isValidMove(  7,2, 7-2,2+1));        // Knight move
-        assertTrue(p2.isValidMove(  7,2, 7-2,2-1));        // Knight move
-        assertTrue(p2.isValidMove(  7,2, 7-1,2+2));        // Knight move
+        assertTrue(p2.isValidMove(  7,2, 7-2,2+1));        // no.chess.game.piece.Knight move
+        assertTrue(p2.isValidMove(  7,2, 7-2,2-1));        // no.chess.game.piece.Knight move
+        assertTrue(p2.isValidMove(  7,2, 7-1,2+2));        // no.chess.game.piece.Knight move
     }
 
     @Test
@@ -242,12 +245,12 @@ class ChessGameTest {
         ChessBoard cb = new ChessBoard();
         cb.initialize();
 
-        assertTrue(cb.isOwnPiece(0,0,Color.BLACK));
-        assertTrue(cb.isOwnPiece(7,7,Color.WHITE));
-        assertFalse(cb.isOwnPiece(2,2, Color.BLACK));
-        assertFalse(cb.isOwnPiece(5,5, Color.WHITE));
-        assertFalse(cb.isOwnPiece(6,6,Color.BLACK));
-        assertFalse(cb.isOwnPiece(1,1,Color.WHITE));
+        assertTrue(cb.isOwnPiece(0,0, PieceColor.BLACK));
+        assertTrue(cb.isOwnPiece(7,7, PieceColor.WHITE));
+        assertFalse(cb.isOwnPiece(2,2, PieceColor.BLACK));
+        assertFalse(cb.isOwnPiece(5,5, PieceColor.WHITE));
+        assertFalse(cb.isOwnPiece(6,6, PieceColor.BLACK));
+        assertFalse(cb.isOwnPiece(1,1, PieceColor.WHITE));
     }
 
     @Test
@@ -270,8 +273,8 @@ class ChessGameTest {
 
         String[][] cb_true = makeInitialBoardLayout();
 
-        Color c1 = Color.WHITE;
-        Color c2 = Color.BLACK;
+        PieceColor c1 = PieceColor.WHITE;
+        PieceColor c2 = PieceColor.BLACK;
 
         assertArrayEquals(cb_true,cb.boardLayout());
         cb.movePiece(0,0,1,0, c2); // should not be possible
@@ -335,8 +338,8 @@ class ChessGameTest {
         ChessBoard cb = new ChessBoard();
         cb.initialize();
 
-        Color c1 = Color.WHITE;
-        Color c2 = Color.BLACK;
+        PieceColor c1 = PieceColor.WHITE;
+        PieceColor c2 = PieceColor.BLACK;
         assertTrue(cb.getPiece(1,0).isValidMove(1,0,3,0));
         cb.movePiece(1,0,3,0, c2);
         assertFalse(cb.getPiece(3,0).isValidMove(3,0,5,0));
@@ -352,8 +355,8 @@ class ChessGameTest {
         String[][] correctBoardLayout = makeInitialBoardLayout();
         assertArrayEquals(correctBoardLayout, cb.boardLayout());
 
-        Color c1 = Color.WHITE;
-        Color c2 = Color.BLACK;
+        PieceColor c1 = PieceColor.WHITE;
+        PieceColor c2 = PieceColor.BLACK;
 
         //Move black knight
         cb.movePiece(0,1,2,0, c2);
@@ -382,8 +385,8 @@ class ChessGameTest {
         cb.initialize();
 
         String[][] correctBoardLayout = makeInitialBoardLayout();
-        Color c1 = Color.WHITE;
-        Color c2 = Color.BLACK;
+        PieceColor c1 = PieceColor.WHITE;
+        PieceColor c2 = PieceColor.BLACK;
         cb.movePiece(1,2,3,2,c2);
         cb.movePiece(0,3,3,0,c2);
         assertFalse(cb.isChecked(c1));
@@ -398,8 +401,8 @@ class ChessGameTest {
         cb.initialize();
 
         String[][] correctBoardLayout = makeInitialBoardLayout();
-        Color c1 = Color.WHITE;
-        Color c2 = Color.BLACK;
+        PieceColor c1 = PieceColor.WHITE;
+        PieceColor c2 = PieceColor.BLACK;
         cb.movePiece(1,2,2,2,c2);
         cb.movePiece(0,3,3,0,c2);
 
@@ -412,8 +415,8 @@ class ChessGameTest {
     public void testCastlingMove() throws Exception {
         ChessBoard cb = new ChessBoard();
         cb.initialize();
-        Color c1 = Color.WHITE;
-        Color c2 = Color.BLACK;
+        PieceColor c1 = PieceColor.WHITE;
+        PieceColor c2 = PieceColor.BLACK;
 
         String[][] correctBoardLayout = makeInitialBoardLayout();
         cb.movePiece(6,6,5,6,c1);
@@ -484,82 +487,82 @@ class ChessGameTest {
     @Test
     public void testPossibleToMoveOutOfCheck() throws Exception {
         ChessBoard cb = new ChessBoard();
-        cb.setPiece(7,7,new King(Color.WHITE));
-        cb.setPiece(0,7,new Queen(Color.BLACK));
-        assertTrue(cb.possibleToMoveKingOutOfCheck(Color.WHITE));
+        cb.setPiece(7,7,new King(PieceColor.WHITE));
+        cb.setPiece(0,7,new Queen(PieceColor.BLACK));
+        assertTrue(cb.possibleToMoveKingOutOfCheck(PieceColor.WHITE));
 
-        cb.setPiece(0,6,new Rook(Color.BLACK));
-        assertFalse(cb.possibleToMoveKingOutOfCheck(Color.WHITE));
+        cb.setPiece(0,6,new Rook(PieceColor.BLACK));
+        assertFalse(cb.possibleToMoveKingOutOfCheck(PieceColor.WHITE));
 
         cb = new ChessBoard();
-        cb.setPiece(7,7,new King(Color.WHITE));
-        cb.setPiece(6,6,new Bishop(Color.BLACK));
-        assertTrue(cb.possibleToMoveKingOutOfCheck(Color.WHITE));
+        cb.setPiece(7,7,new King(PieceColor.WHITE));
+        cb.setPiece(6,6,new Bishop(PieceColor.BLACK));
+        assertTrue(cb.possibleToMoveKingOutOfCheck(PieceColor.WHITE));
 
-        cb.setPiece(6,7,new Rook(Color.BLACK));
-        assertTrue(cb.possibleToMoveKingOutOfCheck(Color.WHITE));
+        cb.setPiece(6,7,new Rook(PieceColor.BLACK));
+        assertTrue(cb.possibleToMoveKingOutOfCheck(PieceColor.WHITE));
     }
 
     @Test
     public void testPossibleToTakeKingAttacker() throws Exception {
         ChessBoard cb = new ChessBoard();
-        cb.setPiece(7,7,new King(Color.WHITE));
-        cb.setPiece(4,7,new Queen(Color.BLACK));
+        cb.setPiece(7,7,new King(PieceColor.WHITE));
+        cb.setPiece(4,7,new Queen(PieceColor.BLACK));
 
-        assertFalse(cb.possibleToTakeKingAttackerNotUsingKing(Color.WHITE));
+        assertFalse(cb.possibleToTakeKingAttackerNotUsingKing(PieceColor.WHITE));
 
-        cb.setPiece(5,6,new Pawn(Color.WHITE));
-        assertTrue(cb.possibleToTakeKingAttackerNotUsingKing(Color.WHITE));
+        cb.setPiece(5,6,new Pawn(PieceColor.WHITE));
+        assertTrue(cb.possibleToTakeKingAttackerNotUsingKing(PieceColor.WHITE));
 
         cb = new ChessBoard();
-        cb.setPiece(7,7,new King(Color.WHITE));
-        cb.setPiece(6,6,new Queen(Color.BLACK));
+        cb.setPiece(7,7,new King(PieceColor.WHITE));
+        cb.setPiece(6,6,new Queen(PieceColor.BLACK));
 
-        assertFalse(cb.possibleToTakeKingAttackerNotUsingKing(Color.WHITE));
+        assertFalse(cb.possibleToTakeKingAttackerNotUsingKing(PieceColor.WHITE));
     }
 
     @Test
     public void testPossibleToBlockKingAttacker() throws Exception {
         ChessBoard cb = new ChessBoard();
-        cb.setPiece(7,7,new King(Color.WHITE));
-        cb.setPiece(4,7,new Queen(Color.BLACK));
+        cb.setPiece(7,7,new King(PieceColor.WHITE));
+        cb.setPiece(4,7,new Queen(PieceColor.BLACK));
 
-        assertFalse(cb.possibleToBlockCheckNotUsingKing(Color.WHITE));
+        assertFalse(cb.possibleToBlockCheckNotUsingKing(PieceColor.WHITE));
 
-        cb.setPiece(6,0,new Rook(Color.WHITE));
+        cb.setPiece(6,0,new Rook(PieceColor.WHITE));
 
-        assertTrue(cb.possibleToBlockCheckNotUsingKing(Color.WHITE));
+        assertTrue(cb.possibleToBlockCheckNotUsingKing(PieceColor.WHITE));
     }
 
     @Test
     public void testCheckMate() throws Exception {
         ChessBoard cb = new ChessBoard();
-        cb.setPiece(7,7,new King(Color.WHITE));
-        cb.setPiece(5,6,new Queen(Color.BLACK));
-        cb.setPiece(7,0,new Rook(Color.BLACK));
+        cb.setPiece(7,7,new King(PieceColor.WHITE));
+        cb.setPiece(5,6,new Queen(PieceColor.BLACK));
+        cb.setPiece(7,0,new Rook(PieceColor.BLACK));
 
-        assertTrue(cb.isCheckMate(Color.WHITE));
+        assertTrue(cb.isCheckMate(PieceColor.WHITE));
 
         cb.removePiece(7,0);
-        assertFalse(cb.isCheckMate(Color.WHITE));
+        assertFalse(cb.isCheckMate(PieceColor.WHITE));
 
-        cb.movePiece(5,6,6,6,Color.BLACK);
+        cb.movePiece(5,6,6,6, PieceColor.BLACK);
 
-        assertTrue(cb.isChecked(Color.WHITE));
-        assertFalse(cb.isCheckMate(Color.WHITE));
+        assertTrue(cb.isChecked(PieceColor.WHITE));
+        assertFalse(cb.isCheckMate(PieceColor.WHITE));
 
-        cb.setPiece(0,6,new Rook(Color.BLACK));;
-        assertTrue(cb.isChecked(Color.WHITE));
-        assertTrue(cb.isCheckMate(Color.WHITE));
+        cb.setPiece(0,6,new Rook(PieceColor.BLACK));;
+        assertTrue(cb.isChecked(PieceColor.WHITE));
+        assertTrue(cb.isCheckMate(PieceColor.WHITE));
 
         cb.initialize();
-        cb.movePiece(6,5,5,5,Color.WHITE);
-        cb.movePiece(1,4,3,4,Color.BLACK);
-        cb.movePiece(6,6,4,6,Color.WHITE);
-        cb.movePiece(0,3,4,7,Color.BLACK);
+        cb.movePiece(6,5,5,5, PieceColor.WHITE);
+        cb.movePiece(1,4,3,4, PieceColor.BLACK);
+        cb.movePiece(6,6,4,6, PieceColor.WHITE);
+        cb.movePiece(0,3,4,7, PieceColor.BLACK);
 
-        assertTrue(cb.isChecked(Color.WHITE));
-        assertTrue(cb.isCheckMate(Color.WHITE));
+        assertTrue(cb.isChecked(PieceColor.WHITE));
+        assertTrue(cb.isCheckMate(PieceColor.WHITE));
     }
 
     @Test
@@ -567,8 +570,8 @@ class ChessGameTest {
         ChessBoard cb = new ChessBoard();
         cb.initialize();
 
-        Color c1 = Color.WHITE;
-        Color c2 = Color.BLACK;
+        PieceColor c1 = PieceColor.WHITE;
+        PieceColor c2 = PieceColor.BLACK;
         cb.movePiece(1,1,3,1, c2);
         cb.movePiece(3,1,4,1, c2);
         cb.movePiece(4,1,5,1, c2);
@@ -589,8 +592,8 @@ class ChessGameTest {
     public void testStaleMate() throws Exception {
         ChessBoard cb = new ChessBoard();
 
-        Color c1 = Color.WHITE;
-        Color c2 = Color.BLACK;
+        PieceColor c1 = PieceColor.WHITE;
+        PieceColor c2 = PieceColor.BLACK;
         cb.setPiece(7,7,new King(c1));
         cb.setPiece(0,6, new Rook(c2));
         assertFalse(cb.isStaleMate(c1));
@@ -614,8 +617,8 @@ class ChessGameTest {
     public void testEnPassantState() throws Exception {
         ChessBoard cb = new ChessBoard();
         cb.initialize();
-        Color c1 = Color.WHITE;
-        Color c2 = Color.BLACK;
+        PieceColor c1 = PieceColor.WHITE;
+        PieceColor c2 = PieceColor.BLACK;
 
         assertFalse(cb.getPiece(1,0).checkIfEnPassantIsPossible());
         assertFalse(cb.getPiece(1,1).checkIfEnPassantIsPossible());
@@ -679,8 +682,8 @@ class ChessGameTest {
     public void testEnPassantMove() throws Exception {
         ChessBoard cb = new ChessBoard();
         cb.initialize();
-        Color c1 = Color.WHITE;
-        Color c2 = Color.BLACK;
+        PieceColor c1 = PieceColor.WHITE;
+        PieceColor c2 = PieceColor.BLACK;
 
         cb.setPiece(1,1, new Pawn(c2));
         cb.setPiece(6,2, new Pawn(c1));
@@ -721,8 +724,8 @@ class ChessGameTest {
     public void testLayoutList() throws Exception {
         ChessBoard cb = new ChessBoard();
         cb.initialize();
-        Color c1 = Color.WHITE;
-        Color c2 = Color.BLACK;
+        PieceColor c1 = PieceColor.WHITE;
+        PieceColor c2 = PieceColor.BLACK;
 
         cb.movePiece(6,1,4,1,c1);
         cb.movePiece(1,1,3,1,c2);
@@ -730,7 +733,6 @@ class ChessGameTest {
         cb.movePiece(0,6,2,5,c2);
         cb.printBoardLayout();
     }
-
 
     private String[][] makeInitialBoardLayout(){
         ChessBoard cb = new ChessBoard();

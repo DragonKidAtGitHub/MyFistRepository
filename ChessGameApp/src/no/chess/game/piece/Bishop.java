@@ -1,10 +1,11 @@
+package no.chess.game.piece;
 /**
  * Created by ujo on 21.04.2017.
  */
 public class Bishop extends Piece {
-    private Color color;
+    private PieceColor color;
 
-    Bishop(Color color){
+    public Bishop(PieceColor color){
         this.color = color;
     }
 
@@ -28,8 +29,7 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public Color getColor() {
+    public PieceColor getColor() {
         return color;
     }
-
 }

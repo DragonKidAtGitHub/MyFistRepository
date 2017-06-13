@@ -1,10 +1,12 @@
+package no.chess.game.piece;
+
 /**
  * Created by ujo on 06.04.2017.
  */
 public class Pawn extends Piece {
     private boolean enPassantIsPossible = false;
 
-    Pawn(Color color){
+    public Pawn(PieceColor color){
         this.color = color;
     }
 
@@ -18,58 +20,58 @@ public class Pawn extends Piece {
     }
 
     @Override
-    boolean isOkayToCapture(int fromX, int fromY, int toX, int toY) {
+    public boolean isOkayToCapture(int fromX, int fromY, int toX, int toY) {
         return isDiagonalMove(fromX,fromY,toX,toY);
     }
 
     @Override
-    boolean isOkayToMoveWithoutCapturing(int fromX, int fromY, int toX, int toY) {
+    public boolean isOkayToMoveWithoutCapturing(int fromX, int fromY, int toX, int toY) {
         return (isNormalPawnMove(fromX,fromY,toX,toY) || isDoubleFirstMove(fromX,fromY,toX,toY));
     }
 
     @Override
-    boolean checkIfEnPassantIsPossible() {
+    public boolean checkIfEnPassantIsPossible() {
         return enPassantIsPossible;
     }
 
     @Override
-    void setEnPassantPossible() {
+    public void setEnPassantPossible() {
         enPassantIsPossible = true;
     }
 
     @Override
-    void setEnPassantState() {
+    public void setEnPassantState() {
         if (hasMoved && enPassantIsPossible)  enPassantIsPossible = false;
     }
 
     @Override
-    boolean isSpecialFirstMove(int fromX, int fromY, int toX, int toY) {
+    public boolean isSpecialFirstMove(int fromX, int fromY, int toX, int toY) {
         return isDoubleFirstMove(fromX,fromY,toX,toY);
     }
 
     @Override
-    boolean checkIsPromoted(int fromX, int fromY, int toX, int toY) {
-        if (color==Color.WHITE) return (toX==0);
+    public boolean checkIsPromoted(int fromX, int fromY, int toX, int toY) {
+        if (color== PieceColor.WHITE) return (toX==0);
         else                    return (toX==7);
     }
 
     @Override
-    boolean isReversibleMove() {
+    public boolean isReversibleMove() {
         return false;
     }
 
     private boolean isDiagonalMove(int fromX, int fromY, int toX, int toY){
-        if (color==Color.BLACK)     return (toX == fromX + 1 && toY == fromY + 1) || (toX == fromX + 1 && toY == fromY - 1);
+        if (color== PieceColor.BLACK)     return (toX == fromX + 1 && toY == fromY + 1) || (toX == fromX + 1 && toY == fromY - 1);
         else                        return (toX == fromX - 1 && toY == fromY + 1) || (toX == fromX - 1 && toY == fromY - 1);
     }
 
     private boolean isNormalPawnMove(int fromX, int fromY, int toX, int toY) {
-        if (color==Color.BLACK) return (toX == fromX + 1 && toY == fromY);
+        if (color== PieceColor.BLACK) return (toX == fromX + 1 && toY == fromY);
         else                    return (toX == fromX - 1 && toY == fromY);
     }
 
     private boolean isDoubleFirstMove(int fromX, int fromY, int toX, int toY) {
-        if (color==Color.BLACK) return (!hasMoved && toX==fromX+2 && toY==fromY);
+        if (color== PieceColor.BLACK) return (!hasMoved && toX==fromX+2 && toY==fromY);
         else                    return (!hasMoved && toX==fromX-2 && toY==fromY);
     }
 

@@ -1,3 +1,6 @@
+import no.chess.game.board.*;
+import no.chess.game.piece.*;
+
 import java.util.*;
 
 /**
@@ -7,7 +10,7 @@ public class ChessGame {
     private ChessBoard cb;
     private Player player1;
     private Player player2;
-    private HashMap<Player,Color> selectedPieceColor;
+    private HashMap<Player,PieceColor> selectedPieceColor;
     private boolean gameIsSetup = false;
     private Player playersTurn;
 
@@ -32,7 +35,7 @@ public class ChessGame {
     }
 
     public void chooseColors() {
-        selectedPieceColor = new HashMap<Player, Color>();
+        selectedPieceColor = new HashMap<Player, PieceColor>();
         Scanner scan = new Scanner(System.in);
         boolean isOkayInput = false;
         System.out.println("Choose color for Player 1 (" + player1.getName() + "): White(W)/Black(B): ");
@@ -44,13 +47,13 @@ public class ChessGame {
             isOkayInput = (player1Color.equalsIgnoreCase("W")) || (player1Color.equalsIgnoreCase("B"));
         }
         if (player1Color.equalsIgnoreCase("W")) {
-            selectedPieceColor.put(player1, Color.WHITE);
-            selectedPieceColor.put(player2, Color.BLACK);
+            selectedPieceColor.put(player1, PieceColor.WHITE);
+            selectedPieceColor.put(player2, PieceColor.BLACK);
             playersTurn = player1;
         }
         else {
-            selectedPieceColor.put(player1, Color.BLACK);
-            selectedPieceColor.put(player2, Color.WHITE);
+            selectedPieceColor.put(player1, PieceColor.BLACK);
+            selectedPieceColor.put(player2, PieceColor.WHITE);
             playersTurn = player2;
         }
         System.out.println("Player 1 ("+ player1.getName()+ ") has chosen " + selectedPieceColor.get(player1).toString() + " pieces.");
@@ -136,7 +139,7 @@ public class ChessGame {
     }
 
     public boolean checkIfGameIsOver() {
-        Color color = selectedPieceColor.get(playersTurn);
+        PieceColor color = selectedPieceColor.get(playersTurn);
         boolean isCheckMate = cb.isCheckMate(color);
         boolean isDraw = cb.isDraw(color);
         return isCheckMate || isDraw;

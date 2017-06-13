@@ -1,3 +1,4 @@
+package no.chess.game.player;
 /**
  * Created by Ulrik on 31-May-17.
  */

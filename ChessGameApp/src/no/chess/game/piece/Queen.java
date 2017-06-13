@@ -1,9 +1,11 @@
+package no.chess.game.piece;
+
 /**
  * Created by ujo on 21.04.2017.
  */
 public class Queen extends Piece {
 
-    Queen(Color color){
+    public Queen(PieceColor color){
         this.color = color;
     }
 

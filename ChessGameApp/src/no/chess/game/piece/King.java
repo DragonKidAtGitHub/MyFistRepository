@@ -1,9 +1,10 @@
+package no.chess.game.piece;
 /**
  * Created by ujo on 06.04.2017.
  */
 public class King extends Piece {
 
-    King(Color color) {
+    public King(PieceColor color) {
         this.color = color;
     }
 
@@ -20,7 +21,7 @@ public class King extends Piece {
     }
 
     @Override
-    protected boolean isCastlingMove(int fromX, int fromY, int toX, int toY) {
+    public boolean isCastlingMove(int fromX, int fromY, int toX, int toY) {
         return (!hasMoved && fromX==toX && Math.abs(fromY-toY) == 2);
     }
 }

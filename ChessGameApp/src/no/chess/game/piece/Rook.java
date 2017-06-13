@@ -1,9 +1,11 @@
+package no.chess.game.piece;
+
 /**
  * Created by ujo on 21.04.2017.
  */
 public class Rook extends Piece {
 
-    Rook(Color color){
+    public Rook(PieceColor color){
         this.color = color;
     }
 
@@ -20,7 +22,7 @@ public class Rook extends Piece {
     }
 
     @Override
-    protected boolean isCastlingMove(int fromX, int fromY, int toX, int toY) {
+    public boolean isCastlingMove(int fromX, int fromY, int toX, int toY) {
         return  (!hasMoved && fromX==toX && ((fromY==0 && toY==3) || (fromY==7 && toY==5)));
     }
 }

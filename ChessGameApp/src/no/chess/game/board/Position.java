@@ -1,3 +1,5 @@
+package no.chess.game.board;
+
 /**
  * Created by Ulrik Jorgensen on 18-May-17.
  */

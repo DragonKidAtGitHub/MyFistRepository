@@ -1,16 +1,19 @@
+package no.chess.game.board;
+import no.chess.game.piece.Piece;
+
 /**
  * Created by ujo on 06.04.2017.
  */
 public class Spot {
     private Piece piece;
-    private Color color;
+    private SpotColor color;
 
-    Spot(Color color) {
+    Spot(SpotColor color) {
         this.color = color;
         this.piece = null;
     }
 
-    public Spot(Piece piece, Color color) {
+    public Spot(Piece piece, SpotColor color) {
         this.piece = piece;
         this.color = color;
     }
