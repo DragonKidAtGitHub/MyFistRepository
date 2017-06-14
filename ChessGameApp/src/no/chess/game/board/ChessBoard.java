@@ -2,6 +2,7 @@ package no.chess.game.board;
 import no.chess.game.piece.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -318,11 +319,24 @@ public class ChessBoard {
         return true;
     }
 
-    boolean isPossibleDraw() {
+    public boolean isPossibleDraw() {
         boolean fiftyMoveRuleIsActive = (listOfLayouts.size() >= 50);
-        boolean threefoldRepetition = false; //TODO: check for threefold repetition
+        boolean threefoldRepetition = isThreefoldRepetition();
 
         return fiftyMoveRuleIsActive || threefoldRepetition;
+    }
+
+    private boolean isThreefoldRepetition() {
+        for (int i=0; i<listOfLayouts.size()-2;i++) {
+            int counter = 0;
+            for (int j=i+1; j<listOfLayouts.size(); j++) {
+                String[][] layout1 = listOfLayouts.get(i);
+                String[][] layout2 = listOfLayouts.get(j);
+                if (Arrays.deepEquals(layout1,layout2)) counter++;
+                if (counter>=2) return true;
+            }
+        }
+        return false;
     }
 
     public boolean isDraw(PieceColor kingColor) {

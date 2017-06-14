@@ -721,17 +721,25 @@ class ChessGameTest {
     }
 
     @Test
-    public void testLayoutList() throws Exception {
+    public void testThreefoldRepetition() throws Exception {
         ChessBoard cb = new ChessBoard();
         cb.initialize();
         PieceColor c1 = PieceColor.WHITE;
-        PieceColor c2 = PieceColor.BLACK;
+        PieceColor c2 = PieceColor.WHITE;
 
-        cb.movePiece(6,1,4,1,c1);
-        cb.movePiece(1,1,3,1,c2);
-        cb.movePiece(7,1,5,2,c1);
-        cb.movePiece(0,6,2,5,c2);
+        cb.movePiece(7,1,5,0,c1);
+        cb.movePiece(5,0,7,1,c1);
+        cb.movePiece(7,1,5,0,c1);
+        cb.movePiece(5,0,7,1,c1);
+        assertFalse(cb.isPossibleDraw());
+        cb.movePiece(7,1,5,0,c1);
         cb.printBoardLayout();
+
+        assertTrue(cb.isPossibleDraw());
+        cb.movePiece(6,6,5,6,c1);
+        assertFalse(cb.isPossibleDraw());
+
+
     }
 
     private String[][] makeInitialBoardLayout(){
