@@ -16,6 +16,11 @@ public class King extends Piece {
         else return isNormalKingMove(fromX, fromY, toX, toY);
     }
 
+    @Override
+    public String getType() {
+        return "K";
+    }
+
     private boolean isNormalKingMove(int fromX, int fromY, int toX, int toY) {
         return Math.abs(fromX - toX) <= 1 && Math.abs(fromY - toY) <= 1;
     }

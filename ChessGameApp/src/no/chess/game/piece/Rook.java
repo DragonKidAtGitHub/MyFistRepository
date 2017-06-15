@@ -17,6 +17,11 @@ public class Rook extends Piece {
         else return isStraightMove(fromX, fromY, toX, toY);
     }
 
+    @Override
+    public String getType() {
+        return "R";
+    }
+
     private boolean isStraightMove(int fromX, int fromY, int toX, int toY){
         return (toX==fromX || toY ==fromY);
     }

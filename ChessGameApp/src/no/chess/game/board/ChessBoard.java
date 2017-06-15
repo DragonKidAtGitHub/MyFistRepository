@@ -127,8 +127,8 @@ public class ChessBoard {
         if (!isOutOfBounds(x,y)) spots[x][y].setPiece(p);
     }
 
-    private boolean isEmpty(int x, int y) {
-        return spots[x][y].getPiece() == null;
+    public boolean isEmpty(int x, int y) {
+        return (spots[x][y].getPiece() == null);
     }
 
     public boolean isOwnPiece(int x, int y, PieceColor color) {

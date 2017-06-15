@@ -20,6 +20,11 @@ public class Pawn extends Piece {
     }
 
     @Override
+    public String getType() {
+        return "P";
+    }
+
+    @Override
     public boolean isOkayToCapture(int fromX, int fromY, int toX, int toY) {
         return isDiagonalMove(fromX,fromY,toX,toY);
     }

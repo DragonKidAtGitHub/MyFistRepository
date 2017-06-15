@@ -16,6 +16,11 @@ public class Knight extends Piece {
         else return isKnightMove(fromX, fromY, toX, toY);
     }
 
+    @Override
+    public String getType() {
+        return "N";
+    }
+
     private boolean isKnightMove(int fromX, int fromY, int toX, int toY){
         return ((Math.abs(fromX-toX)==1 && Math.abs(fromY-toY)==2) || (Math.abs(fromX-toX)==2 && Math.abs(fromY-toY)==1));
     }

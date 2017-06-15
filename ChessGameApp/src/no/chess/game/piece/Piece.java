@@ -7,8 +7,11 @@ import no.chess.game.board.ChessBoard;
 public abstract class Piece {
     PieceColor color;
     boolean hasMoved;
+    String type;
 
     public abstract boolean isValidMove(int fromX, int fromY, int toX, int toY);
+
+    public abstract String getType();
 
     public boolean isCastlingMove(int fromX, int fromY, int toX, int toY) {
         return false;

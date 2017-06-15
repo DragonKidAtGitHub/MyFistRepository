@@ -57,8 +57,8 @@ public class ChessGame {
             selectedPieceColor.put(player2, PieceColor.WHITE);
             playersTurn = player2;
         }
-        System.out.println("Player 1 ("+ player1.getName()+ ") has chosen " + selectedPieceColor.get(player1).toString() + " pieces.");
-        System.out.println("Player 2 ("+ player2.getName()+ ") has chosen " + selectedPieceColor.get(player2).toString() + " pieces.");
+        System.out.println("Player 1 ("+ player1.getName()+ ") has chosen " + selectedPieceColor.get(player1).colorString() + " pieces.");
+        System.out.println("Player 2 ("+ player2.getName()+ ") has chosen " + selectedPieceColor.get(player2).colorString() + " pieces.");
     }
 
     public void setupChessBoard() {

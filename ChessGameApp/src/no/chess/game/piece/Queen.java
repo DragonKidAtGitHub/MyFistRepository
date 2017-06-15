@@ -17,6 +17,11 @@ public class Queen extends Piece {
         else return isStraightMove(fromX, fromY, toX, toY);
     }
 
+    @Override
+    public String getType() {
+        return "Q";
+    }
+
     private boolean isDiagonalMove(int fromX, int fromY, int toX, int toY){
         return (Math.abs(fromX-toX) == Math.abs(fromY-toY));
     }
