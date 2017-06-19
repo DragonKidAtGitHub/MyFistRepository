@@ -13,4 +13,12 @@ public enum PieceColor {
             default:    throw new IllegalArgumentException();
         }
     }
+
+    public String longColorString() {
+        switch (this) {
+            case BLACK: return "Black";
+            case WHITE: return "White";
+            default:    throw new IllegalArgumentException();
+        }
+    }
 }

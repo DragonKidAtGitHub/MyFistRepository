@@ -1,5 +1,6 @@
 package no.chess.game.GUI;
 
+import no.chess.game.ChessGame;
 import no.chess.game.board.ChessBoard;
 import no.chess.game.board.Position;
 import no.chess.game.piece.*;
@@ -25,14 +26,14 @@ public class SpotPanel extends JPanel {
     private final Color lightSpotColor  = new Color(239,218,176);
     private final Color darkSpotColor   = new Color(179,137,93);
 
-    SpotPanel(int x, int y, ChessBoard chessBoard, BoardPanel boardPanel) {
+    SpotPanel(int x, int y, BoardPanel boardPanel, ChessGame chessGame) {
         super(new GridBagLayout());
         this.x = x;
         this.y = y;
         super.setPreferredSize(SPOT_PANEL_DIMENSION);
         setSpotPanelColor(x,y);
-        drawPieceOnSpot(chessBoard);
-        super.addMouseListener(createMoseAdapter(boardPanel, chessBoard));
+        drawPieceOnSpot(chessGame.getChessBoard());
+        super.addMouseListener(createMoseAdapter(boardPanel, chessGame));
         super.validate();
     }
 
@@ -52,37 +53,43 @@ public class SpotPanel extends JPanel {
         }
     }
 
-    private MouseAdapter createMoseAdapter(BoardPanel boardPanel, ChessBoard chessBoard) {
+    private MouseAdapter createMoseAdapter(BoardPanel boardPanel, ChessGame chessGame) {
         MouseAdapter mouseAdapter = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (SwingUtilities.isLeftMouseButton(e)) {//
                     if (boardPanel.getSourcePosition()==null) {
                         // Fist click
-                        System.out.println("First click on (" + x + "," + y +") with left mouse button");
+                        System.out.println("First click for " + chessGame.getCurrentPlayerColor().longColorString() + " on (" + x + "," + y +") with left mouse button");
                         boardPanel.setSourcePosition(new Position(x,y));
-                        if (chessBoard.isEmpty(x,y)) {
-                            System.out.println("Cancel move with left button");
+                        if (chessGame.getChessBoard().isEmpty(x,y)) {
+                            System.out.println("Cancel move with left button for " + chessGame.getCurrentPlayerColor().longColorString());
                             boardPanel.cancelMove();
                         }
                     }
                     else {
                         // Second click
-                        System.out.println("Second click on (" + x + "," + y +") with left mouse button");
+                        System.out.println("Second click for " + chessGame.getCurrentPlayerColor().longColorString() + " on (" + x + "," + y +") with left mouse button");
                         boardPanel.setDestinationPosition(new Position(x,y));
-                        chessBoard.movePiece(boardPanel.getSourcePosition(),boardPanel.getDestinationPosition(),PieceColor.WHITE);
-                        boardPanel.cancelMove();
+                        boolean isMoved = chessGame.getChessBoard().movePiece(boardPanel.getSourcePosition(),boardPanel.getDestinationPosition(),chessGame.getCurrentPlayerColor());
+                        if (isMoved) {
+                            chessGame.switchPlayersTurn();
+                            boardPanel.cancelMove();
+                        }
+                        else {
+                            System.out.println("Move was not performed for " + chessGame.getCurrentPlayerColor().longColorString());
+                        }
                     }
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            boardPanel.drawBoard(chessBoard);
+                            boardPanel.drawBoard(chessGame.getChessBoard());
                         }
                     });
                 }
                 else if (SwingUtilities.isRightMouseButton(e)) {
                     boardPanel.cancelMove();
-                    System.out.println("Cancel move with right mouse button");
+                    System.out.println("Cancel move with right mouse button for " + chessGame.getCurrentPlayerColor().longColorString());
                 }
             }
         };

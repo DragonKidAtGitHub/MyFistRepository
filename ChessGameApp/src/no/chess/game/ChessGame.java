@@ -10,14 +10,26 @@ import java.util.*;
  * Created by Ulrik on 31-May-17.
  */
 public class ChessGame {
-    private ChessBoard cb;
+    private ChessBoard chessBoard;
     private Player player1;
     private Player player2;
     private HashMap<Player,PieceColor> selectedPieceColor;
     private boolean gameIsSetup = false;
     private Player playersTurn;
 
-    ChessGame() {
+    public ChessGame() {
+        this.chessBoard = new ChessBoard();
+        chessBoard.initialize();
+        this.player1 = new Player("Player 1");
+        this.player2 = new Player("Player 2");
+        this.selectedPieceColor = new HashMap<Player, PieceColor>();
+        this.selectedPieceColor.put(player1,PieceColor.WHITE);
+        this.selectedPieceColor.put(player2,PieceColor.BLACK);
+        this.playersTurn = player1;
+    }
+
+    public ChessBoard getChessBoard() {
+        return this.chessBoard;
     }
 
     public void setupGame() {
@@ -64,13 +76,13 @@ public class ChessGame {
     }
 
     public void setupChessBoard() {
-        cb = new ChessBoard();
-        cb.initialize();
+        chessBoard = new ChessBoard();
+        chessBoard.initialize();
     }
 
     public void playTurn() {
         System.out.println("\nCurrent layout:");
-        cb.printBoardLayout();
+        chessBoard.printBoardLayout();
         performMove();
     }
 
@@ -88,8 +100,8 @@ public class ChessGame {
     }
 
     private void finishGame() {
-        boolean isCheckMate = cb.isCheckMate(selectedPieceColor.get(playersTurn));
-        boolean isStaleMate = cb.isStaleMate(selectedPieceColor.get(playersTurn));
+        boolean isCheckMate = chessBoard.isCheckMate(selectedPieceColor.get(playersTurn));
+        boolean isStaleMate = chessBoard.isStaleMate(selectedPieceColor.get(playersTurn));
         System.out.println("Game Over!");
         switchPlayersTurn();
         if (isCheckMate) {
@@ -122,7 +134,7 @@ public class ChessGame {
             }
             if (userInput.size()==4) {
                 System.out.println("Chosen move: (" + userInput.get(0) + "," +userInput.get(1) + ")->(" + userInput.get(2) +"," +userInput.get(3) + ")");
-                pieceIsMoved = cb.movePiece(userInput.get(0),userInput.get(1),userInput.get(2),userInput.get(3),selectedPieceColor.get(playersTurn));
+                pieceIsMoved = chessBoard.movePiece(userInput.get(0),userInput.get(1),userInput.get(2),userInput.get(3),selectedPieceColor.get(playersTurn));
                 isOkayMove = isOkayMoveInput(inputs) && pieceIsMoved;
             }
             if (!isOkayMove) System.out.println("Input not accepted. Try again.");
@@ -143,8 +155,12 @@ public class ChessGame {
 
     public boolean checkIfGameIsOver() {
         PieceColor color = selectedPieceColor.get(playersTurn);
-        boolean isCheckMate = cb.isCheckMate(color);
-        boolean isDraw = cb.isDraw(color);
+        boolean isCheckMate = chessBoard.isCheckMate(color);
+        boolean isDraw = chessBoard.isDraw(color);
         return isCheckMate || isDraw;
+    }
+
+    public PieceColor getCurrentPlayerColor() {
+        return selectedPieceColor.get(playersTurn);
     }
 }

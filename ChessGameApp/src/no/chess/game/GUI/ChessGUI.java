@@ -1,5 +1,6 @@
 package no.chess.game.GUI;
 
+import no.chess.game.ChessGame;
 import no.chess.game.board.ChessBoard;
 import no.chess.game.board.Spot;
 import javax.swing.*;
@@ -12,19 +13,18 @@ import java.awt.event.*;
 public class ChessGUI{
     private JFrame mainGUIFrame;
     private BoardPanel boardPanel;
-    private ChessBoard chessBoard;
+    private ChessGame chessGame;
 
     static final Dimension OUTER_FRAME_DIMENSION    = new Dimension(600,600);
     static final Dimension BOARD_PANEL_DIMENSION    = new Dimension(400,350);
     static final Dimension SPOT_PANEL_DIMENSION     = new Dimension(10,10);
 
     ChessGUI() {
-        this.chessBoard = new ChessBoard();
-        this.chessBoard.initialize();
+        this.chessGame = new ChessGame();
         this.mainGUIFrame = new JFrame("Chess game");
         this.mainGUIFrame.setSize(OUTER_FRAME_DIMENSION);
         JMenuBar menuBar = createMenuBar();
-        this.boardPanel = new BoardPanel(this.chessBoard);
+        this.boardPanel = new BoardPanel(this.chessGame);
         this.mainGUIFrame.add(boardPanel,BorderLayout.CENTER);
         this.mainGUIFrame.setJMenuBar(menuBar);
         this.setWindowListener();

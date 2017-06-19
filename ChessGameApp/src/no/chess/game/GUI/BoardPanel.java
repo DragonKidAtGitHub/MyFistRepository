@@ -1,5 +1,6 @@
 package no.chess.game.GUI;
 
+import no.chess.game.ChessGame;
 import no.chess.game.board.ChessBoard;
 import no.chess.game.board.Position;
 
@@ -18,12 +19,12 @@ public class BoardPanel extends JPanel {
     private Position sourcePosition         = null;
     private Position destinationPosition    = null;
 
-    public BoardPanel(ChessBoard chessBoard) {
+    public BoardPanel(ChessGame chessGame) {
         super(new GridLayout(rows,columns));
         this.spotPanels = new SpotPanel[rows][columns];
         for (int row=0; row<rows; row++) {
             for (int column=0; column<columns; column++) {
-                SpotPanel spotPanel = new SpotPanel(row,column,chessBoard,this);
+                SpotPanel spotPanel = new SpotPanel(row,column,this,chessGame);
                 this.spotPanels[row][column] = spotPanel;
                 super.add(spotPanel);
             }
