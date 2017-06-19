@@ -103,6 +103,10 @@ public class ChessBoard {
         return pieceIsMoved;
     }
 
+    public boolean movePiece(Position source, Position destination, PieceColor color) {
+        return movePiece(source.getX(),source.getY(),destination.getX(),destination.getY(),color);
+    }
+
     private void setEnPassantStates(PieceColor c) {
         for (int row = 0; row < rows; row++) {
             for (int column = 0; column < columns; column++) {
