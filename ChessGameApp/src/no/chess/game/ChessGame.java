@@ -1,3 +1,5 @@
+package no.chess.game;
+
 import no.chess.game.board.*;
 import no.chess.game.piece.*;
 import no.chess.game.player.*;

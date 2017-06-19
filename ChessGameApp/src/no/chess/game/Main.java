@@ -1,4 +1,6 @@
-import java.util.Scanner;
+package no.chess.game;
+
+import no.chess.game.ChessGame;
 
 public class Main {
     public static void main(String args[])
