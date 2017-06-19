@@ -39,7 +39,7 @@ public class SpotPanel extends JPanel {
     private void drawPieceOnSpot(ChessBoard chessBoard) {
         this.removeAll();
         if (!chessBoard.isEmpty(this.x,this.y)) {
-            String defaultImagePath = "D:/Java_projects/no.chess.game.ChessGame/ChessGameApp/art/simple/";
+            String defaultImagePath = "ChessGameApp/art/simple/";
             Piece piece = chessBoard.getPiece(this.x,this.y);
             String imageColorString = piece.getColor().colorString();
             String pieceTypeString = piece.getType();
