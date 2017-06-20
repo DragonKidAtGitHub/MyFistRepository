@@ -60,16 +60,16 @@ public class SpotPanel extends JPanel {
                 if (SwingUtilities.isLeftMouseButton(e)) {//
                     if (boardPanel.getSourcePosition()==null) {
                         // Fist click
-                        System.out.println("First click for " + chessGame.getCurrentPlayerColor().longColorString() + " on (" + x + "," + y +") with left mouse button");
+                        System.out.println("First click for " + chessGame.getCurrentPlayerColor().longColorString() + " on (" + x + "," + y +")");
                         boardPanel.setSourcePosition(new Position(x,y));
                         if (chessGame.getChessBoard().isEmpty(x,y)) {
-                            System.out.println("Cancel move with left button for " + chessGame.getCurrentPlayerColor().longColorString());
+                            System.out.println("Cancel move for " + chessGame.getCurrentPlayerColor().longColorString());
                             boardPanel.cancelMove();
                         }
                     }
                     else {
                         // Second click
-                        System.out.println("Second click for " + chessGame.getCurrentPlayerColor().longColorString() + " on (" + x + "," + y +") with left mouse button");
+                        System.out.println("Second click for " + chessGame.getCurrentPlayerColor().longColorString() + " on (" + x + "," + y +")");
                         boardPanel.setDestinationPosition(new Position(x,y));
                         boolean isMoved = chessGame.getChessBoard().movePiece(boardPanel.getSourcePosition(),boardPanel.getDestinationPosition(),chessGame.getCurrentPlayerColor());
                         if (isMoved) {
@@ -90,7 +90,7 @@ public class SpotPanel extends JPanel {
                 }
                 else if (SwingUtilities.isRightMouseButton(e)) {
                     boardPanel.cancelMove();
-                    System.out.println("Cancel move with right mouse button for " + chessGame.getCurrentPlayerColor().longColorString());
+                    System.out.println("Cancel move for " + chessGame.getCurrentPlayerColor().longColorString());
                 }
             }
         };
