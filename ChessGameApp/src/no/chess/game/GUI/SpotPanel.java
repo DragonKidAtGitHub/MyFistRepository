@@ -75,6 +75,7 @@ public class SpotPanel extends JPanel {
                         if (isMoved) {
                             chessGame.switchPlayersTurn();
                             boardPanel.cancelMove();
+                            if (chessGame.checkIfGameIsOver()) System.out.println("Game Over");
                         }
                         else {
                             System.out.println("Move was not performed for " + chessGame.getCurrentPlayerColor().longColorString());

@@ -12,19 +12,17 @@ import java.awt.event.*;
  */
 public class ChessGUI{
     private JFrame mainGUIFrame;
-    private BoardPanel boardPanel;
-    private ChessGame chessGame;
 
     static final Dimension OUTER_FRAME_DIMENSION    = new Dimension(600,600);
     static final Dimension BOARD_PANEL_DIMENSION    = new Dimension(400,350);
     static final Dimension SPOT_PANEL_DIMENSION     = new Dimension(10,10);
 
     ChessGUI() {
-        this.chessGame = new ChessGame();
+        ChessGame chessGame = new ChessGame();
         this.mainGUIFrame = new JFrame("Chess game");
         this.mainGUIFrame.setSize(OUTER_FRAME_DIMENSION);
         JMenuBar menuBar = createMenuBar();
-        this.boardPanel = new BoardPanel(this.chessGame);
+        BoardPanel boardPanel = new BoardPanel(chessGame);
         this.mainGUIFrame.add(boardPanel,BorderLayout.CENTER);
         this.mainGUIFrame.setJMenuBar(menuBar);
         this.setWindowListener();
