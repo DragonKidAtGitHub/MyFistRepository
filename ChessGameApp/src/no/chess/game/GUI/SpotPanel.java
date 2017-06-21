@@ -13,6 +13,8 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static no.chess.game.GUI.ChessGUI.SPOT_PANEL_DIMENSION;
 
@@ -84,7 +86,7 @@ public class SpotPanel extends JPanel {
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            boardPanel.drawBoard(chessGame.getChessBoard());
+                            boardPanel.drawBoard(chessGame);
                         }
                     });
                 }
@@ -110,8 +112,32 @@ public class SpotPanel extends JPanel {
         }
     }
 
-    public void drawSpot(ChessBoard chessBoard) {
-        drawPieceOnSpot(chessBoard);
+    private void highlightLegalMoves(BoardPanel boardPanel, ChessGame chessGame) {
+        if (true) {
+            for (Position pos : getLegalMovesForPiece(boardPanel, chessGame)) {
+                if (pos.getX()==this.x && pos.getY()==this.y) {
+                    try {
+                        add(new JLabel(new ImageIcon(ImageIO.read(new File("ChessGameApp/art/misc/green_dot.png")))));
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+    }
+
+    private ArrayList<Position> getLegalMovesForPiece(BoardPanel boardPanel, ChessGame chessGame) {
+        if (boardPanel.getSourcePosition()!=null) {
+            return chessGame.getChessBoard().getLegalMoves(boardPanel.getSourcePosition().getX(),boardPanel.getSourcePosition().getY(),chessGame.getCurrentPlayerColor());
+        }
+        else return new ArrayList<Position>();
+    }
+
+    public void drawSpot(BoardPanel boardPanel, ChessGame chessGame) {
+        drawPieceOnSpot(chessGame.getChessBoard());
+        highlightLegalMoves(boardPanel,chessGame);
         super.validate();
         super.repaint();
     }

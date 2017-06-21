@@ -54,11 +54,11 @@ public class BoardPanel extends JPanel {
         this.destinationPosition = null;
     }
 
-    public void drawBoard(ChessBoard chessBoard) {
+    public void drawBoard(ChessGame chessGame) {
         super.removeAll();
         for (int row=0; row<rows; row++) {
             for (int column=0; column<columns; column++) {
-                this.spotPanels[row][column].drawSpot(chessBoard);
+                this.spotPanels[row][column].drawSpot(this,chessGame);
                 super.add(this.spotPanels[row][column]);
             }
         }
