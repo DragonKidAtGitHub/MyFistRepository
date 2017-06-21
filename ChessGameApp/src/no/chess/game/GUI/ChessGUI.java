@@ -20,23 +20,17 @@ public class ChessGUI{
     static final Dimension BOARD_PANEL_DIMENSION    = new Dimension(400,350);
     static final Dimension SPOT_PANEL_DIMENSION     = new Dimension(10,10);
 
-    private static final ChessGUI INSTANCE = new ChessGUI();
-
     ChessGUI() {
         ChessGame chessGame = new ChessGame();
         this.mainGUIFrame = new JFrame("Chess game");
         this.mainGUIFrame.setSize(OUTER_FRAME_DIMENSION);
         JMenuBar menuBar = createMenuBar();
-        BoardPanel boardPanel = new BoardPanel(chessGame);
+        BoardPanel boardPanel = new BoardPanel(chessGame,this);
         this.mainGUIFrame.add(boardPanel,BorderLayout.CENTER);
         this.mainGUIFrame.setJMenuBar(menuBar);
         this.highlightLegalMoves = false;
         this.setWindowListener();
         this.mainGUIFrame.setVisible(true);
-    }
-
-    public static ChessGUI getGUI() {
-        return INSTANCE;
     }
 
     private JMenuBar createMenuBar() {

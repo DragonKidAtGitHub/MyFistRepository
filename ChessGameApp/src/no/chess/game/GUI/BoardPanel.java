@@ -19,12 +19,12 @@ public class BoardPanel extends JPanel {
     private Position sourcePosition         = null;
     private Position destinationPosition    = null;
 
-    public BoardPanel(ChessGame chessGame) {
+    public BoardPanel(ChessGame chessGame, ChessGUI chessGUI) {
         super(new GridLayout(rows,columns));
         this.spotPanels = new SpotPanel[rows][columns];
         for (int row=0; row<rows; row++) {
             for (int column=0; column<columns; column++) {
-                SpotPanel spotPanel = new SpotPanel(row,column,this,chessGame);
+                SpotPanel spotPanel = new SpotPanel(row,column,this,chessGame,chessGUI);
                 this.spotPanels[row][column] = spotPanel;
                 super.add(spotPanel);
             }
@@ -54,11 +54,11 @@ public class BoardPanel extends JPanel {
         this.destinationPosition = null;
     }
 
-    public void drawBoard(ChessGame chessGame) {
+    public void drawBoard(ChessGame chessGame, ChessGUI chessGUI) {
         super.removeAll();
         for (int row=0; row<rows; row++) {
             for (int column=0; column<columns; column++) {
-                this.spotPanels[row][column].drawSpot(this,chessGame);
+                this.spotPanels[row][column].drawSpot(this,chessGame,chessGUI);
                 super.add(this.spotPanels[row][column]);
             }
         }

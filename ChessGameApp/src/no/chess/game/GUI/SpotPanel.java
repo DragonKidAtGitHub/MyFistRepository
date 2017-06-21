@@ -28,14 +28,14 @@ public class SpotPanel extends JPanel {
     private final Color lightSpotColor  = new Color(239,218,176);
     private final Color darkSpotColor   = new Color(179,137,93);
 
-    SpotPanel(int x, int y, BoardPanel boardPanel, ChessGame chessGame) {
+    SpotPanel(int x, int y, BoardPanel boardPanel, ChessGame chessGame, ChessGUI chessGUI) {
         super(new GridBagLayout());
         this.x = x;
         this.y = y;
         super.setPreferredSize(SPOT_PANEL_DIMENSION);
         setSpotPanelColor(x,y);
         drawPieceOnSpot(chessGame.getChessBoard());
-        super.addMouseListener(createMoseAdapter(boardPanel, chessGame));
+        super.addMouseListener(createMoseAdapter(boardPanel, chessGame, chessGUI));
         super.validate();
     }
 
@@ -55,7 +55,7 @@ public class SpotPanel extends JPanel {
         }
     }
 
-    private MouseAdapter createMoseAdapter(BoardPanel boardPanel, ChessGame chessGame) {
+    private MouseAdapter createMoseAdapter(BoardPanel boardPanel, ChessGame chessGame, ChessGUI chessGUI) {
         MouseAdapter mouseAdapter = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -86,7 +86,7 @@ public class SpotPanel extends JPanel {
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            boardPanel.drawBoard(chessGame);
+                            boardPanel.drawBoard(chessGame,chessGUI);
                         }
                     });
                 }
@@ -112,8 +112,8 @@ public class SpotPanel extends JPanel {
         }
     }
 
-    private void highlightLegalMoves(BoardPanel boardPanel, ChessGame chessGame) {
-        if (true) {
+    private void highlightLegalMoves(BoardPanel boardPanel, ChessGame chessGame, ChessGUI chessGUI) {
+        if (chessGUI.isLegalMoveHighlighted()) {
             for (Position pos : getLegalMovesForPiece(boardPanel, chessGame)) {
                 if (pos.getX()==this.x && pos.getY()==this.y) {
                     try {
@@ -135,9 +135,9 @@ public class SpotPanel extends JPanel {
         else return new ArrayList<Position>();
     }
 
-    public void drawSpot(BoardPanel boardPanel, ChessGame chessGame) {
+    public void drawSpot(BoardPanel boardPanel, ChessGame chessGame, ChessGUI chessGUI) {
         drawPieceOnSpot(chessGame.getChessBoard());
-        highlightLegalMoves(boardPanel,chessGame);
+        highlightLegalMoves(boardPanel,chessGame, chessGUI);
         super.validate();
         super.repaint();
     }
