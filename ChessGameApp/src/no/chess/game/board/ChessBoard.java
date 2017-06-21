@@ -75,6 +75,18 @@ public class ChessBoard {
         return removedPieces;
     }
 
+    public ArrayList<Position> getLegalMoves(int x, int y, PieceColor color) {
+        ArrayList<Position> listOfLegalMoves = new ArrayList<>();
+        if (isOwnPiece(x,y,color)) {
+            for (int row = 0; row < rows; row++) {
+                for (int column = 0; column < columns; column++) {
+                    if (isLegalMove(x,y,row,column,color)) listOfLegalMoves.add(new Position(row,column));
+                }
+            }
+        }
+        return listOfLegalMoves;
+    }
+
     public boolean movePiece(int fromX, int fromY, int toX, int toY, PieceColor color){
         boolean pieceIsMoved = false;
         if (isOwnPiece(fromX,fromY,color)) {

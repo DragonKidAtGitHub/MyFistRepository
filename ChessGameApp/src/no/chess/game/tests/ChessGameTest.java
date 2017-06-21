@@ -1,7 +1,10 @@
 package no.chess.game.tests;
 import no.chess.game.board.ChessBoard;
+import no.chess.game.board.Position;
 import no.chess.game.piece.*;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
