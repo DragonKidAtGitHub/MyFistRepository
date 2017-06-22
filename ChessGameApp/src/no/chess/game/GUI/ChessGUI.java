@@ -15,6 +15,7 @@ import java.awt.event.*;
 public class ChessGUI{
     private JFrame mainGUIFrame;
     private boolean highlightLegalMoves;
+    private boolean highlightChosenPiece;
 
     static final Dimension OUTER_FRAME_DIMENSION    = new Dimension(600,600);
     static final Dimension BOARD_PANEL_DIMENSION    = new Dimension(400,350);
@@ -74,6 +75,15 @@ public class ChessGUI{
         });
         preferencesMenu.add(checkBoxHighlightLegalMovesMenuItem);
 
+        JCheckBoxMenuItem checkBoxHighlightChosenPieceMenuItem = new JCheckBoxMenuItem("Highlight chosen piece",true);
+        checkBoxHighlightChosenPieceMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                highlightChosenPiece = checkBoxHighlightChosenPieceMenuItem.isSelected();
+            }
+        });
+        preferencesMenu.add(checkBoxHighlightChosenPieceMenuItem);
+
         return preferencesMenu;
     }
 
@@ -88,6 +98,10 @@ public class ChessGUI{
 
     public boolean isLegalMoveHighlighted() {
         return this.highlightLegalMoves;
+    }
+
+    public boolean isHighlightingSelectedPiece() {
+        return this.highlightChosenPiece;
     }
 
     public static void main(String[] args) {

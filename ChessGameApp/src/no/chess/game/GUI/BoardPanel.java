@@ -3,6 +3,7 @@ package no.chess.game.GUI;
 import no.chess.game.ChessGame;
 import no.chess.game.board.ChessBoard;
 import no.chess.game.board.Position;
+import no.chess.game.piece.Piece;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +19,7 @@ public class BoardPanel extends JPanel {
 
     private Position sourcePosition         = null;
     private Position destinationPosition    = null;
+    private Piece movingPiece               = null;
 
     public BoardPanel(ChessGame chessGame, ChessGUI chessGUI) {
         super(new GridLayout(rows,columns));
@@ -41,6 +43,10 @@ public class BoardPanel extends JPanel {
         return destinationPosition;
     }
 
+    public Piece getMovingPiece() {
+        return this.movingPiece;
+    }
+
     public void setSourcePosition(Position sourcePosition) {
         this.sourcePosition = sourcePosition;
     }
@@ -49,9 +55,14 @@ public class BoardPanel extends JPanel {
         this.destinationPosition = destinationPosition;
     }
 
+    public void setMovingPiece(Piece piece) {
+        this.movingPiece = piece;
+    }
+
     public void cancelMove() {
-        this.sourcePosition = null;
-        this.destinationPosition = null;
+        this.sourcePosition         = null;
+        this.destinationPosition    = null;
+        this.movingPiece            = null;
     }
 
     public void drawBoard(ChessGame chessGame, ChessGUI chessGUI) {

@@ -7,6 +7,7 @@ import no.chess.game.piece.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -27,6 +28,8 @@ public class SpotPanel extends JPanel {
 
     private final Color lightSpotColor  = new Color(239,218,176);
     private final Color darkSpotColor   = new Color(179,137,93);
+    private final Border yellowBorder   = BorderFactory.createLineBorder(Color.yellow,5);
+    private final Border noBorder       = BorderFactory.createLineBorder(Color.black,5);
 
     SpotPanel(int x, int y, BoardPanel boardPanel, ChessGame chessGame, ChessGUI chessGUI) {
         super(new GridBagLayout());
@@ -64,7 +67,8 @@ public class SpotPanel extends JPanel {
                         // Fist click
                         System.out.println("First click for " + chessGame.getCurrentPlayerColor().longColorString() + " on (" + x + "," + y +")");
                         boardPanel.setSourcePosition(new Position(x,y));
-                        if (chessGame.getChessBoard().isEmpty(x,y)) {
+                        boardPanel.setMovingPiece(chessGame.getChessBoard().getPiece(x,y));
+                        if (boardPanel.getMovingPiece()==null) {
                             System.out.println("Cancel move for " + chessGame.getCurrentPlayerColor().longColorString());
                             boardPanel.cancelMove();
                         }
@@ -112,6 +116,12 @@ public class SpotPanel extends JPanel {
         }
     }
 
+    private void highlightSelectedPiece(BoardPanel boardPanel, ChessGUI chessGUI) {
+        if (chessGUI.isHighlightingSelectedPiece()) {
+            super.setBorder(BorderFactory.createLineBorder(Color.yellow,5));
+        }
+    }
+
     private void highlightLegalMoves(BoardPanel boardPanel, ChessGame chessGame, ChessGUI chessGUI) {
         if (chessGUI.isLegalMoveHighlighted()) {
             for (Position pos : getLegalMovesForPiece(boardPanel, chessGame)) {
@@ -138,6 +148,7 @@ public class SpotPanel extends JPanel {
     public void drawSpot(BoardPanel boardPanel, ChessGame chessGame, ChessGUI chessGUI) {
         drawPieceOnSpot(chessGame.getChessBoard());
         highlightLegalMoves(boardPanel,chessGame, chessGUI);
+        highlightSelectedPiece(boardPanel,chessGUI);
         super.validate();
         super.repaint();
     }
