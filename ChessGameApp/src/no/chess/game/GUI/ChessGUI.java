@@ -30,6 +30,7 @@ public class ChessGUI{
         this.mainGUIFrame.add(boardPanel,BorderLayout.CENTER);
         this.mainGUIFrame.setJMenuBar(menuBar);
         this.highlightLegalMoves = false;
+        this.highlightChosenPiece = true;
         this.setWindowListener();
         this.mainGUIFrame.setVisible(true);
     }

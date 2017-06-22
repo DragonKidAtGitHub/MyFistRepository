@@ -59,10 +59,11 @@ public class BoardPanel extends JPanel {
         this.movingPiece = piece;
     }
 
-    public void cancelMove() {
+    public void cancelMove(ChessGame chessGame, ChessGUI chessGUI) {
         this.sourcePosition         = null;
         this.destinationPosition    = null;
         this.movingPiece            = null;
+        drawBoard(chessGame,chessGUI);
     }
 
     public void drawBoard(ChessGame chessGame, ChessGUI chessGUI) {
@@ -73,7 +74,7 @@ public class BoardPanel extends JPanel {
                 super.add(this.spotPanels[row][column]);
             }
         }
-        super.validate();
+        super.revalidate();
         super.repaint();
     }
 }

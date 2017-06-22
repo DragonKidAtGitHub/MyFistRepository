@@ -29,7 +29,7 @@ public class SpotPanel extends JPanel {
     private final Color lightSpotColor  = new Color(239,218,176);
     private final Color darkSpotColor   = new Color(179,137,93);
     private final Border yellowBorder   = BorderFactory.createLineBorder(Color.yellow,5);
-    private final Border noBorder       = BorderFactory.createLineBorder(Color.black,5);
+    private final Border noBorder       = BorderFactory.createEmptyBorder();
 
     SpotPanel(int x, int y, BoardPanel boardPanel, ChessGame chessGame, ChessGUI chessGUI) {
         super(new GridBagLayout());
@@ -62,40 +62,35 @@ public class SpotPanel extends JPanel {
         MouseAdapter mouseAdapter = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (SwingUtilities.isLeftMouseButton(e)) {//
-                    if (boardPanel.getSourcePosition()==null) {
+                if (SwingUtilities.isLeftMouseButton(e)) {
+                    if (boardPanel.getSourcePosition()==null && chessGame.getChessBoard().isOwnPiece(x,y,chessGame.getCurrentPlayerColor())) {
                         // Fist click
                         System.out.println("First click for " + chessGame.getCurrentPlayerColor().longColorString() + " on (" + x + "," + y +")");
                         boardPanel.setSourcePosition(new Position(x,y));
                         boardPanel.setMovingPiece(chessGame.getChessBoard().getPiece(x,y));
                         if (boardPanel.getMovingPiece()==null) {
                             System.out.println("Cancel move for " + chessGame.getCurrentPlayerColor().longColorString());
-                            boardPanel.cancelMove();
+                            boardPanel.cancelMove(chessGame,chessGUI);
                         }
                     }
-                    else {
+                    else if (boardPanel.getSourcePosition()!=null){
                         // Second click
                         System.out.println("Second click for " + chessGame.getCurrentPlayerColor().longColorString() + " on (" + x + "," + y +")");
                         boardPanel.setDestinationPosition(new Position(x,y));
                         boolean isMoved = chessGame.getChessBoard().movePiece(boardPanel.getSourcePosition(),boardPanel.getDestinationPosition(),chessGame.getCurrentPlayerColor());
                         if (isMoved) {
                             chessGame.switchPlayersTurn();
-                            boardPanel.cancelMove();
+                            boardPanel.cancelMove(chessGame,chessGUI);
                             if (chessGame.checkIfGameIsOver()) System.out.println("Game Over");
                         }
                         else {
                             System.out.println("Move was not performed for " + chessGame.getCurrentPlayerColor().longColorString());
                         }
                     }
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            boardPanel.drawBoard(chessGame,chessGUI);
-                        }
-                    });
+                    boardPanel.drawBoard(chessGame,chessGUI);
                 }
                 else if (SwingUtilities.isRightMouseButton(e)) {
-                    boardPanel.cancelMove();
+                    boardPanel.cancelMove(chessGame,chessGUI);
                     System.out.println("Cancel move for " + chessGame.getCurrentPlayerColor().longColorString());
                 }
             }
@@ -116,10 +111,17 @@ public class SpotPanel extends JPanel {
         }
     }
 
-    private void highlightSelectedPiece(BoardPanel boardPanel, ChessGUI chessGUI) {
+    private void highlightSelectedPiece(BoardPanel boardPanel, ChessGame chessGame, ChessGUI chessGUI) {
         if (chessGUI.isHighlightingSelectedPiece()) {
-            super.setBorder(BorderFactory.createLineBorder(Color.yellow,5));
+            Piece piece = boardPanel.getMovingPiece();
+            if (piece!=null && piece.getColor()==chessGame.getCurrentPlayerColor()) {
+                if (boardPanel.getSourcePosition().getX()==this.x && boardPanel.getSourcePosition().getY()==this.y) {
+                    super.setBorder(yellowBorder);
+                }
+            }
+            else super.setBorder(noBorder);
         }
+        else super.setBorder(noBorder);
     }
 
     private void highlightLegalMoves(BoardPanel boardPanel, ChessGame chessGame, ChessGUI chessGUI) {
@@ -148,8 +150,8 @@ public class SpotPanel extends JPanel {
     public void drawSpot(BoardPanel boardPanel, ChessGame chessGame, ChessGUI chessGUI) {
         drawPieceOnSpot(chessGame.getChessBoard());
         highlightLegalMoves(boardPanel,chessGame, chessGUI);
-        highlightSelectedPiece(boardPanel,chessGUI);
-        super.validate();
+        highlightSelectedPiece(boardPanel,chessGame,chessGUI);
+        super.revalidate();
         super.repaint();
     }
 }
