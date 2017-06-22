@@ -65,26 +65,22 @@ public class SpotPanel extends JPanel {
                 if (SwingUtilities.isLeftMouseButton(e)) {
                     if (boardPanel.getSourcePosition()==null && chessGame.getChessBoard().isOwnPiece(x,y,chessGame.getCurrentPlayerColor())) {
                         // Fist click
-                        System.out.println("First click for " + chessGame.getCurrentPlayerColor().longColorString() + " on (" + x + "," + y +")");
                         boardPanel.setSourcePosition(new Position(x,y));
                         boardPanel.setMovingPiece(chessGame.getChessBoard().getPiece(x,y));
-                        if (boardPanel.getMovingPiece()==null) {
-                            System.out.println("Cancel move for " + chessGame.getCurrentPlayerColor().longColorString());
-                            boardPanel.cancelMove(chessGame,chessGUI);
-                        }
+                        if (boardPanel.getMovingPiece()==null) boardPanel.cancelMove(chessGame,chessGUI);
                     }
                     else if (boardPanel.getSourcePosition()!=null){
                         // Second click
-                        System.out.println("Second click for " + chessGame.getCurrentPlayerColor().longColorString() + " on (" + x + "," + y +")");
                         boardPanel.setDestinationPosition(new Position(x,y));
-                        boolean isMoved = chessGame.getChessBoard().movePiece(boardPanel.getSourcePosition(),boardPanel.getDestinationPosition(),chessGame.getCurrentPlayerColor());
+                        Position sourcePos  = boardPanel.getSourcePosition();
+                        Position destPos    = boardPanel.getDestinationPosition();
+                        ChessBoard board    = chessGame.getChessBoard();
+                        PieceColor curColor = chessGame.getCurrentPlayerColor();
+                        boolean isMoved = board.movePiece(sourcePos,destPos,curColor);
                         if (isMoved) {
                             chessGame.switchPlayersTurn();
                             boardPanel.cancelMove(chessGame,chessGUI);
                             if (chessGame.checkIfGameIsOver()) System.out.println("Game Over");
-                        }
-                        else {
-                            System.out.println("Move was not performed for " + chessGame.getCurrentPlayerColor().longColorString());
                         }
                     }
                     boardPanel.drawBoard(chessGame,chessGUI);
