@@ -71,22 +71,6 @@ public class ChessBoard {
         else                        return null;
     }
 
-    public ArrayList<Piece> getRemovedPieces() {
-        return removedPieces;
-    }
-
-    public ArrayList<Position> getLegalMoves(int x, int y, PieceColor color) {
-        ArrayList<Position> listOfLegalMoves = new ArrayList<>();
-        if (isOwnPiece(x,y,color)) {
-            for (int row = 0; row < rows; row++) {
-                for (int column = 0; column < columns; column++) {
-                    if (isLegalMove(x,y,row,column,color)) listOfLegalMoves.add(new Position(row,column));
-                }
-            }
-        }
-        return listOfLegalMoves;
-    }
-
     public boolean movePiece(int fromX, int fromY, int toX, int toY, PieceColor color){
         boolean pieceIsMoved = false;
         if (isOwnPiece(fromX,fromY,color)) {
@@ -113,6 +97,22 @@ public class ChessBoard {
         }
 
         return pieceIsMoved;
+    }
+
+    public ArrayList<Piece> getRemovedPieces() {
+        return removedPieces;
+    }
+
+    public ArrayList<Position> getLegalMoves(int x, int y, PieceColor color) {
+        ArrayList<Position> listOfLegalMoves = new ArrayList<>();
+        if (isOwnPiece(x,y,color)) {
+            for (int row = 0; row < rows; row++) {
+                for (int column = 0; column < columns; column++) {
+                    if (isLegalMove(x,y,row,column,color)) listOfLegalMoves.add(new Position(row,column));
+                }
+            }
+        }
+        return listOfLegalMoves;
     }
 
     public boolean movePiece(Position source, Position destination, PieceColor color) {
@@ -502,9 +502,10 @@ public class ChessBoard {
         boolean isLegalMove         = isValidMove && isNoPieceBetween && isNotExposingCheck;
 
         if (isLegalMove) {
-            boolean toSpotIsEmpty   = isEmpty(toX,toY);
-            boolean toSpotIsAnEnemy = isEnemyPiece(toX,toY,color);
+            boolean toSpotIsEmpty = isEmpty(toX, toY);
+            boolean toSpotIsAnEnemy = isEnemyPiece(toX, toY, color);
             if (toSpotIsEmpty && p.isOkayToMoveWithoutCapturing(fromX,fromY,toX,toY))   return true;
+            else if (toSpotIsEmpty && isEnPassantMove(fromX,fromY,toX,toY,color))       return true;
             else if (toSpotIsAnEnemy && p.isOkayToCapture(fromX,fromY,toX,toY))         return true;
         }
         return false;

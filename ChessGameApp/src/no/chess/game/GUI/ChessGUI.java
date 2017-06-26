@@ -26,8 +26,10 @@ public class ChessGUI{
         this.mainGUIFrame = new JFrame("Chess game");
         this.mainGUIFrame.setSize(OUTER_FRAME_DIMENSION);
         JMenuBar menuBar = createMenuBar();
-        BoardPanel boardPanel = new BoardPanel(chessGame,this);
+        BoardPanel boardPanel               = new BoardPanel(chessGame,this);
+        TakenPiecesPanel takenPiecesPanel   = new TakenPiecesPanel();
         this.mainGUIFrame.add(boardPanel,BorderLayout.CENTER);
+        this.mainGUIFrame.add(takenPiecesPanel,BorderLayout.WEST);
         this.mainGUIFrame.setJMenuBar(menuBar);
         this.highlightLegalMoves = false;
         this.highlightChosenPiece = true;
