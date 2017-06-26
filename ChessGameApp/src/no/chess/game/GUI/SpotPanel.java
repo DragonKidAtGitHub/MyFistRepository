@@ -80,6 +80,7 @@ public class SpotPanel extends JPanel {
                         if (isMoved) {
                             chessGame.switchPlayersTurn();
                             boardPanel.cancelMove(chessGame,chessGUI);
+                            chessGUI.getTakenPiecesPanel().updatePanel(chessGame.getChessBoard());
                             if (chessGame.checkIfGameIsOver()) System.out.println("Game Over");
                         }
                     }
@@ -137,8 +138,9 @@ public class SpotPanel extends JPanel {
     }
 
     private ArrayList<Position> getLegalMovesForPiece(BoardPanel boardPanel, ChessGame chessGame) {
-        if (boardPanel.getSourcePosition()!=null) {
-            return chessGame.getChessBoard().getLegalMoves(boardPanel.getSourcePosition().getX(),boardPanel.getSourcePosition().getY(),chessGame.getCurrentPlayerColor());
+        if (boardPanel.getMovingPiece()!=null) {
+            ChessBoard chessBoard = chessGame.getChessBoard();
+            return chessBoard.getLegalMoves(boardPanel.getSourcePosition().getX(),boardPanel.getSourcePosition().getY(),chessGame.getCurrentPlayerColor());
         }
         else return new ArrayList<Position>();
     }

@@ -16,6 +16,7 @@ public class ChessGUI{
     private JFrame mainGUIFrame;
     private boolean highlightLegalMoves;
     private boolean highlightChosenPiece;
+    private TakenPiecesPanel takenPiecesPanel;
 
     static final Dimension OUTER_FRAME_DIMENSION    = new Dimension(600,600);
     static final Dimension BOARD_PANEL_DIMENSION    = new Dimension(400,350);
@@ -26,8 +27,8 @@ public class ChessGUI{
         this.mainGUIFrame = new JFrame("Chess game");
         this.mainGUIFrame.setSize(OUTER_FRAME_DIMENSION);
         JMenuBar menuBar = createMenuBar();
-        BoardPanel boardPanel               = new BoardPanel(chessGame,this);
-        TakenPiecesPanel takenPiecesPanel   = new TakenPiecesPanel();
+        BoardPanel boardPanel   = new BoardPanel(chessGame,this);
+        this.takenPiecesPanel   = new TakenPiecesPanel();
         this.mainGUIFrame.add(boardPanel,BorderLayout.CENTER);
         this.mainGUIFrame.add(takenPiecesPanel,BorderLayout.WEST);
         this.mainGUIFrame.setJMenuBar(menuBar);
@@ -105,6 +106,10 @@ public class ChessGUI{
 
     public boolean isHighlightingSelectedPiece() {
         return this.highlightChosenPiece;
+    }
+
+    public TakenPiecesPanel getTakenPiecesPanel() {
+        return this.takenPiecesPanel;
     }
 
     public static void main(String[] args) {

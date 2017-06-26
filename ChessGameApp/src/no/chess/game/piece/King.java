@@ -5,7 +5,8 @@ package no.chess.game.piece;
 public class King extends Piece {
 
     public King(PieceColor color) {
-        this.color = color;
+        this.color      = color;
+        this.hasMoved   = false;
     }
 
     @Override

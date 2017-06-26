@@ -5,7 +5,8 @@ package no.chess.game.piece;
 public class Bishop extends Piece {
 
     public Bishop(PieceColor color){
-        this.color = color;
+        this.color      = color;
+        this.hasMoved   = false;
     }
 
     @Override
