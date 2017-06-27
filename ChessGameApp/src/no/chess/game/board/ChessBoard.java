@@ -92,15 +92,15 @@ public class ChessBoard {
                 performCastlingMove(fromX,fromY,toX,toY);
                 pieceIsMoved = true;
             }
-            else if (isGeneralReqOK && toSpotIsEmpty && isEnPassantMove) {
+            else if (isEnPassantMove) {
                 performEnPassantMove(fromX, fromY, toX, toY);
                 pieceIsMoved = true;
             }
-            else if (isGeneralReqOK && toSpotIsEmpty && p.isOkayToMoveWithoutCapturing(fromX,fromY,toX,toY) && !isCastlingAttempt) {
+            else if (toSpotIsEmpty) {
                 gotoSpot(fromX,fromY,toX,toY);
                 pieceIsMoved = true;
             }
-            else if (isGeneralReqOK && toSpotIsAnEnemy && p.isOkayToCapture(fromX,fromY,toX,toY)) {
+            else if (toSpotIsAnEnemy) {
                 captureSpot(fromX,fromY,toX,toY);
                 pieceIsMoved = true;
             }

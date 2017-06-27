@@ -400,7 +400,6 @@ class ChessGameTest {
         correctBoardLayout[6][1] = "wB";
         correctBoardLayout[6][2] = "wQ";
 
-        cb.printBoardLayout();
         assertArrayEquals(correctBoardLayout,cb.boardLayout());
 
     }
@@ -449,7 +448,6 @@ class ChessGameTest {
         cb.movePiece(7,6,5,5,c1);
         cb.movePiece(7,5,5,7,c1);
         cb.movePiece(7,4,7,6,c1);
-        cb.printBoardLayout();
 
         correctBoardLayout[5][5] = "wk";
         correctBoardLayout[5][6] = "wP";
