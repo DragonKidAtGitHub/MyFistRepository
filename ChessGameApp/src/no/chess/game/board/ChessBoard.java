@@ -35,6 +35,7 @@ public class ChessBoard {
         for (int row = 0; row < rows; row++) {
             for (int column = 0; column<columns; column++) {
                 spots[row][column].removePiece();
+                System.out.println();
             }
         }
 
