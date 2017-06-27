@@ -30,4 +30,9 @@ public class King extends Piece {
     public boolean isCastlingAttempt(int fromX, int fromY, int toX, int toY) {
         return (!hasMoved && fromX==toX && Math.abs(fromY-toY) == 2);
     }
+
+    @Override
+    public boolean isCastlingMove(int fromX, int fromY, int toX, int toY) {
+        return isCastlingAttempt(fromX,fromY,toX,toY);
+    }
 }

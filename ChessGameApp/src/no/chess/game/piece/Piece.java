@@ -17,6 +17,10 @@ public abstract class Piece {
         return false;
     }
 
+    public boolean isCastlingMove(int fromX, int fromY, int toX, int toY) {
+        return false;
+    }
+
     public boolean isOkayToCapture(int fromX, int fromY, int toX, int toY) {
         return true;
     }

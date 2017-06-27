@@ -377,6 +377,32 @@ class ChessGameTest {
         correctBoardLayout[1][7] = "wP";
 
         assertArrayEquals(correctBoardLayout,cb.boardLayout());
+
+        cb.initialize();
+        cb.movePiece(6,0,4,0,c1);
+        cb.movePiece(6,1,4,1,c1);
+        cb.movePiece(6,2,4,2,c1);
+        cb.movePiece(7,1,5,0,c1);
+        cb.movePiece(7,2,6,1,c1);
+        cb.movePiece(7,3,6,2,c1);
+        cb.movePiece(7,0,7,3,c1);
+
+        correctBoardLayout = makeInitialBoardLayout();
+        correctBoardLayout[7][0] = "  ";
+        correctBoardLayout[7][1] = "  ";
+        correctBoardLayout[7][2] = "  ";
+        correctBoardLayout[7][3] = "wR";
+        correctBoardLayout[4][0] = "wP";
+        correctBoardLayout[4][1] = "wP";
+        correctBoardLayout[4][2] = "wP";
+        correctBoardLayout[5][0] = "wk";
+        correctBoardLayout[6][0] = "  ";
+        correctBoardLayout[6][1] = "wB";
+        correctBoardLayout[6][2] = "wQ";
+
+        cb.printBoardLayout();
+        assertArrayEquals(correctBoardLayout,cb.boardLayout());
+
     }
 
     @Test
@@ -423,6 +449,7 @@ class ChessGameTest {
         cb.movePiece(7,6,5,5,c1);
         cb.movePiece(7,5,5,7,c1);
         cb.movePiece(7,4,7,6,c1);
+        cb.printBoardLayout();
 
         correctBoardLayout[5][5] = "wk";
         correctBoardLayout[5][6] = "wP";

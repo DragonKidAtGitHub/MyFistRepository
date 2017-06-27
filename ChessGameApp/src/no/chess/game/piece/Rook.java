@@ -28,7 +28,7 @@ public class Rook extends Piece {
     }
 
     @Override
-    public boolean isCastlingAttempt(int fromX, int fromY, int toX, int toY) {
+    public boolean isCastlingMove(int fromX, int fromY, int toX, int toY) {
         return  (!hasMoved && fromX==toX && ((fromY==0 && toY==3) || (fromY==7 && toY==5)));
     }
 }

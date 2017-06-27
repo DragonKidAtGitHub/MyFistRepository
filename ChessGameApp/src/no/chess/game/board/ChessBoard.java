@@ -72,7 +72,7 @@ public class ChessBoard {
 
     public boolean movePiece(int fromX, int fromY, int toX, int toY, PieceColor color){
         boolean pieceIsMoved = false;
-        if (isOwnPiece(fromX,fromY,color)) {
+        if (isLegalMove(fromX,fromY,toX,toY,color)) {
             Piece p = getPiece(fromX, fromY);
             boolean isValidMove         = p.isValidMove(fromX,fromY,toX,toY);
             boolean isNoPieceBetween    = !isPieceBetween(fromX,fromY,toX,toY);
@@ -84,6 +84,7 @@ public class ChessBoard {
             boolean isEnPassantMove     = isEnPassantMove(fromX,fromY,toX,toY,color);
             boolean isPromoted          = p.checkIsPromoted(fromX,fromY,toX,toY);
             boolean isPawnDoubleMove    = p.isSpecialFirstMove(fromX,fromY,toX,toY);
+            boolean isGeneralReqOK      = isValidMove && isNoPieceBetween && isNotExposingCheck;
 
             setEnPassantStates(color);
 
@@ -91,21 +92,21 @@ public class ChessBoard {
                 performCastlingMove(fromX,fromY,toX,toY);
                 pieceIsMoved = true;
             }
-            else if (isValidMove && isNoPieceBetween && isNotExposingCheck && toSpotIsEmpty && isEnPassantMove) {
+            else if (isGeneralReqOK && toSpotIsEmpty && isEnPassantMove) {
                 performEnPassantMove(fromX, fromY, toX, toY);
                 pieceIsMoved = true;
             }
-            else if (isValidMove && isNoPieceBetween && isNotExposingCheck && toSpotIsEmpty && p.isOkayToMoveWithoutCapturing(fromX,fromY,toX,toY) && !isCastlingAttempt) {
+            else if (isGeneralReqOK && toSpotIsEmpty && p.isOkayToMoveWithoutCapturing(fromX,fromY,toX,toY) && !isCastlingAttempt) {
                 gotoSpot(fromX,fromY,toX,toY);
                 pieceIsMoved = true;
             }
-            else if (isValidMove && isNoPieceBetween && isNotExposingCheck && toSpotIsAnEnemy && p.isOkayToCapture(fromX,fromY,toX,toY)) {
+            else if (isGeneralReqOK && toSpotIsAnEnemy && p.isOkayToCapture(fromX,fromY,toX,toY)) {
                 captureSpot(fromX,fromY,toX,toY);
                 pieceIsMoved = true;
             }
 
-            if (pieceIsMoved && isPromoted)              promotePiece(toX,toY,color);
-            if (pieceIsMoved && isPawnDoubleMove)        p.setEnPassantPossible();
+            if (pieceIsMoved && isPromoted)         promotePiece(toX,toY,color);
+            if (pieceIsMoved && isPawnDoubleMove)   p.setEnPassantPossible();
         }
 
         return pieceIsMoved;
@@ -287,7 +288,7 @@ public class ChessBoard {
             if (isRightCastling) {
                 Piece r = getPiece(fromX, 7);
                 if (r != null) {
-                    rookReadyToCastle = r.isCastlingAttempt(fromX, 7, toX, 5);
+                    rookReadyToCastle = r.isCastlingMove(fromX, 7, toX, 5);
                     noPiecesBetweenKingAndRook = ((getPiece(fromX, 5) == null) && (getPiece(fromX, 6) == null));
                     isInCheck = isChecked(color);
                     moveThroughCheckSpot = isCheckedAfterMove(fromX, fromY, fromX, 5, color);
@@ -296,7 +297,7 @@ public class ChessBoard {
             } else if (isLeftCastling) {
                 Piece r = getPiece(fromX, 0);
                 if (r != null) {
-                    rookReadyToCastle = r.isCastlingAttempt(fromX, 0, toX, 3);
+                    rookReadyToCastle = r.isCastlingMove(fromX, 0, toX, 3);
                     noPiecesBetweenKingAndRook = ((getPiece(fromX, 1) == null) && (getPiece(fromX, 2) == null) && (getPiece(fromX, 3) == null));
                     isInCheck = isChecked(color);
                     moveThroughCheckSpot = isCheckedAfterMove(fromX, fromY, fromX, 3, color);
@@ -516,38 +517,14 @@ public class ChessBoard {
             boolean isCastlingAttempt   = p.isCastlingAttempt(fromX,fromY,toX,toY);
             boolean isCastlingMove      = isCastlingPossible(fromX,fromY,toX,toY,color);
             boolean isEnPassantMove     = isEnPassantMove(fromX,fromY,toX,toY,color);
+            boolean isGeneralReqOK      = isValidMove && isNoPieceBetween && isNotExposingCheck;
 
-            if (isCastlingMove) {
-                return true;
-            }
-            else if (isValidMove && isNoPieceBetween && isNotExposingCheck && toSpotIsEmpty && isEnPassantMove) {
-                return true;
-            }
-            else if (isValidMove && isNoPieceBetween && isNotExposingCheck && toSpotIsEmpty && p.isOkayToMoveWithoutCapturing(fromX,fromY,toX,toY) && !isCastlingAttempt) {
-                return true;
-            }
-            else if (isValidMove && isNoPieceBetween && isNotExposingCheck && toSpotIsAnEnemy && p.isOkayToCapture(fromX,fromY,toX,toY)) {
-                return true;
-            }
-        }
-
-        return false;
-        /*
-        Piece p = getPiece(fromX,fromY);
-        boolean isValidMove         = p.isValidMove(fromX,fromY,toX,toY);
-        boolean isNoPieceBetween    = !isPieceBetween(fromX,fromY,toX,toY);
-        boolean isNotExposingCheck  = !isCheckedAfterMove(fromX,fromY,toX,toY,color);
-        boolean isLegalMove         = isValidMove && isNoPieceBetween && isNotExposingCheck;
-
-        if (isLegalMove) {
-            boolean toSpotIsEmpty   = isEmpty(toX, toY);
-            boolean toSpotIsAnEnemy = isEnemyPiece(toX, toY, color);
-            if (toSpotIsEmpty && p.isOkayToMoveWithoutCapturing(fromX,fromY,toX,toY))   return true;
-            else if (toSpotIsEmpty && isEnPassantMove(fromX,fromY,toX,toY,color))       return true;
-            else if (toSpotIsAnEnemy && p.isOkayToCapture(fromX,fromY,toX,toY))         return true;
+            if (isCastlingMove)                                                                                                     return true;
+            else if (isGeneralReqOK && toSpotIsEmpty && isEnPassantMove)                                                            return true;
+            else if (isGeneralReqOK && toSpotIsEmpty && p.isOkayToMoveWithoutCapturing(fromX,fromY,toX,toY) && !isCastlingAttempt)  return true;
+            else if (isGeneralReqOK && toSpotIsAnEnemy && p.isOkayToCapture(fromX,fromY,toX,toY))                                   return true;
         }
         return false;
-        */
     }
 
     private boolean canMoveToWithoutKing(int toX, int toY, PieceColor c) {
