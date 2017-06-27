@@ -13,7 +13,7 @@ public abstract class Piece {
 
     public abstract String getType();
 
-    public boolean isCastlingMove(int fromX, int fromY, int toX, int toY) {
+    public boolean isCastlingAttempt(int fromX, int fromY, int toX, int toY) {
         return false;
     }
 

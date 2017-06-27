@@ -1,10 +1,7 @@
 package no.chess.game.tests;
 import no.chess.game.board.ChessBoard;
-import no.chess.game.board.Position;
 import no.chess.game.piece.*;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,8 +32,8 @@ class ChessGameTest {
         assertFalse(p.isValidMove(  0,4,-1,4)); // Out of bounds move
         assertFalse(p.isValidMove(  0,4,0,1)); //Too long x-dir move
         assertFalse(p.isValidMove(  0,4,2,4)); //Too long y-dir move
-        assertTrue(p.isValidMove(   0,4,0,2)); //Castling move
-        assertTrue(p.isValidMove(   0,4,0,6)); //Castling move
+        assertTrue(p.isCastlingAttempt(0,4,0,2)); //Castling move
+        assertTrue(p.isCastlingAttempt(0,4,0,6)); //Castling move
     }
 
     @Test
@@ -485,6 +482,31 @@ class ChessGameTest {
         correctBoardLayout[0][4] = "bK";
 
         assertArrayEquals(correctBoardLayout,cb.boardLayout());
+
+        cb.initialize();
+        cb.movePiece(6,0,4,0,c1);
+        cb.movePiece(6,1,4,1,c1);
+        cb.movePiece(6,2,4,2,c1);
+        cb.movePiece(7,1,5,0,c1);
+        cb.movePiece(7,0,6,0,c1);
+        cb.movePiece(7,2,6,1,c1);
+        cb.movePiece(7,3,6,2,c1);
+        cb.movePiece(7,4,7,2,c1);
+
+        correctBoardLayout = makeInitialBoardLayout();
+        correctBoardLayout[7][0] = "  ";
+        correctBoardLayout[7][1] = "  ";
+        correctBoardLayout[7][2] = "  ";
+        correctBoardLayout[7][3] = "  ";
+        correctBoardLayout[4][0] = "wP";
+        correctBoardLayout[4][1] = "wP";
+        correctBoardLayout[4][2] = "wP";
+        correctBoardLayout[5][0] = "wk";
+        correctBoardLayout[6][0] = "wR";
+        correctBoardLayout[6][1] = "wB";
+        correctBoardLayout[6][2] = "wQ";
+
+        assertArrayEquals(correctBoardLayout,cb.boardLayout());
     }
 
     @Test
@@ -736,13 +758,10 @@ class ChessGameTest {
         cb.movePiece(5,0,7,1,c1);
         assertFalse(cb.isPossibleDraw());
         cb.movePiece(7,1,5,0,c1);
-        cb.printBoardLayout();
 
         assertTrue(cb.isPossibleDraw());
         cb.movePiece(6,6,5,6,c1);
         assertFalse(cb.isPossibleDraw());
-
-
     }
 
     private String[][] makeInitialBoardLayout(){

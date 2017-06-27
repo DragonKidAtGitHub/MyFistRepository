@@ -14,7 +14,7 @@ public class Rook extends Piece {
     public boolean isValidMove(int fromX, int fromY, int toX, int toY) {
         if (isNoMove(fromX, fromY, toX,toY))                return false;
         else if (isOutOfBoundsMove(toX,toY))                return false;
-        else if (isCastlingMove(fromX,fromY,toX,toY))       return true;
+        else if (isCastlingAttempt(fromX,fromY,toX,toY))       return true;
         else return isStraightMove(fromX, fromY, toX, toY);
     }
 
@@ -28,7 +28,7 @@ public class Rook extends Piece {
     }
 
     @Override
-    public boolean isCastlingMove(int fromX, int fromY, int toX, int toY) {
+    public boolean isCastlingAttempt(int fromX, int fromY, int toX, int toY) {
         return  (!hasMoved && fromX==toX && ((fromY==0 && toY==3) || (fromY==7 && toY==5)));
     }
 }
