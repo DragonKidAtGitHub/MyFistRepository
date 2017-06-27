@@ -38,9 +38,9 @@ public class ChessGame {
     }
 
     public boolean checkIfGameIsOver() {
-        PieceColor color = selectedPieceColor.get(playersTurn);
+        PieceColor color    = selectedPieceColor.get(playersTurn);
         boolean isCheckMate = chessBoard.isCheckMate(color);
-        boolean isDraw = chessBoard.isDraw(color);
+        boolean isDraw      = false; //TODO: chessBoard.isDraw(color);
         return isCheckMate || isDraw;
     }
 
