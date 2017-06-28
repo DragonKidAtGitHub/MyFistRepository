@@ -4,7 +4,6 @@ import no.chess.game.ChessGame;
 import no.chess.game.board.ChessBoard;
 import no.chess.game.board.Position;
 import no.chess.game.piece.*;
-import no.chess.game.player.Player;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -16,7 +15,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import static no.chess.game.GUI.ChessGUI.SPOT_PANEL_DIMENSION;
 
@@ -81,8 +79,11 @@ public class SpotPanel extends JPanel {
                         if (isMoved) {
                             boardPanel.cancelMove(chessGame,chessGUI);
                             chessGUI.getTakenPiecesPanel().updatePanel(chessGame.getChessBoard());
+                            if (board.getPiece(x,y).checkIsPromoted(x,y))   {
+                                board.promotePieceTo(x,y,makePawnPromotionDialog(boardPanel),chessGame.getCurrentPlayerColor());
+                            }
                             chessGame.switchPlayersTurn();
-                            if (chessGame.checkIfGameIsOver()) makeGameOverDialog(boardPanel,chessGame);
+                            if (chessGame.checkIfGameIsOver())              makeGameOverDialog(boardPanel,chessGame);
                         }
                     }
                     boardPanel.drawBoard(chessGame,chessGUI);
@@ -156,5 +157,10 @@ public class SpotPanel extends JPanel {
 
     private void makeGameOverDialog(BoardPanel boardPanel, ChessGame chessGame) {
         JOptionPane.showMessageDialog(boardPanel,"Game Over! "+chessGame.getOppositePlayerColor()+" is the winner.","Game Over",JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private String makePawnPromotionDialog(BoardPanel boardPanel) {
+        Object[] options = {"Queen", "Bishop", "Knight", "Rook",};
+        return (String)JOptionPane.showInputDialog(boardPanel,"Choose promotion:","Pawn Promotion",JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
     }
 }

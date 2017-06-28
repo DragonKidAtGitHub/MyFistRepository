@@ -41,7 +41,7 @@ public abstract class Piece {
         return false;
     }
 
-    public boolean checkIsPromoted(int fromX, int fromY, int toX, int toY) {
+    public boolean checkIsPromoted(int x, int y) {
         return false;
     }
 

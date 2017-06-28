@@ -56,9 +56,9 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public boolean checkIsPromoted(int fromX, int fromY, int toX, int toY) {
-        if (color== PieceColor.WHITE) return (toX==0);
-        else                    return (toX==7);
+    public boolean checkIsPromoted(int x, int y) {
+        if (color== PieceColor.WHITE)   return (x==0);
+        else                            return (x==7);
     }
 
     @Override

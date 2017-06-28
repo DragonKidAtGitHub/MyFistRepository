@@ -1,4 +1,5 @@
 package no.chess.game.board;
+import no.chess.game.GUI.SpotPanel;
 import no.chess.game.piece.*;
 
 import java.util.ArrayList;
@@ -74,17 +75,12 @@ public class ChessBoard {
         boolean pieceIsMoved = false;
         if (isLegalMove(fromX,fromY,toX,toY,color)) {
             Piece p = getPiece(fromX, fromY);
-            boolean isValidMove         = p.isValidMove(fromX,fromY,toX,toY);
-            boolean isNoPieceBetween    = !isPieceBetween(fromX,fromY,toX,toY);
-            boolean isNotExposingCheck  = !isCheckedAfterMove(fromX,fromY,toX,toY,color);
             boolean toSpotIsEmpty       = isEmpty(toX,toY);
             boolean toSpotIsAnEnemy     = isEnemyPiece(toX,toY,color);
-            boolean isCastlingAttempt   = p.isCastlingAttempt(fromX,fromY,toX,toY);
             boolean isCastlingMove      = isCastlingPossible(fromX,fromY,toX,toY,color);
             boolean isEnPassantMove     = isEnPassantMove(fromX,fromY,toX,toY,color);
-            boolean isPromoted          = p.checkIsPromoted(fromX,fromY,toX,toY);
+            boolean isPromoted          = p.checkIsPromoted(toX,toY);
             boolean isPawnDoubleMove    = p.isSpecialFirstMove(fromX,fromY,toX,toY);
-            boolean isGeneralReqOK      = isValidMove && isNoPieceBetween && isNotExposingCheck;
 
             setEnPassantStates(color);
 
@@ -105,11 +101,28 @@ public class ChessBoard {
                 pieceIsMoved = true;
             }
 
-            if (pieceIsMoved && isPromoted)         promotePiece(toX,toY,color);
+            //if (pieceIsMoved && isPromoted)         promotePieceTo(toX,toY,color);
             if (pieceIsMoved && isPawnDoubleMove)   p.setEnPassantPossible();
         }
 
         return pieceIsMoved;
+    }
+
+    public void promotePieceTo(int x, int y, String pieceType, PieceColor color) {
+        Piece p = getPiece(x,y);
+        if (p != null && !isOutOfBounds(x,y))
+            switch (pieceType) {
+                case "Queen"    :   setPiece(x,y,new Queen(color));
+                                    break;
+                case "Bishop"   :   setPiece(x,y,new Bishop(color));
+                                    break;
+                case "Knight"   :   setPiece(x,y,new Knight(color));
+                                    break;
+                case "Rook"     :   setPiece(x,y,new Rook(color));
+                                    break;
+                default         :   System.out.println("No promotion performed!");
+                                    break;
+            }
     }
 
     public ArrayList<Piece> getRemovedPieces() {
@@ -143,7 +156,7 @@ public class ChessBoard {
         }
     }
 
-    private void promotePiece(int x, int y, PieceColor color) {
+    public void promotePiece(int x, int y, PieceColor color) {
         Piece p = getPiece(x,y);
         if (p != null && !isOutOfBounds(x,y)) setPiece(x,y,new Queen(color));
     }
