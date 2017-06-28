@@ -145,7 +145,7 @@ public class ChessBoard {
 
     private void promotePiece(int x, int y, PieceColor color) {
         Piece p = getPiece(x,y);
-        if (p != null && !isOutOfBounds(x,y)) spots[x][y].setPiece(new Queen(color));
+        if (p != null && !isOutOfBounds(x,y)) setPiece(x,y,new Queen(color));
     }
 
     public Piece removePiece(int x, int y) {

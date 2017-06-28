@@ -14,7 +14,6 @@ public class ChessGame {
     private Player player1;
     private Player player2;
     private HashMap<Player,PieceColor> selectedPieceColor;
-    private boolean gameIsSetup = false;
     private Player playersTurn;
 
     public ChessGame() {
@@ -32,6 +31,15 @@ public class ChessGame {
         return this.chessBoard;
     }
 
+    public Player getPlayersTurn() {
+        return playersTurn;
+    }
+
+    public Player getNotPlayersTurn() {
+        if (playersTurn==player1)   return player2;
+        else                        return player1;
+    }
+
     public void switchPlayersTurn() {
         if (playersTurn == player1) playersTurn = player2;
         else                        playersTurn = player1;
@@ -46,5 +54,10 @@ public class ChessGame {
 
     public PieceColor getCurrentPlayerColor() {
         return selectedPieceColor.get(playersTurn);
+    }
+
+    public PieceColor getOppositePlayerColor() {
+        Player oppositePlayer = getNotPlayersTurn();
+        return selectedPieceColor.get(oppositePlayer);
     }
 }

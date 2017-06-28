@@ -4,6 +4,7 @@ import no.chess.game.ChessGame;
 import no.chess.game.board.ChessBoard;
 import no.chess.game.board.Position;
 import no.chess.game.piece.*;
+import no.chess.game.player.Player;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -78,10 +79,10 @@ public class SpotPanel extends JPanel {
                         PieceColor curColor = chessGame.getCurrentPlayerColor();
                         boolean isMoved = board.movePiece(sourcePos,destPos,curColor);
                         if (isMoved) {
-                            chessGame.switchPlayersTurn();
                             boardPanel.cancelMove(chessGame,chessGUI);
                             chessGUI.getTakenPiecesPanel().updatePanel(chessGame.getChessBoard());
-                            if (chessGame.checkIfGameIsOver()) System.out.println("Game Over");
+                            chessGame.switchPlayersTurn();
+                            if (chessGame.checkIfGameIsOver()) makeGameOverDialog(boardPanel,chessGame);
                         }
                     }
                     boardPanel.drawBoard(chessGame,chessGUI);
@@ -151,5 +152,9 @@ public class SpotPanel extends JPanel {
         highlightSelectedPiece(boardPanel,chessGame,chessGUI);
         super.revalidate();
         super.repaint();
+    }
+
+    private void makeGameOverDialog(BoardPanel boardPanel, ChessGame chessGame) {
+        JOptionPane.showMessageDialog(boardPanel,"Game Over! "+chessGame.getOppositePlayerColor()+" is the winner.","Game Over",JOptionPane.PLAIN_MESSAGE);
     }
 }
