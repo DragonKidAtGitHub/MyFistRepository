@@ -79,9 +79,7 @@ public class SpotPanel extends JPanel {
                         if (isMoved) {
                             boardPanel.cancelMove(chessGame,chessGUI);
                             chessGUI.getTakenPiecesPanel().updatePanel(chessGame.getChessBoard());
-                            if (board.getPiece(x,y).checkIsPromoted(x,y))   {
-                                board.promotePieceTo(x,y,makePawnPromotionDialog(boardPanel),chessGame.getCurrentPlayerColor());
-                            }
+                            if (board.getPiece(x,y).checkIsPromoted(x,y))   board.promotePieceTo(x,y,makePawnPromotionDialog(boardPanel),chessGame.getCurrentPlayerColor());
                             chessGame.switchPlayersTurn();
                             if (chessGame.checkIfGameIsOver())              makeGameOverDialog(boardPanel,chessGame);
                         }
